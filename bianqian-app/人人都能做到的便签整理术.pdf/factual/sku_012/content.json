@@ -1,0 +1,20 @@
+[
+  {
+    "quadrant": "A区",
+    "position": "右上角",
+    "criteria": "越有压力的事越往上贴，对日常生活影响越大的事越往右贴",
+    "action": "整理先从A区的便签开始"
+  },
+  {
+    "quadrant": "B区",
+    "action": "为了避免失败或给他人添麻烦，建议先B后C"
+  },
+  {
+    "quadrant": "C区",
+    "action": "建议先B后C"
+  },
+  {
+    "quadrant": "D区",
+    "action": "等到A、B、C区的事项完成后再去做，往后推推也可以"
+  }
+]

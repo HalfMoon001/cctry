@@ -1,0 +1,22 @@
+[
+  {
+    "quadrant": "A部分",
+    "axis": "右上角",
+    "characteristics": "消耗时间短，消耗人力少",
+    "example": "整理化妆用品"
+  },
+  {
+    "quadrant": "B部分",
+    "characteristics": "消耗时间长，消耗人力少"
+  },
+  {
+    "quadrant": "C部分",
+    "characteristics": "消耗时间短，消耗人力多"
+  },
+  {
+    "quadrant": "D部分",
+    "axis": "左下角",
+    "characteristics": "消耗时间长，消耗人力多",
+    "example": "更改客厅的样貌"
+  }
+]

@@ -1,0 +1,202 @@
+{
+  "entries": [
+    {
+      "subject": "便签整理法",
+      "predicate": "implements",
+      "object": "可视化",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "便签整理法",
+      "predicate": "implements",
+      "object": "细分化",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "便签整理法",
+      "predicate": "implements",
+      "object": "一元化",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "细分化",
+      "predicate": "related-to",
+      "object": "妖怪便签",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "细分化",
+      "predicate": "enables",
+      "object": "利用零碎时间",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "一元化",
+      "predicate": "related-to",
+      "object": "信息分散",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "可视化",
+      "predicate": "requires",
+      "object": "时间轴",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "便签",
+      "predicate": "part-of",
+      "object": "便签整理法",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "备忘录",
+      "predicate": "part-of",
+      "object": "便签整理法",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "薄型文件夹",
+      "predicate": "part-of",
+      "object": "便签整理法",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "遮蔽胶带",
+      "predicate": "related-to",
+      "object": "循环便签",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "循环便签",
+      "predicate": "related-to",
+      "object": "库存管理",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "整理",
+      "predicate": "is-a",
+      "object": "TODO",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "整理",
+      "predicate": "causes",
+      "object": "压力",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "乱放",
+      "predicate": "causes",
+      "object": "重蹈覆辙",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "给所有东西找个家",
+      "predicate": "related-to",
+      "object": "无家可归",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "给所有东西找个家",
+      "predicate": "related-to",
+      "object": "有家忘回",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "适量化",
+      "predicate": "requires",
+      "object": "细分化",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "便签整理法",
+      "predicate": "related-to",
+      "object": "阿娜吉备忘录整理法",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "细分化",
+      "predicate": "enables",
+      "object": "脑内规划",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "细分化",
+      "predicate": "enables",
+      "object": "实际操作",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    },
+    {
+      "subject": "便签",
+      "predicate": "related-to",
+      "object": "给东西准备一个避难所",
+      "source_chunks": [
+        "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+      ],
+      "confidence": null
+    }
+  ]
+}

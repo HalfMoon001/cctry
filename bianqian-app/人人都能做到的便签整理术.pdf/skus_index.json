@@ -1,0 +1,385 @@
+{
+  "created_at": "2026-03-10T08:43:13.842167",
+  "updated_at": "2026-03-10T08:53:20.220193",
+  "total_skus": 37,
+  "total_characters": 27391,
+  "chunks_processed": [
+    "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001"
+  ],
+  "skus": [
+    {
+      "sku_id": "sku_001",
+      "name": "methodology-core-principles",
+      "classification": "factual",
+      "path": "skus/factual/sku_001",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 46,
+      "description": "便签整理法的三大核心原则：可视化、细分化、一元化。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_002",
+      "name": "principle-visualization",
+      "classification": "factual",
+      "path": "skus/factual/sku_002",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 101,
+      "description": "“可视化”原则的具体应用方法。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_003",
+      "name": "principle-subdivision",
+      "classification": "factual",
+      "path": "skus/factual/sku_003",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 100,
+      "description": "“细分化”原则的具体应用方法。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_004",
+      "name": "principle-unification",
+      "classification": "factual",
+      "path": "skus/factual/sku_004",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 54,
+      "description": "“一元化”原则的具体应用方法。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_005",
+      "name": "preparation-tools",
+      "classification": "factual",
+      "path": "skus/factual/sku_005",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 246,
+      "description": "实施便签整理法需要准备的三样物品。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_006",
+      "name": "schedule-vs-todo",
+      "classification": "factual",
+      "path": "skus/factual/sku_006",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 344,
+      "description": "“日程表”与“TODO”的定义区别。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_007",
+      "name": "todo-list-categories",
+      "classification": "factual",
+      "path": "skus/factual/sku_007",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 571,
+      "description": "“待完成清单”推荐的分类方式。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_008",
+      "name": "time-matrix-quadrants",
+      "classification": "factual",
+      "path": "skus/factual/sku_008",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 367,
+      "description": "“时间段方阵”的四个区域定义。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_009",
+      "name": "monster-sticky-note",
+      "classification": "factual",
+      "path": "skus/factual/sku_009",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 78,
+      "description": "“妖怪便签”的特征。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_010",
+      "name": "subdivision-example",
+      "classification": "factual",
+      "path": "skus/factual/sku_010",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 90,
+      "description": "将“拿到网上拍卖”进行细分化的步骤示例。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_011",
+      "name": "organization-4-steps",
+      "classification": "factual",
+      "path": "skus/factual/sku_011",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 222,
+      "description": "整理收纳的4个步骤。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_012",
+      "name": "priority-matrix-quadrants",
+      "classification": "factual",
+      "path": "skus/factual/sku_012",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 325,
+      "description": "“整理优先顺序方阵”的四个区域定义。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_013",
+      "name": "appropriate-quantity-tips",
+      "classification": "factual",
+      "path": "skus/factual/sku_013",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 366,
+      "description": "把握物品“适量”的4个窍门。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_014",
+      "name": "storage-4-tips",
+      "classification": "factual",
+      "path": "skus/factual/sku_014",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 401,
+      "description": "给物品“安家”的4大窍门。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_015",
+      "name": "storage-location-qa",
+      "classification": "factual",
+      "path": "skus/factual/sku_015",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 97,
+      "description": "寻找物品最佳“住所”的自问自答流程。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_016",
+      "name": "storage-difficulty-examples",
+      "classification": "factual",
+      "path": "skus/factual/sku_016",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 387,
+      "description": "不同难度的收纳物品示例及处理建议。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_017",
+      "name": "re-cluttering-cause",
+      "classification": "factual",
+      "path": "skus/factual/sku_017",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 78,
+      "description": "整理后重蹈覆辙的根本原因。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_018",
+      "name": "frame-rule",
+      "classification": "factual",
+      "path": "skus/factual/sku_018",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 96,
+      "description": "“画框法则”的定义及应用。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_019",
+      "name": "shelter-examples",
+      "classification": "factual",
+      "path": "skus/factual/sku_019",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 308,
+      "description": "给东西准备的“避难所”示例。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_020",
+      "name": "habit-formation-21-days",
+      "classification": "factual",
+      "path": "skus/factual/sku_020",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 100,
+      "description": "“21天效应”在培养整理习惯中的应用。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_021",
+      "name": "pressure-methods",
+      "classification": "factual",
+      "path": "skus/factual/sku_021",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 205,
+      "description": "利用备忘录给自己施加压力的两种方法。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_022",
+      "name": "family-involvement-tactics",
+      "classification": "factual",
+      "path": "skus/factual/sku_022",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 220,
+      "description": "让丈夫参与整理的战术。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_023",
+      "name": "family-activity-organization",
+      "classification": "factual",
+      "path": "skus/factual/sku_023",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 164,
+      "description": "动员全家进行整理“活动化”的步骤。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_024",
+      "name": "child-instruction-method",
+      "classification": "factual",
+      "path": "skus/factual/sku_024",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 77,
+      "description": "对孩子下达整理指令的方法。",
+      "confidence": null
+    },
+    {
+      "sku_id": "sku_025",
+      "name": "child-memo-habits",
+      "classification": "factual",
+      "path": "skus/factual/sku_025",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 216,
+      "description": "孩子备忘录中包含的整理相关习惯便签。",
+      "confidence": null
+    },
+    {
+      "sku_id": "relational-knowledge-base",
+      "name": "relational-knowledge-base",
+      "classification": "relational",
+      "path": "skus/relational",
+      "source_chunk": "aggregated",
+      "character_count": 14484,
+      "description": "Domain label hierarchy and terminology glossary",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_001",
+      "name": "sticky-note-organization-method",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_001",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 439,
+      "description": "利用便签和备忘录进行时间管理和整理，解决没时间、不知从何下手的问题。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_002",
+      "name": "time-visualization-scheduling",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_002",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 365,
+      "description": "使用带时间轴的备忘录可视化时间安排，将待办事项填入零碎时间。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_003",
+      "name": "create-pending-task-list",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_003",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 381,
+      "description": "制作按时间段或场所分类的待完成清单，利用零碎时间处理琐事。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_004",
+      "name": "task-subdivision-technique",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_004",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 372,
+      "description": "将模糊、宏大的任务（妖怪便签）细分为具体、可立即执行的小步骤。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_005",
+      "name": "four-step-decluttering-process",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_005",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 384,
+      "description": "按照定目标、定顺序、适量化、定位置的顺序进行整理，避免无效收纳。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_006",
+      "name": "item-quantity-optimization",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_006",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 375,
+      "description": "通过“从零开始”的思维和数字管理，确定物品的合适数量，避免囤积。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_007",
+      "name": "assigning-homes-and-labeling",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_007",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 375,
+      "description": "为每件物品决定最佳存放位置，并使用标签进行可视化，方便取放。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_008",
+      "name": "inventory-management-cyclic-notes",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_008",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 402,
+      "description": "使用可重复粘贴的便签（如遮蔽胶带）管理日用品库存，自动触发补货。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_009",
+      "name": "habit-formation-21-day-rule",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_009",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 362,
+      "description": "利用奖励贴纸和备忘录记录，坚持21天养成整理习惯。",
+      "confidence": null
+    },
+    {
+      "sku_id": "skill_010",
+      "name": "family-decluttering-mobilization",
+      "classification": "procedural",
+      "path": "skus/procedural/skill_010",
+      "source_chunk": "6f9718b0_e170115d-6260-4b43-bf80-fc16e7a96a2d.sk, 1lib.sk, z-lib.sk)_chunk_001",
+      "character_count": 381,
+      "description": "通过家庭会议、具体指令和游戏化方式，让家庭成员参与整理。",
+      "confidence": null
+    },
+    {
+      "sku_id": "meta-knowledge",
+      "name": "meta-knowledge",
+      "classification": "meta",
+      "path": "skus/meta",
+      "source_chunk": "aggregated",
+      "character_count": 3812,
+      "description": "SKU routing (mapping.md) and creative insights (eureka.md)",
+      "confidence": null
+    }
+  ],
+  "factual_count": 25,
+  "relational_count": 1,
+  "procedural_count": 10,
+  "meta_count": 1
+}

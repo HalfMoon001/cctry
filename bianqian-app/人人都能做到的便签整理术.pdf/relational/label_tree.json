@@ -1,0 +1,98 @@
+{
+  "roots": [
+    {
+      "name": "整理收纳",
+      "children": [
+        {
+          "name": "整理方法",
+          "children": [
+            {
+              "name": "便签整理法",
+              "children": [
+                {
+                  "name": "可视化",
+                  "children": []
+                },
+                {
+                  "name": "细分化",
+                  "children": []
+                },
+                {
+                  "name": "一元化",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "name": "阿娜吉备忘录整理法",
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "整理步骤",
+          "children": [
+            {
+              "name": "定好目标点",
+              "children": []
+            },
+            {
+              "name": "定好整理的优先顺序",
+              "children": []
+            },
+            {
+              "name": "把东西适量化",
+              "children": []
+            },
+            {
+              "name": "给所有东西找个家",
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "工具与材料",
+          "children": [
+            {
+              "name": "便签",
+              "children": []
+            },
+            {
+              "name": "备忘录",
+              "children": []
+            },
+            {
+              "name": "薄型文件夹",
+              "children": []
+            },
+            {
+              "name": "遮蔽胶带",
+              "children": []
+            },
+            {
+              "name": "循环便签",
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "常见问题",
+          "children": [
+            {
+              "name": "妖怪便签",
+              "children": []
+            },
+            {
+              "name": "无家可归",
+              "children": []
+            },
+            {
+              "name": "有家忘回",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
