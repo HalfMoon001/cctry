@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>便签整理术</title>
+<style>
+/*
+ * Design: Refined Minimalism
+ * 60% warm white · 30% charcoal · 10% terracotta accent
+ * 8px grid · 2 font weights · purposeful motion only
+ */
+
+:root {
+  /* 60% — surfaces */
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-alt: #F4F3F0;
+  /* 30% — text */
+  --text-1: #1A1A1A;
+  --text-2: #6B6B6B;
+  --text-3: #A0A0A0;
+  --border: #E8E6E1;
+  --border-light: #F0EEEA;
+  /* 10% — accent */
+  --accent: #C67A4B;
+  --accent-hover: #B56A3E;
+  --accent-light: rgba(198,122,75,0.08);
+  /* notes */
+  --n-yellow: #FFF9E0;
+  --n-pink: #FFF0F2;
+  --n-green: #EEFAE8;
+  --n-blue: #EBF5FF;
+  --n-orange: #FFF4E8;
+  --n-purple: #F5F0FA;
+  /* system */
+  --radius: 8px;
+  --radius-sm: 4px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --dur: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-1);
+  background: var(--bg);
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ────── SIDEBAR ────── */
+.sidebar {
+  width: 232px;
+  min-width: 232px;
+  background: var(--text-1);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.sidebar-head {
+  padding: 32px 24px 28px;
+}
+.sidebar-head h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #FFF;
+  letter-spacing: 4px;
+}
+.sidebar-head p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.sidebar nav {
+  flex: 1;
+  padding: 8px 12px;
+  overflow-y: auto;
+}
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  margin-bottom: 2px;
+}
+.sidebar nav a:hover {
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+}
+.sidebar nav a.active {
+  color: #FFF;
+  background: rgba(255,255,255,0.1);
+}
+.sidebar nav a .ic {
+  width: 20px;
+  text-align: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ────── MAIN ────── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+.topbar h2 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+}
+
+/* ────── BUTTONS ────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-1);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  line-height: 1.4;
+}
+.btn:hover {
+  border-color: var(--text-3);
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary {
+  background: var(--accent);
+  color: #FFF;
+  border-color: var(--accent);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: 0 2px 8px rgba(198,122,75,0.2);
+}
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-2);
+}
+.btn-ghost:hover { background: var(--surface-alt); border-color: transparent; }
+.btn-danger { color: #D44; border-color: #ECC; }
+.btn-danger:hover { background: #FEF5F5; border-color: #D44; }
+
+/* ────── CARDS ────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+/* ────── STICKY NOTE ────── */
+.note {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  min-height: 72px;
+  position: relative;
+  cursor: grab;
+  word-break: break-word;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.note:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  z-index: 5;
+}
+.note.color-yellow { background: var(--n-yellow); }
+.note.color-pink { background: var(--n-pink); }
+.note.color-green { background: var(--n-green); }
+.note.color-blue { background: var(--n-blue); }
+.note.color-orange { background: var(--n-orange); }
+.note.color-purple { background: var(--n-purple); }
+.note .note-text { font-size: 14px; line-height: 1.7; }
+.note .note-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  margin-top: 10px;
+  margin-right: 4px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 3px;
+  color: var(--text-2);
+}
+.note .note-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: none;
+  gap: 2px;
+}
+.note:hover .note-actions { display: flex; }
+.note .note-actions button {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: none;
+  background: rgba(255,255,255,0.8);
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--dur);
+}
+.note .note-actions button:hover { background: #FFF; }
+.note.dragging { opacity: 0.4; }
+
+/* ────── MODAL ────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 32px;
+  width: 440px;
+  max-width: 92vw;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn var(--dur) var(--ease);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+.modal label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+.modal input, .modal textarea, .modal select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 15px;
+  margin-bottom: 20px;
+  background: var(--bg);
+  color: var(--text-1);
+  transition: border-color var(--dur);
+}
+.modal input:focus, .modal textarea:focus, .modal select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.modal textarea { height: 96px; resize: vertical; line-height: 1.7; }
+.modal .actions { display: flex; gap: 8px; justify-content: flex-end; }
+.color-picker { display: flex; gap: 8px; margin-bottom: 20px; }
+.color-picker span {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--dur);
+}
+.color-picker span:hover { transform: scale(1.12); }
+.color-picker span.active { border-color: var(--text-1); }
+
+/* ═══════════════ BOARD ═══════════════ */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* ═══════════════ TIMELINE ═══════════════ */
+.tl-wrap { display: flex; gap: 32px; }
+.tl-main { flex: 1; min-width: 0; }
+.tl-side { width: 240px; flex-shrink: 0; }
+.tl-paper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.hour-row {
+  display: flex;
+  align-items: stretch;
+  min-height: 48px;
+  border-bottom: 1px solid var(--border-light);
+}
+.hour-row:last-child { border-bottom: none; }
+.hour-label {
+  width: 56px;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  padding: 8px 12px 8px 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  border-right: 1px solid var(--border-light);
+}
+.hour-slot {
+  flex: 1;
+  padding: 6px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-content: flex-start;
+  transition: background var(--dur);
+}
+.hour-slot.drag-over { background: var(--accent-light); }
+.slot-block {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--text-1);
+  color: #FFF;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+}
+.slot-block .rm { background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 14px; padding: 0; }
+.slot-block .rm:hover { color: #FFF; }
+.slot-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--n-yellow);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.slot-note .rm { background: none; border: none; color: var(--text-3); cursor: pointer; font-size: 14px; padding: 0; }
+.tl-side-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: 12px;
+}
+.todo-pool { display: flex; flex-direction: column; gap: 8px; }
+.todo-pool .note { padding: 12px; min-height: auto; font-size: 13px; }
+
+/* ═══════════════ PENDING ═══════════════ */
+.pending-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.pend-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.pend-card-head {
+  padding: 14px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--surface-alt);
+  letter-spacing: 0.5px;
+}
+.pend-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 64px;
+}
+.pend-card-body .note { padding: 12px; min-height: auto; font-size: 13px; }
+.pend-add {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-3);
+  transition: all var(--dur);
+}
+.pend-add:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* ═══════════════ MONSTER ═══════════════ */
+.mon-wrap { display: flex; gap: 24px; }
+.mon-left { width: 280px; flex-shrink: 0; }
+.mon-right { flex: 1; min-width: 0; }
+.mon-list { display: flex; flex-direction: column; gap: 8px; }
+.mon-item {
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--dur);
+  font-size: 14px;
+  border-left: 3px solid var(--accent);
+}
+.mon-item:hover { background: var(--surface-alt); }
+.mon-item.active { background: var(--accent-light); border-color: var(--accent); }
+
+.tree-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  min-height: 320px;
+}
+.tree-root-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--accent-light);
+  border: 1px solid rgba(198,122,75,0.2);
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.tree-root-tag button { background: none; border: none; cursor: pointer; color: var(--text-3); font-size: 14px; }
+.tree-root-tag button:hover { color: var(--accent); }
+.tree-branch {
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 2px solid var(--border);
+}
+.tree-step {
+  padding: 10px 0;
+  position: relative;
+}
+.tree-step::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  background: var(--border);
+}
+.tree-leaf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
+.tree-leaf button { background: none; border: none; cursor: pointer; color: var(--text-3); font-size: 13px; }
+.tree-leaf button:hover { color: #D44; }
+.tree-input {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+.tree-input input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--bg);
+}
+.tree-input input:focus { outline: none; border-color: var(--accent); }
+.tree-hint {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.8;
+}
+
+/* ═══════════════ MATRIX ═══════════════ */
+.mx-tabs { display: flex; gap: 0; margin-bottom: 24px; }
+.mx-tabs button {
+  padding: 10px 24px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--text-2);
+  transition: all var(--dur);
+}
+.mx-tabs button:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.mx-tabs button:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; border-left: none; }
+.mx-tabs button.active { background: var(--text-1); color: #FFF; border-color: var(--text-1); }
+
+.mx-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  grid-template-rows: 32px 1fr 1fr;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.mx-y {
+  grid-column: 1;
+  grid-row: 2 / 4;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  background: var(--surface-alt);
+  border-right: 1px solid var(--border-light);
+}
+.mx-x {
+  grid-column: 2 / 4;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border-light);
+}
+.mx-cell {
+  padding: 16px;
+  min-height: 180px;
+  border: 1px solid var(--border-light);
+  position: relative;
+  transition: background var(--dur);
+}
+.mx-cell.drag-over { background: var(--accent-light); }
+.mx-cell .cl { position: absolute; top: 8px; left: 12px; font-size: 24px; font-weight: 700; color: rgba(0,0,0,0.04); }
+.mx-cell .cd { font-size: 11px; color: var(--text-3); margin-bottom: 10px; }
+.mx-cell .cn { display: flex; flex-wrap: wrap; gap: 8px; }
+.mx-cell .cn .note { padding: 8px 12px; min-height: auto; font-size: 12px; max-width: 140px; }
+.mx-cell .cn .note .mdel {
+  position: absolute; top: 3px; right: 5px;
+  background: none; border: none; cursor: pointer; font-size: 11px; color: var(--text-3);
+  opacity: 0; transition: opacity var(--dur);
+}
+.mx-cell .cn .note:hover .mdel { opacity: 1; }
+
+.mx-pool {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.mx-pool-title { font-size: 13px; font-weight: 500; color: var(--text-2); margin-bottom: 12px; }
+.mx-pool-notes { display: flex; flex-wrap: wrap; gap: 8px; }
+.mx-pool-notes .note { padding: 8px 12px; min-height: auto; font-size: 12px; max-width: 150px; }
+
+/* ═══════════════ HABIT ═══════════════ */
+.hab-cards { display: flex; flex-direction: column; gap: 24px; }
+.hab-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  position: relative;
+}
+.hab-del {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color var(--dur);
+}
+.hab-del:hover { color: #D44; }
+.hab-card h4 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.hab-reward {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-bottom: 20px;
+}
+.hab-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  max-width: 420px;
+}
+.hab-day {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+  font-size: 12px;
+  color: var(--text-3);
+  background: var(--surface);
+}
+.hab-day:hover { border-color: var(--accent); }
+.hab-day.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #FFF;
+  font-weight: 600;
+}
+.hab-bar {
+  margin-top: 20px;
+  height: 4px;
+  background: var(--surface-alt);
+  border-radius: 2px;
+  overflow: hidden;
+  max-width: 420px;
+}
+.hab-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s var(--ease);
+}
+.hab-stat {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-3);
+  max-width: 420px;
+  text-align: right;
+}
+.hab-done {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--n-green);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  text-align: center;
+  max-width: 420px;
+}
+
+/* ═══════════════ INVENTORY ═══════════════ */
+.inv-wrap { display: flex; gap: 32px; }
+.inv-main { flex: 1; }
+.inv-side { width: 280px; flex-shrink: 0; }
+.inv-list { display: flex; flex-direction: column; gap: 8px; }
+.inv-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all var(--dur);
+}
+.inv-item:hover { border-color: var(--text-3); }
+.inv-name { flex: 1; font-size: 14px; }
+.inv-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+.inv-badge.ok { background: var(--n-green); color: #3A7D1A; }
+.inv-badge.no { background: var(--n-orange); color: #B56A3E; }
+.inv-btns { display: flex; gap: 6px; }
+
+.shop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.shop-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.shop-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+}
+.shop-item:last-child { border-bottom: none; }
+.shop-item button {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--dur);
+}
+.shop-item button:hover { background: var(--accent); color: #FFF; }
+
+/* ═══════════════ FAMILY ═══════════════ */
+.fam-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.fam-col {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.fam-head {
+  padding: 20px 16px 16px;
+  text-align: center;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border-light);
+}
+.fam-head .fi { font-size: 28px; margin-bottom: 4px; }
+.fam-head .fn { font-size: 15px; font-weight: 600; }
+.fam-body { padding: 16px; }
+.fam-task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  transition: background var(--dur);
+}
+.fam-task:hover { background: var(--surface-alt); }
+.fam-task.done .ft { text-decoration: line-through; color: var(--text-3); }
+.fam-task input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--dur);
+  position: relative;
+}
+.fam-task input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.fam-task input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 700;
+}
+.ft { flex: 1; }
+.fd {
+  background: none; border: none; cursor: pointer; color: var(--text-3); font-size: 15px;
+  opacity: 0; transition: opacity var(--dur); padding: 0 4px;
+}
+.fam-task:hover .fd { opacity: 1; }
+.fd:hover { color: #D44; }
+.fam-score {
+  text-align: center;
+  padding: 14px 0 6px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border-light);
+  font-size: 13px;
+  color: var(--text-3);
+}
+.fam-score em {
+  font-style: normal;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.fam-add {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+.fam-add input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  background: var(--bg);
+}
+.fam-add input:focus { outline: none; border-color: var(--accent); }
+
+/* ────── UTILITIES ────── */
+.hint {
+  color: var(--text-3);
+  font-size: 14px;
+  text-align: center;
+  padding: 48px 24px;
+  line-height: 2;
+}
+.view { display: none; }
+.view.active { display: block; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.mb { margin-bottom: 24px; }
+.section-label { font-size: 13px; font-weight: 500; color: var(--text-2); }
+
+/* ────── SCROLLBAR ────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ────── RESPONSIVE ────── */
+@media (max-width: 1024px) {
+  .sidebar { width: 200px; min-width: 200px; }
+  .content { padding: 24px; }
+  .topbar { padding: 16px 24px; }
+}
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .sidebar { width: 100%; min-width: 100%; flex-direction: row; height: 56px; overflow-x: auto; }
+  .sidebar-head { display: none; }
+  .sidebar nav { display: flex; padding: 0 8px; flex: 1; }
+  .sidebar nav a { padding: 8px 12px; white-space: nowrap; margin-bottom: 0; font-size: 13px; }
+  .content { padding: 16px; }
+  .topbar { padding: 12px 16px; }
+  .tl-wrap, .mon-wrap, .inv-wrap { flex-direction: column; }
+  .tl-side, .mon-left, .inv-side { width: 100%; }
+  .hab-grid { max-width: 100%; }
+  .hab-bar, .hab-stat, .hab-done { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  .board-grid { grid-template-columns: 1fr; }
+  .pending-grid { grid-template-columns: 1fr; }
+  .fam-cols { grid-template-columns: 1fr; }
+}
+
+/* ────── ANIMATION ────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.view.active { animation: fadeIn 0.25s var(--ease); }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-head">
+    <h1>便签整理术</h1>
+    <p>人人都能做到</p>
+  </div>
+  <nav>
+    <a data-view="board" class="active"><span class="ic">📋</span>便签板</a>
+    <a data-view="timeline"><span class="ic">⏱</span>时间轴</a>
+    <a data-view="pending"><span class="ic">📂</span>待办清单</a>
+    <a data-view="monster"><span class="ic">📌</span>妖怪拆解</a>
+    <a data-view="matrix"><span class="ic">◧</span>整理方阵</a>
+    <a data-view="habit"><span class="ic">◉</span>21天打卡</a>
+    <a data-view="inventory"><span class="ic">☰</span>库存管理</a>
+    <a data-view="family"><span class="ic">⌂</span>家庭任务</a>
+  </nav>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h2 id="viewTitle">便签板</h2>
+    <div id="topActions"></div>
+  </div>
+  <div class="content" id="contentArea">
+
+    <div class="view active" id="view-board">
+      <div class="board-grid" id="boardGrid"></div>
+      <div class="hint" id="boardEmpty" style="display:none">还没有便签<br>点击右上角「新建便签」开始</div>
+    </div>
+
+    <div class="view" id="view-timeline">
+      <div class="flex-between mb">
+        <input type="date" id="timelineDate" style="font-family:inherit;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;background:var(--surface);">
+        <button class="btn btn-sm" onclick="showAddBlockModal()">+ 日程块</button>
+      </div>
+      <div class="tl-wrap">
+        <div class="tl-main"><div class="tl-paper" id="timelineBody"></div></div>
+        <div class="tl-side">
+          <div class="tl-side-title">待安排</div>
+          <div class="todo-pool" id="todoPool"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-pending">
+      <div class="pending-grid" id="pendingCats"></div>
+    </div>
+
+    <div class="view" id="view-monster">
+      <div class="mon-wrap">
+        <div class="mon-left">
+          <div class="flex-between mb"><span class="section-label">大任务列表</span><button class="btn btn-sm" onclick="showMonsterModal()">+ 添加</button></div>
+          <div class="mon-list" id="monsterList"></div>
+        </div>
+        <div class="mon-right">
+          <div class="tree-card" id="monsterTree"><div class="hint">选择左侧任务开始拆解</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-matrix">
+      <div class="mx-tabs"><button class="tab active" data-matrix="priority">优先方阵</button><button class="tab" data-matrix="time">时间方阵</button></div>
+      <div id="matrixContent"></div>
+    </div>
+
+    <div class="view" id="view-habit">
+      <div class="flex-between mb"><span></span><button class="btn btn-primary" onclick="showHabitModal()">+ 新习惯目标</button></div>
+      <div class="hab-cards" id="habitCards"></div>
+      <div class="hint" id="habitEmpty" style="display:none">设定习惯目标，坚持21天</div>
+    </div>
+
+    <div class="view" id="view-inventory">
+      <div class="inv-wrap">
+        <div class="inv-main">
+          <div class="flex-between mb"><span class="section-label">物品库存</span><button class="btn btn-sm" onclick="showInvModal()">+ 添加</button></div>
+          <div class="inv-list" id="invList"></div>
+        </div>
+        <div class="inv-side">
+          <div class="shop-card"><h4>购物清单</h4><div id="shoppingList"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-family">
+      <div class="fam-cols" id="familyCols"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
+
+<script>
+const SK='bianqian_app';
+const DEF_CATS=['外出时顺便做','在家5分钟内','用电脑做的事','电话联系'];
+const COLORS=[{n:'yellow',h:'#FFF9E0'},{n:'pink',h:'#FFF0F2'},{n:'green',h:'#EEFAE8'},{n:'blue',h:'#EBF5FF'},{n:'orange',h:'#FFF4E8'},{n:'purple',h:'#F5F0FA'}];
+const MEM=[{k:'dad',l:'爸爸',i:'👨'},{k:'mom',l:'妈妈',i:'👩'},{k:'child',l:'孩子',i:'🧒'}];
+
+function load(){const r=localStorage.getItem(SK);if(r)return JSON.parse(r);return{notes:[],timelineBlocks:[],timelineNotes:[],categories:[...DEF_CATS],monsters:[],matrixPriority:{A:[],B:[],C:[],D:[]},matrixTime:{A:[],B:[],C:[],D:[]},habits:[],inventory:[],familyTasks:[]};}
+function save(){localStorage.setItem(SK,JSON.stringify(D));}
+let D=load();
+function gid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+const titles={board:'便签板',timeline:'时间轴',pending:'待办清单',monster:'妖怪便签拆解',matrix:'整理方阵',habit:'21天打卡',inventory:'库存管理',family:'家庭任务'};
+
+document.querySelectorAll('.sidebar nav a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.querySelectorAll('.sidebar nav a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+    const v=a.dataset.view;
+    document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+    document.getElementById('view-'+v).classList.add('active');
+    document.getElementById('viewTitle').textContent=titles[v];
+    setTop(v);render(v);
+  });
+});
+
+function setTop(v){document.getElementById('topActions').innerHTML=v==='board'?'<button class="btn btn-primary" onclick="showNoteModal()">+ 新建便签</button>':'';}
+setTop('board');
+function render(v){({board:renderBoard,timeline:renderTimeline,pending:renderPending,monster:renderMonster,matrix:renderMatrix,habit:renderHabit,inventory:renderInventory,family:renderFamily})[v]?.();}
+
+function showModal(h){document.getElementById('modalContent').innerHTML=h;document.getElementById('modalOverlay').classList.add('show');}
+function hideModal(){document.getElementById('modalOverlay').classList.remove('show');}
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)hideModal();});
+
+function setupDrag(el){
+  el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',el.dataset.id);el.classList.add('dragging');});
+  el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+}
+
+// ═══ BOARD ═══
+function renderBoard(){
+  const g=document.getElementById('boardGrid'),emp=document.getElementById('boardEmpty');
+  if(!D.notes.length){g.innerHTML='';emp.style.display='';return;}
+  emp.style.display='none';
+  g.innerHTML=D.notes.map(n=>`<div class="note color-${n.color}" draggable="true" data-id="${n.id}">
+    <div class="note-actions"><button onclick="editNote('${n.id}')">✏</button><button onclick="deleteNote('${n.id}')">✕</button></div>
+    <div class="note-text">${esc(n.text)}</div>
+    <span class="note-tag">${n.type==='schedule'?'日程':'TODO'}</span>
+    ${n.category?`<span class="note-tag">${esc(n.category)}</span>`:''}
+  </div>`).join('');
+  g.querySelectorAll('.note[draggable]').forEach(setupDrag);
+}
+
+function showNoteModal(eid){
+  const n=eid?D.notes.find(x=>x.id===eid):null;
+  const cols=COLORS.map(c=>`<span style="background:${c.h}" data-color="${c.n}" class="${(!n&&c.n==='yellow')||(n&&n.color===c.n)?'active':''}" onclick="this.parentNode.querySelectorAll('span').forEach(s=>s.classList.remove('active'));this.classList.add('active')"></span>`).join('');
+  const cats=D.categories.map(c=>`<option value="${c}" ${n&&n.category===c?'selected':''}>${c}</option>`).join('');
+  showModal(`<h3>${n?'编辑便签':'新建便签'}</h3>
+    <label>内容</label><textarea id="noteText">${n?esc(n.text):''}</textarea>
+    <label>颜色</label><div class="color-picker" id="notePicker">${cols}</div>
+    <label>类型</label><select id="noteType"><option value="todo" ${n&&n.type==='todo'?'selected':''}>TODO</option><option value="schedule" ${n&&n.type==='schedule'?'selected':''}>日程</option></select>
+    <label>分类</label><select id="noteCat"><option value="">无</option>${cats}</select>
+    <div class="actions"><button class="btn" onclick="hideModal()">取消</button><button class="btn btn-primary" onclick="saveNote('${eid||''}')">${n?'保存':'创建'}</button></div>`);
+}
+function saveNote(eid){
+  const text=document.getElementById('noteText').value.trim();if(!text)return;
+  const color=document.querySelector('#notePicker .active')?.dataset.color||'yellow';
+  const type=document.getElementById('noteType').value,cat=document.getElementById('noteCat').value;
+  if(eid){const n=D.notes.find(x=>x.id===eid);if(n){n.text=text;n.color=color;n.type=type;n.category=cat;}}
+  else D.notes.push({id:gid(),text,color,type,category:cat,createdAt:Date.now(),children:[]});
+  save();hideModal();renderBoard();
+}
+function editNote(id){showNoteModal(id);}
+function deleteNote(id){
+  D.notes=D.notes.filter(n=>n.id!==id);D.timelineNotes=D.timelineNotes.filter(t=>t.noteId!==id);
+  ['matrixPriority','matrixTime'].forEach(k=>['A','B','C','D'].forEach(q=>{D[k][q]=(D[k][q]||[]).filter(x=>x!==id);}));
+  save();renderBoard();
+}
+
+// ═══ TIMELINE ═══
+function renderTimeline(){
+  const di=document.getElementById('timelineDate');
+  if(!di.value)di.value=new Date().toISOString().slice(0,10);
+  const date=di.value,body=document.getElementById('timelineBody');
+  let h='';
+  for(let hr=6;hr<=23;hr++){
+    const lbl=String(hr).padStart(2,'0')+':00';
+    const blocks=D.timelineBlocks.filter(b=>b.date===date&&b.hour===hr);
+    const notes=D.timelineNotes.filter(t=>t.date===date&&t.hour===hr);
+    const bh=blocks.map(b=>`<div class="slot-block">${esc(b.text)}<button class="rm" onclick="removeBlock('${b.id}')">&times;</button></div>`).join('');
+    const nh=notes.map(t=>{const n=D.notes.find(x=>x.id===t.noteId);if(!n)return'';return`<div class="slot-note">${esc(n.text)}<button class="rm" onclick="removeTN('${t.id}')">&times;</button></div>`;}).join('');
+    h+=`<div class="hour-row"><span class="hour-label">${lbl}</span><div class="hour-slot" data-hour="${hr}" data-date="${date}">${bh}${nh}</div></div>`;
+  }
+  body.innerHTML=h;
+  body.querySelectorAll('.hour-slot').forEach(s=>{
+    s.addEventListener('dragover',e=>{e.preventDefault();s.classList.add('drag-over');});
+    s.addEventListener('dragleave',()=>s.classList.remove('drag-over'));
+    s.addEventListener('drop',e=>{e.preventDefault();s.classList.remove('drag-over');const nid=e.dataTransfer.getData('text/plain');if(!nid)return;const hr=parseInt(s.dataset.hour),dt=s.dataset.date;if(!D.timelineNotes.find(t=>t.noteId===nid&&t.date===dt&&t.hour===hr)){D.timelineNotes.push({id:gid(),noteId:nid,date:dt,hour:hr});save();renderTimeline();}});
+  });
+  const pool=document.getElementById('todoPool'),todos=D.notes.filter(n=>n.type==='todo');
+  pool.innerHTML=todos.length?todos.map(n=>`<div class="note color-${n.color}" draggable="true" data-id="${n.id}"><div class="note-text">${esc(n.text)}</div></div>`).join(''):'<div class="hint" style="padding:16px">暂无TODO</div>';
+  pool.querySelectorAll('.note[draggable]').forEach(setupDrag);
+}
+document.getElementById('timelineDate')?.addEventListener('change',renderTimeline);
+function showAddBlockModal(){
+  let opts='';for(let h=6;h<=23;h++)opts+=`<option value="${h}">${String(h).padStart(2,'0')}:00</option>`;
+  showModal(`<h3>添加日程块</h3><label>名称</label><input id="blockText" placeholder="例如：送孩子上学"><label>时间</label><select id="blockHour">${opts}</select><div class="actions"><button class="btn" onclick="hideModal()">取消</button><button class="btn btn-primary" onclick="addBlock()">添加</button></div>`);
+}
+function addBlock(){const text=document.getElementById('blockText').value.trim(),hour=parseInt(document.getElementById('blockHour').value),di=document.getElementById('timelineDate'),date=di?di.value:new Date().toISOString().slice(0,10);if(!text)return;D.timelineBlocks.push({id:gid(),text,hour,date});save();hideModal();renderTimeline();}
+function removeBlock(id){D.timelineBlocks=D.timelineBlocks.filter(b=>b.id!==id);save();renderTimeline();}
+function removeTN(id){D.timelineNotes=D.timelineNotes.filter(t=>t.id!==id);save();renderTimeline();}
+
+// ═══ PENDING ═══
+function renderPending(){
+  const w=document.getElementById('pendingCats');
+  w.innerHTML=D.categories.map(cat=>{
+    const notes=D.notes.filter(n=>n.category===cat);
+    const nh=notes.length?notes.map(n=>`<div class="note color-${n.color}"><div class="note-text">${esc(n.text)}</div></div>`).join(''):'<div class="hint" style="padding:16px">暂无便签</div>';
+    return`<div class="pend-card"><div class="pend-card-head">${esc(cat)}</div><div class="pend-card-body">${nh}</div></div>`;
+  }).join('');
+  w.innerHTML+=`<div class="pend-add" onclick="showAddCatModal()">+ 添加分类</div>`;
+}
+function showAddCatModal(){showModal(`<h3>添加分类</h3><label>分类名称</label><input id="newCatName" placeholder="例如：周末再说"><div class="actions"><button class="btn" onclick="hideModal()">取消</button><button class="btn btn-primary" onclick="addCat()">添加</button></div>`);}
+function addCat(){const n=document.getElementById('newCatName').value.trim();if(!n||D.categories.includes(n))return;D.categories.push(n);save();hideModal();renderPending();}
+
+// ═══ MONSTER ═══
+let activeMon=null;
+function renderMonster(){
+  const list=document.getElementById('monsterList');
+  list.innerHTML=D.monsters.length?D.monsters.map(m=>`<div class="mon-item ${activeMon===m.id?'active':''}" onclick="selectMon('${m.id}')">${esc(m.text)}</div>`).join(''):'<div class="hint" style="padding:24px">添加一个让你头疼的大任务</div>';
+  renderTree();
+}
+function selectMon(id){activeMon=id;renderMonster();}
+function renderTree(){
+  const el=document.getElementById('monsterTree');
+  if(!activeMon){el.innerHTML='<div class="hint">选择左侧任务开始拆解</div>';return;}
+  const m=D.monsters.find(x=>x.id===activeMon);if(!m)return;
+  let h=`<div class="tree-root-tag">${esc(m.text)}<button onclick="deleteMon('${m.id}')">✕</button></div>`;
+  h+='<div class="tree-branch">';
+  if(m.children?.length){
+    h+=m.children.map((c,i)=>`<div class="tree-step"><div class="tree-leaf">${esc(c)}<button onclick="removeStep('${m.id}',${i})">✕</button></div></div>`).join('');
+  } else {
+    h+='<div style="padding:16px 0;color:var(--text-3);font-size:14px">问自己：第一步要做什么？</div>';
+  }
+  h+=`</div><div class="tree-input"><input id="newStep" placeholder="下一步具体做什么？" onkeydown="if(event.key==='Enter')addStep('${m.id}')"><button class="btn btn-sm btn-primary" onclick="addStep('${m.id}')">添加</button></div>`;
+  h+=`<div class="tree-hint">提示：不断问自己「第一步具体做什么？」拆到能立即动手为止</div>`;
+  el.innerHTML=h;
+}
+function showMonsterModal(){showModal(`<h3>添加大任务</h3><label>让你头疼的事是什么？</label><input id="monsterText" placeholder="例如：整理储藏室"><div class="actions"><button class="btn" onclick="hideModal()">取消</button><button class="btn btn-primary" onclick="addMon()">添加</button></div>`);}
+function addMon(){const t=document.getElementById('monsterText').value.trim();if(!t)return;const m={id:gid(),text:t,children:[]};D.monsters.push(m);activeMon=m.id;save();hideModal();renderMonster();}
+function addStep(mid){const inp=document.getElementById('newStep'),t=inp.value.trim();if(!t)return;const m=D.monsters.find(x=>x.id===mid);if(m){m.children.push(t);save();renderTree();}}
+function removeStep(mid,i){const m=D.monsters.find(x=>x.id===mid);if(m){m.children.splice(i,1);save();renderTree();}}
+function deleteMon(id){D.monsters=D.monsters.filter(m=>m.id!==id);if(activeMon===id)activeMon=null;save();renderMonster();}
+
+// ═══ MATRIX ═══
+let curMx='priority';
+function renderMatrix(){
+  document.querySelectorAll('.mx-tabs button').forEach(t=>{t.classList.toggle('active',t.dataset.matrix===curMx);t.onclick=()=>{curMx=t.dataset.matrix;renderMatrix();};});
+  const isP=curMx==='priority',yL=isP?'压力程度 ↑':'消耗时间 ↑',xL=isP?'生活影响 →':'消耗人力 →',dk=isP?'matrixPriority':'matrixTime';
+  const desc=isP?{A:'高压力 · 大影响',B:'高压力 · 小影响',C:'低压力 · 大影响',D:'低压力 · 小影响'}:{A:'耗时长 · 多人力',B:'耗时长 · 少人力',C:'耗时短 · 多人力',D:'耗时短 · 少人力'};
+  function cellH(q){
+    const ids=D[dk][q]||[];
+    const nh=ids.map(id=>{const n=D.notes.find(x=>x.id===id);if(!n)return'';return`<div class="note color-${n.color}" style="position:relative"><div class="note-text">${esc(n.text)}</div><button class="mdel" onclick="rmMx('${dk}','${q}','${id}')">&times;</button></div>`;}).join('');
+    return`<div class="mx-cell" data-q="${q}" data-key="${dk}"><div class="cl">${q}</div><div class="cd">${desc[q]}</div><div class="cn">${nh}</div></div>`;
+  }
+  document.getElementById('matrixContent').innerHTML=`
+    <div class="mx-grid"><div class="mx-y">${yL}</div><div class="mx-x">${xL}</div>${cellH('A')}${cellH('B')}${cellH('C')}${cellH('D')}</div>
+    <div class="mx-pool"><div class="mx-pool-title">拖拽便签到方阵中</div><div class="mx-pool-notes" id="matrixPool"></div></div>`;
+  const pool=document.getElementById('matrixPool'),used=new Set([...(D[dk].A||[]),...(D[dk].B||[]),...(D[dk].C||[]),...(D[dk].D||[])]),free=D.notes.filter(n=>!used.has(n.id));
+  pool.innerHTML=free.length?free.map(n=>`<div class="note color-${n.color}" draggable="true" data-id="${n.id}" style="position:relative"><div class="note-text">${esc(n.text)}</div></div>`).join(''):'<div class="hint" style="padding:8px">所有便签已分配</div>';
+  pool.querySelectorAll('.note[draggable]').forEach(setupDrag);
+  document.querySelectorAll('.mx-cell').forEach(cell=>{
+    cell.addEventListener('dragover',e=>{e.preventDefault();cell.classList.add('drag-over');});
+    cell.addEventListener('dragleave',()=>cell.classList.remove('drag-over'));
+    cell.addEventListener('drop',e=>{e.preventDefault();cell.classList.remove('drag-over');const nid=e.dataTransfer.getData('text/plain');if(!nid)return;const key=cell.dataset.key,q=cell.dataset.q;['A','B','C','D'].forEach(qq=>{D[key][qq]=(D[key][qq]||[]).filter(x=>x!==nid);});if(!D[key][q])D[key][q]=[];D[key][q].push(nid);save();renderMatrix();});
+  });
+}
+function rmMx(k,q,id){D[k][q]=(D[k][q]||[]).filter(x=>x!==id);save();renderMatrix();}
+
+// ═══ HABIT ═══
+function renderHabit(){
+  const cards=document.getElementById('habitCards'),emp=document.getElementById('habitEmpty');
+  if(!D.habits.length){cards.innerHTML='';emp.style.display='';return;}
+  emp.style.display='none';
+  cards.innerHTML=D.habits.map(h=>{
+    const cnt=h.days.filter(Boolean).length,pct=Math.round(cnt/21*100),done=cnt>=21;
+    const dh=h.days.map((d,i)=>`<div class="hab-day ${d?'on':''}" onclick="togHab('${h.id}',${i})">${i+1}</div>`).join('');
+    return`<div class="hab-card"><button class="hab-del" onclick="delHab('${h.id}')">&times;</button>
+      <h4>${esc(h.goal)}</h4><div class="hab-reward">达成奖励：${esc(h.reward||'未设置')}</div>
+      <div class="hab-grid">${dh}</div>
+      <div class="hab-bar"><div class="hab-bar-fill" style="width:${pct}%"></div></div>
+      <div class="hab-stat">${cnt} / 21</div>
+      ${done?`<div class="hab-done">已坚持21天，习惯养成！去享受「${esc(h.reward)}」吧</div>`:''}
+    </div>`;
+  }).join('');
+}
+function showHabitModal(){showModal(`<h3>新习惯目标</h3><label>习惯目标</label><input id="habitGoal" placeholder="例如：餐桌不堆东西"><label>达成奖励</label><input id="habitReward" placeholder="例如：去吃烤肉"><div class="actions"><button class="btn" onclick="hideModal()">取消</button><button class="btn btn-primary" onclick="addHab()">开始</button></div>`);}
+function addHab(){const g=document.getElementById('habitGoal').value.trim(),r=document.getElementById('habitReward').value.trim();if(!g)return;D.habits.push({id:gid(),goal:g,reward:r,startDate:Date.now(),days:new Array(21).fill(false)});save();hideModal();renderHabit();}
+function togHab(hid,i){const h=D.habits.find(x=>x.id===hid);if(h){h.days[i]=!h.days[i];save();renderHabit();}}
+function delHab(id){D.habits=D.habits.filter(h=>h.id!==id);save();renderHabit();}
+
+// ═══ INVENTORY ═══
+function renderInventory(){
+  const list=document.getElementById('invList'),shop=document.getElementById('shoppingList');
+  list.innerHTML=D.inventory.length?D.inventory.map(it=>`<div class="inv-item">
+    <span class="inv-name">${esc(it.name)}</span>
+    <span class="inv-badge ${it.hasBackup?'ok':'no'}">${it.hasBackup?'有备用':'需补货'}</span>
+    <div class="inv-btns">
+      ${it.hasBackup?`<button class="btn btn-sm" onclick="useBackup('${it.id}')">启用备用</button>`:''}
+      ${!it.hasBackup&&!it.inShoppingList?`<button class="btn btn-sm" onclick="restock('${it.id}')">已补货</button>`:''}
+      <button class="btn btn-sm btn-danger" onclick="delInv('${it.id}')">删除</button>
+    </div></div>`).join(''):'<div class="hint">添加需要管理的物品</div>';
+  const items=D.inventory.filter(i=>i.inShoppingList);
+  shop.innerHTML=items.length?items.map(it=>`<div class="shop-item"><span>${esc(it.name)}</span><button onclick="bought('${it.id}')">已购买</button></div>`).join(''):'<div style="color:var(--text-3);font-size:14px;padding:8px 0;text-align:center">暂无</div>';
+}
+function showInvModal(){showModal(`<h3>添加物品</h3><label>名称</label><input id="invName" placeholder="例如：洗手液"><label>备用状态</label><select id="invBackup"><option value="1">有备用</option><option value="0">无备用</option></select><div class="actions"><button class="btn" onclick="hideModal()">取消</button><button class="btn btn-primary" onclick="addInv()">添加</button></div>`);}
+function addInv(){const n=document.getElementById('invName').value.trim(),b=document.getElementById('invBackup').value==='1';if(!n)return;D.inventory.push({id:gid(),name:n,hasBackup:b,inShoppingList:false});save();hideModal();renderInventory();}
+function useBackup(id){const it=D.inventory.find(x=>x.id===id);if(it){it.hasBackup=false;it.inShoppingList=true;save();renderInventory();}}
+function bought(id){const it=D.inventory.find(x=>x.id===id);if(it){it.hasBackup=true;it.inShoppingList=false;save();renderInventory();}}
+function restock(id){const it=D.inventory.find(x=>x.id===id);if(it){it.hasBackup=true;it.inShoppingList=false;save();renderInventory();}}
+function delInv(id){D.inventory=D.inventory.filter(x=>x.id!==id);save();renderInventory();}
+
+// ═══ FAMILY ═══
+function renderFamily(){
+  document.getElementById('familyCols').innerHTML=MEM.map(m=>{
+    const tasks=D.familyTasks.filter(t=>t.assignee===m.k),done=tasks.filter(t=>t.done).length;
+    const th=tasks.length?tasks.map(t=>`<div class="fam-task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="togFT('${t.id}')"><span class="ft">${esc(t.text)}</span><button class="fd" onclick="delFT('${t.id}')">&times;</button></div>`).join(''):'<div class="hint" style="padding:16px">暂无任务</div>';
+    return`<div class="fam-col"><div class="fam-head"><div class="fi">${m.i}</div><div class="fn">${m.l}</div></div><div class="fam-body">${th}<div class="fam-score"><em>${done}</em> / ${tasks.length}</div><div class="fam-add"><input id="fi-${m.k}" placeholder="添加任务…" onkeydown="if(event.key==='Enter')addFT('${m.k}')"><button class="btn btn-sm" onclick="addFT('${m.k}')">+</button></div></div></div>`;
+  }).join('');
+}
+function addFT(a){const inp=document.getElementById('fi-'+a),t=inp.value.trim();if(!t)return;D.familyTasks.push({id:gid(),text:t,assignee:a,done:false});save();renderFamily();}
+function togFT(id){const t=D.familyTasks.find(x=>x.id===id);if(t){t.done=!t.done;save();renderFamily();}}
+function delFT(id){D.familyTasks=D.familyTasks.filter(x=>x.id!==id);save();renderFamily();}
+
+renderBoard();
+</script>
+</body>
+</html>
