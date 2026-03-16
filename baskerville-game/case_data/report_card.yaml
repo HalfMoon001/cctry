@@ -1,0 +1,158 @@
+# ============================================
+# Game3 - 档案卡（结案报告）
+# 选项式作答，正确答案与truth对应
+# ============================================
+
+reportCard:
+  title: "结案报告 - 迷雾中的真相"
+  description: "请根据您收集的线索，回答以下问题完成结案报告。"
+
+  sections:
+    # ---- 谋杀案部分 ----
+    - sectionId: "murder-section"
+      title: "查尔斯·巴斯克维尔爵士之死"
+      caseType: murder
+      questions:
+        - questionId: "q-killer"
+          text: "谁是杀害查尔斯·巴斯克维尔爵士的凶手？"
+          type: "select_person"
+          options:
+            - id: "opt-stapleton"
+              text: "杰克·斯泰普尔顿"
+            - id: "opt-barrymore"
+              text: "巴里摩尔"
+            - id: "opt-mortimer"
+              text: "莫蒂默医生"
+            - id: "opt-selden"
+              text: "逃犯塞尔登"
+            - id: "opt-henry"
+              text: "亨利·巴斯克维尔"
+          correctAnswer: "opt-stapleton"
+
+        - questionId: "q-murder-method"
+          text: "凶手使用了什么手段杀害查尔斯爵士？"
+          type: "select_description"
+          options:
+            - id: "opt-poison"
+              text: "在查尔斯爵士的雪茄中投入慢性毒药"
+            - id: "opt-hound"
+              text: "放出涂有磷光剂的巨型猎犬追赶，利用其心脏病和迷信致其惊吓而死"
+            - id: "opt-assault"
+              text: "在紫杉大道上伏击并使用暴力致死"
+            - id: "opt-trap"
+              text: "引诱其进入格林盆泥潭陷入沼泽"
+          correctAnswer: "opt-hound"
+
+        - questionId: "q-murder-motive"
+          text: "凶手的核心动机是什么？"
+          type: "select_description"
+          options:
+            - id: "opt-revenge"
+              text: "为家族过去遭受的不公复仇"
+            - id: "opt-inheritance"
+              text: "作为隐藏的巴斯克维尔后裔，清除继承人以谋夺遗产"
+            - id: "opt-debt"
+              text: "因巨额债务不得不铤而走险"
+            - id: "opt-secret"
+              text: "防止查尔斯爵士发现某个不可告人的秘密"
+          correctAnswer: "opt-inheritance"
+
+        - questionId: "q-killer-alibi"
+          text: "关于凶手的不在场证明，以下哪项是正确的？"
+          type: "select_description"
+          options:
+            - id: "opt-alibi-true"
+              text: "凶手案发当晚有可靠的不在场证明"
+            - id: "opt-alibi-false"
+              text: "凶手声称在家中研究标本，但无人能证实"
+            - id: "opt-alibi-partial"
+              text: "凶手有上半夜的不在场证明，但下半夜无法解释"
+            - id: "opt-alibi-none"
+              text: "凶手从未提供不在场证明"
+          correctAnswer: "opt-alibi-false"
+
+    # ---- 阴谋部分 ----
+    - sectionId: "conspiracy-section"
+      title: "巴斯克维尔遗产阴谋"
+      caseType: conspiracy
+      questions:
+        - questionId: "q-conspirator"
+          text: "谁策划了整个遗产阴谋？"
+          type: "select_person"
+          options:
+            - id: "opt-stapleton-c"
+              text: "斯泰普尔顿（实为巴斯克维尔后裔）"
+            - id: "opt-barrymore-c"
+              text: "巴里摩尔夫妇"
+            - id: "opt-mortimer-c"
+              text: "莫蒂默医生"
+            - id: "opt-unknown-c"
+              text: "不明外部势力"
+          correctAnswer: "opt-stapleton-c"
+
+        - questionId: "q-true-identity"
+          text: "斯泰普尔顿的真实身份是什么？"
+          type: "select_description"
+          options:
+            - id: "opt-naturalist"
+              text: "确实只是一个自然学家"
+            - id: "opt-baskerville-son"
+              text: "罗杰·巴斯克维尔（查尔斯爵士弟弟）之子，本名杰克·巴斯克维尔"
+            - id: "opt-moriarty-agent"
+              text: "莫里亚蒂教授的手下"
+            - id: "opt-foreign-spy"
+              text: "外国间谍，觊觎巴斯克维尔家族的土地"
+          correctAnswer: "opt-baskerville-son"
+
+        - questionId: "q-next-target"
+          text: "阴谋的下一个目标是谁？"
+          type: "select_person"
+          options:
+            - id: "opt-watson-t"
+              text: "华生医生"
+            - id: "opt-henry-t"
+              text: "亨利·巴斯克维尔爵士"
+            - id: "opt-mortimer-t"
+              text: "莫蒂默医生"
+            - id: "opt-barrymore-t"
+              text: "巴里摩尔"
+          correctAnswer: "opt-henry-t"
+
+    # ---- 骗局部分 ----
+    - sectionId: "scam-section"
+      title: "红发会骗局"
+      caseType: scam
+      questions:
+        - questionId: "q-scam-purpose"
+          text: "红发会骗局的真正目的是什么？"
+          type: "select_description"
+          options:
+            - id: "opt-distract"
+              text: "每天占用威尔逊四小时，让同伙在当铺地下室挖掘通往银行金库的隧道"
+            - id: "opt-money-launder"
+              text: "利用红发会的名义进行洗钱活动"
+            - id: "opt-spy"
+              text: "监视威尔逊的当铺交易获取情报"
+            - id: "opt-recruit"
+              text: "为犯罪组织招募成员"
+          correctAnswer: "opt-distract"
+
+        - questionId: "q-scam-mastermind"
+          text: "红发会骗局的幕后主使是谁？"
+          type: "select_description"
+          options:
+            - id: "opt-duncan"
+              text: "面试官邓肯·罗斯"
+            - id: "opt-john-clay"
+              text: "威尔逊的助手（真实身份为约翰·克莱，著名罪犯）"
+            - id: "opt-hopkins"
+              text: "虚构的遗产捐赠者霍普金斯"
+            - id: "opt-wilson-self"
+              text: "威尔逊自导自演"
+          correctAnswer: "opt-john-clay"
+
+  evaluation:
+    allCorrect: "卓越的推理能力！你完美地还原了所有真相。福尔摩斯都会对你表示赞赏。"
+    mostCorrect: "出色的分析！大部分真相已被你揭露，但还有一些细节值得再推敲。"
+    halfCorrect: "初步的推理有了方向，但许多关键环节还需要更多证据支撑。"
+    fewCorrect: "还有很多迷雾尚未散去。建议回顾线索板，重新整理思路。"

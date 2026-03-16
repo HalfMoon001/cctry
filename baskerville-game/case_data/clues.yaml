@@ -1,0 +1,264 @@
+clues:
+  # ========== 第一阶段线索 ==========
+
+  - id: "clue_footprints"
+    name: "查尔斯爵士的异常足迹"
+    description: "紫杉大道上查尔斯爵士的足迹从边门处开始由正常步行变为踮脚奔跑，说明他在极度恐惧中逃命。"
+    detailedAnalysis: "足迹分析显示：从庄园到边门为正常步行足迹；在边门处有短暂停留（雪茄烟灰证实5-10分钟）；穿过边门后足迹变为'用脚尖行路'，这种急剧变化说明死者在边门处遭遇了某种极度恐怖的事物，随后在极度恐惧中奔逃，直至心脏病发作倒地。"
+    relevance: "scene"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_01"
+    foundInSceneId: "scene_yew_avenue"
+    sourceSkills:
+      - "sir-charles-baskerville-death-investigation"
+
+  - id: "clue_hound_prints"
+    name: "巨型猎犬爪印"
+    description: "莫蒂默医生私下透露，在距尸体约20码处发现了一组非常清楚、非常新鲜的巨型猎犬爪印。这一证据因担心被视为迷信而未向验尸陪审团披露。"
+    detailedAnalysis: "爪印位于路面靠边门一侧，距尸体约20码。注意：紫杉大道两侧的草地无法留下爪印，只有中央路面的泥地才能保留痕迹。这意味着追赶查尔斯爵士的生物至少有一段路程是在路面上奔跑的。爪印的大小表明这不是普通猎犬，而是一只体型异常庞大的犬类。"
+    relevance: "weapon"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_01"
+    foundInSceneId: "scene_yew_avenue"
+    sourceSkills:
+      - "sir-charles-baskerville-death-investigation"
+      - "yew-avenue-crime-scene-mapping"
+
+  - id: "clue_death_scene"
+    name: "查尔斯爵士的死状"
+    description: "尸体面容极度扭曲，双臂伸开，手指深深抠入地面。无身体暴力伤害痕迹，符合极度恐惧导致心力衰竭的特征。"
+    detailedAnalysis: "死者的面部表情扭曲到几近不可思议的程度，这不是普通心脏病发作的表现，而是在极度恐惧状态下死亡的典型特征。手指抠入地面的姿态表明死亡前有剧烈的挣扎。虽然官方结论为心脏衰竭自然死亡，但这些细节强烈暗示存在外部惊吓因素。"
+    relevance: "scene"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_01"
+    foundInSceneId: "scene_yew_avenue"
+    sourceSkills:
+      - "sir-charles-baskerville-death-investigation"
+
+  - id: "clue_family_legend"
+    name: "巴斯克维尔家族猎犬传说"
+    description: "自1647年雨果·巴斯克维尔被'地狱猎犬'撕碎以来，家族成员多有不得善终者。查尔斯爵士深信这一传说，生前极度恐惧。"
+    detailedAnalysis: "传说称雨果·巴斯克维尔酒后追逐少女跑上荒原，被一只来自地狱的巨型猎犬撕碎。此后家族成员频繁死于非命。这个传说本身虽然是迷信，但对案件至关重要：它既是凶手利用的心理武器（查尔斯爵士因深信传说而更容易被吓死），也可能是凶手伪装谋杀的完美掩护。"
+    relevance: "trick"
+    isHidden: false
+    isKey: true
+    phaseAvailable: "phase_01"
+    foundInSceneId: "scene_baskerville_hall"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+
+  - id: "clue_cigar_ash"
+    name: "边门处的雪茄烟灰"
+    description: "边门旁发现查尔斯爵士的雪茄掉落了两次烟灰，推断他曾在此站立等候5到10分钟。"
+    detailedAnalysis: "根据雪茄燃烧速度推算，两次烟灰掉落意味着查尔斯爵士在边门处站立了约5到10分钟。这说明他是在等待某人——而不是像往常一样在紫杉大道散步。谁约他在此见面？为什么他要在深夜的边门处等候？"
+    relevance: "time"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_01"
+    foundInSceneId: "scene_yew_avenue"
+    sourceSkills:
+      - "yew-avenue-crime-scene-mapping"
+
+  - id: "clue_gate_status"
+    name: "边门状态"
+    description: "通往荒原的边门高约4英尺，当时是关闭上锁状态，但任何人都可以翻越。边门附近砾石上只有查尔斯爵士自己的脚印。"
+    detailedAnalysis: "边门的高度仅4英尺，任何人都可以轻松翻越。门虽然上锁但不能阻止入侵。砾石上只有死者脚印的事实看似排除了第三方存在，但需注意：猎犬可以从草地上接近而不留下爪印（草地无法保留痕迹），直到在泥泞路面上才留下了那组关键的爪印。"
+    relevance: "scene"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_01"
+    foundInSceneId: "scene_yew_avenue"
+    sourceSkills:
+      - "yew-avenue-crime-scene-mapping"
+
+  - id: "clue_warning_letter"
+    name: "匿名警告信"
+    description: "亨利爵士在伦敦旅馆收到一封匿名信：'如果你珍惜自己的性命和理智，就远离荒原。'信上的字是从《泰晤士报》上剪下来拼贴的，但'荒原'二字是用钢笔手写的。"
+    detailedAnalysis: "警告信来自一个了解内情但又不希望暴露身份的人。报纸拼贴的方式说明寄信者刻意隐藏笔迹，但'荒原'一词被手写说明这个词无法从报纸上找到。谁会在伦敦知道亨利爵士的行踪？谁会想要保护他但又不敢公开行动？这封信很可能出自贝里尔·斯台普顿之手——她反对丈夫的谋杀计划但又不敢直接对抗。"
+    relevance: "trick"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_01"
+    foundInSceneId: "scene_baskerville_hall"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+
+  # ========== 第二阶段线索 ==========
+
+  - id: "clue_candle_signal"
+    name: "白瑞摩的深夜烛光信号"
+    description: "深夜约凌晨2点，白瑞摩手持蜡烛在庄园西侧窗口向荒原发送信号，穿着衬衫和长裤，打赤脚，步伐缓慢小心。荒原上有一点'针尖似的黄光'作为回应。"
+    detailedAnalysis: "白瑞摩选择的是庄园中唯一能直视荒原的窗户，透过两棵树之间的缺口发送光信号。观察他的行为：伏在窗边将蜡烛凑在玻璃后，直勾勾盯着黑暗的荒原，似乎有所期待。荒原上出现回应的光点后，白瑞摩叹气并灭掉蜡烛。这是一个固定的通信程序——用于确认逃犯位置并安排食物投放。"
+    relevance: "alibi"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_02"
+    foundInSceneId: "scene_baskerville_hall"
+    sourceSkills:
+      - "nighttime-surveillance-procedure"
+      - "candle-signal-process"
+
+  - id: "clue_moor_howling"
+    name: "荒原上的恐怖嚎叫"
+    description: "荒原夜间从格林盆泥潭方向传来怪声：初始为漫长深沉的咕哝，变成越来越响的咆哮，最终变为越来越低的凄惨呜咽。当地人称之为'巴斯克维尔猎犬的叫声'。"
+    detailedAnalysis: "声音特征：尖利刺耳、狂野凶蛮、来势汹汹。声音随风从格林盆泥潭方向传来，距离数英里之外。斯台普顿将其解释为'一种怪鸟的叫声'，但亨利爵士听后极度恐惧。这种声音的真实来源是藏在格林盆泥潭中的猎犬——它的嚎叫在空旷的荒原上回荡，被超自然传说渲染后成为令人毛骨悚然的'地狱猎犬'之声。"
+    relevance: "weapon"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_02"
+    foundInSceneId: "scene_moor_hideout"
+    sourceSkills:
+      - "moor-howling-identification"
+
+  - id: "clue_mysterious_figure"
+    name: "月光下的神秘人影"
+    description: "在荒原的花岗岩山脊上，月光下出现一个又高又瘦的人影——两腿微微叉开，双臂抱在胸前，低头凝神揣度荒野。排除了逃犯塞尔登的可能，这是荒原上的第三个神秘存在。"
+    detailedAnalysis: "人影站在尖顶之上，映现在月亮的银盘中，漆黑鲜明宛如乌木雕像。通过排除法：距离和体型特征排除了逃犯塞尔登。此人在高处监视整个荒原的行为表明他不是普通路人，而是一个有目的的观察者。结合石屋中的监视字条，荒原上存在一个隐藏的监控网络。"
+    relevance: "culprit"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_02"
+    foundInSceneId: "scene_moor_hideout"
+    sourceSkills:
+      - "mysterious-figure-observation"
+
+  - id: "clue_selden_escape"
+    name: "逃犯塞尔登的存在"
+    description: "达特莫尔监狱的越狱逃犯塞尔登藏匿在荒原上，他是白瑞摩太太的弟弟。白瑞摩夫妇一直在秘密为他提供食物。"
+    detailedAnalysis: "塞尔登是诺丁丘杀人犯，从达特莫尔监狱越狱后藏在荒原石屋中。白瑞摩夫妇通过烛光信号确认他的位置后，将面包和肉食送到约定地点。塞尔登的存在解释了白瑞摩的夜间可疑行为，但他本身并非查尔斯爵士死亡案的关键——他是一个干扰因素。然而，亨利爵士的旧衣服通过白瑞摩转赠给塞尔登，这个细节后来将产生致命后果。"
+    relevance: "red_herring"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_02"
+    foundInSceneId: "scene_moor_hideout"
+    sourceSkills:
+      - "candle-signal-process"
+
+  - id: "clue_henry_clothes"
+    name: "亨利爵士的旧衣服转赠"
+    description: "白瑞摩将亨利爵士不要的旧衣服（包括花呢西服）转赠给了荒原上的逃犯塞尔登。"
+    detailedAnalysis: "猎犬通过气味锁定目标——如果塞尔登穿着亨利爵士的旧衣服，猎犬就会把他误认为亨利爵士。这解释了为什么塞尔登后来被猎犬追赶致死：猎犬通过衣服上残留的气味将塞尔登误判为攻击目标。这条线索同时证明了猎犬确实存在，且它是通过气味来锁定目标的。"
+    relevance: "trick"
+    isHidden: false
+    isKey: true
+    phaseAvailable: "phase_02"
+    foundInSceneId: "scene_baskerville_hall"
+    sourceSkills:
+      - "hound-mistaken-identity-case-analysis"
+
+  - id: "clue_hideout_note"
+    name: "石屋中的监视字条"
+    description: "在荒原石屋的包裹下面发现一张字条，内容是对某人行踪的详细监视报告。出人意料的是，被监视的对象并非仅仅是亨利爵士。"
+    detailedAnalysis: "字条的存在表明荒原上不仅有逃犯塞尔登，还有一个更有组织的观察者在系统地监视着庄园周围的一切。字条的笔迹和用语表明写信者受过良好教育。结合月光下山脊上的神秘人影，可以确认荒原上存在第三方——一个隐藏在暗处的监控者。"
+    relevance: "culprit"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_02"
+    foundInSceneId: "scene_moor_hideout"
+    sourceSkills:
+      - "hideout-search-surveillance-analysis"
+
+  - id: "clue_telegram_verification"
+    name: "电报核验不在场证明"
+    description: "通过向邮电所询问电报投递细节发现：发给白瑞摩的电报并非本人签收，而是由妻子转交，无法确认白瑞摩当时是否在家。"
+    detailedAnalysis: "电报核验程序揭示：投递员未见到白瑞摩本人，电报交给了白瑞摩太太。这意味着白瑞摩可能在阁楼里，也可能根本不在家。同样的方法可以用来核验其他嫌疑人的不在场证明。"
+    relevance: "alibi"
+    isHidden: false
+    isKey: false
+    phaseAvailable: "phase_02"
+    foundInSceneId: "scene_coombe_tracey"
+    sourceSkills:
+      - "alibi-verification-telegrams"
+
+  # ========== 第三阶段线索 ==========
+
+  - id: "clue_portrait_resemblance"
+    name: "肖像画的惊人相似"
+    description: "庄园画廊中1647年雨果·巴斯克维尔的肖像，遮去帽子、假发和领巾后，面部轮廓与斯台普顿惊人地相似——下巴形状、眼神特征几乎一模一样。"
+    detailedAnalysis: "运用排除干扰法：遮挡画像中的帽子、假发等时代装饰物，只观察面部骨骼结构。结果发现画中人与斯台普顿的面部特征高度吻合——这是遗传学上的返祖现象。如果斯台普顿是巴斯克维尔家族的后裔，他就拥有遗产继承权——这构成了最强烈的谋杀动机。"
+    relevance: "culprit"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_03"
+    foundInSceneId: "scene_baskerville_hall"
+    sourceSkills:
+      - "portrait-lineage-analysis"
+
+  - id: "clue_stapleton_identity"
+    name: "斯台普顿的真实身份"
+    description: "斯台普顿实际上是罗杰·巴斯克维尔之子，巴斯克维尔家族的旁系后裔。曾用姓氏范德勒在约克郡办学，后改名斯台普顿迁至达特莫尔。"
+    detailedAnalysis: "身份变迁记录：巴斯克维尔（原姓）→ 范德勒（约克郡办学）→ 斯台普顿（达特莫尔）。作为家族后裔，在查尔斯爵士和亨利爵士都死亡的情况下，他将成为遗产的合法继承人。这就是整个谋杀阴谋的核心动机。"
+    relevance: "culprit"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_03"
+    foundInSceneId: "scene_merripit_house"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+      - "portrait-lineage-analysis"
+
+  - id: "clue_phosphorus_hound"
+    name: "磷光猎犬"
+    description: "在格林盆泥潭中心小岛上发现猎犬藏匿的犬舍，以及用于涂抹猎犬的磷光颜料罐。猎犬从伦敦商行购买，被涂成通体漆黑，口眼喷涂磷光物质。"
+    detailedAnalysis: "猎犬是最强壮最凶猛的品种，经过人工改造：通体涂漆在夜间几乎不可见，口部和眼部涂抹磷光剂呈现'口眼喷火'的恐怖效果。猎犬平时藏在泥潭中央小岛的废弃锡矿小屋中，由老仆人安东尼照看。只有斯台普顿知道穿越泥潭的路径。这就是'巴斯克维尔猎犬'传说的真相。"
+    relevance: "weapon"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_03"
+    foundInSceneId: "scene_grimpen_mire"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+      - "grimpen-mire-navigation"
+
+  - id: "clue_lyons_letter"
+    name: "劳拉·莱昂斯的约会信"
+    description: "劳拉·莱昂斯在斯台普顿的怂恿下写信给查尔斯爵士，请他在5月4日深夜到紫杉大道边门会面。但斯台普顿随后阻止了她赴约。"
+    detailedAnalysis: "这封信解释了查尔斯爵士为何会在深夜的边门处等待。斯台普顿利用莱昂斯的经济困境和感情引诱她写信。然后阻止莱昂斯赴约，自己在暗处放出猎犬。莱昂斯被斯台普顿欺骗——他以假称单身的身份引诱她，许诺在她离婚后与她结婚。"
+    relevance: "trick"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_03"
+    foundInSceneId: "scene_coombe_tracey"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+
+  - id: "clue_boot_theft"
+    name: "旅馆靴子失窃事件"
+    description: "亨利爵士在伦敦旅馆先丢了一只新靴子（后找回），然后又丢了一只旧靴子。偷靴子的人需要旧靴子上的气味来训练猎犬锁定目标。"
+    detailedAnalysis: "第一次偷新靴子是错误——新靴子没有主人气味。发现错误后归还新靴子，改偷旧靴子——旧靴子浸透了主人体味，是训练猎犬的完美气味样本。这证明有人正在为猎犬准备气味诱饵，目标就是亨利爵士。"
+    relevance: "trick"
+    isHidden: true
+    isKey: true
+    phaseAvailable: "phase_03"
+    foundInSceneId: "scene_merripit_house"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+
+  - id: "clue_wife_not_sister"
+    name: "妹妹实为妻子"
+    description: "贝里尔·斯台普顿并非斯台普顿的妹妹，而是他的妻子。斯台普顿将她伪装成妹妹是为了利用她的美貌接近目标，同时保持'单身'身份引诱劳拉·莱昂斯。"
+    detailedAnalysis: "斯台普顿需要保持'单身'身份有两个目的：一是用妻子的美貌吸引目标，二是以单身身份引诱莱昂斯成为不知情的同谋。贝里尔内心反对丈夫的计划，曾写匿名警告信、直接劝说亨利离开。最终斯台普顿在最后行动前将她绑缚以防泄密。"
+    relevance: "culprit"
+    isHidden: false
+    isKey: true
+    phaseAvailable: "phase_03"
+    foundInSceneId: "scene_merripit_house"
+    sourceSkills:
+      - "baskerville-heir-warning-delivery"
+      - "inheritance-murder-conspiracy"
+
+  - id: "clue_mire_path"
+    name: "泥潭秘密路径"
+    description: "格林盆大泥潭中有一条用小木棍标记的秘密路径，只有斯台普顿知道如何穿越。路径通向泥潭中心的小岛——猎犬就藏在那里。"
+    detailedAnalysis: "穿越泥潭必须沿木棍标记行走，踩在长着灯芯草的坚实地面上，避开绿色浮渣的致命区域。斯台普顿以采集蝴蝶为掩护频繁穿越泥潭照看猎犬。泥潭中心是天然屏障——没有人能在不知道路径的情况下活着到达。"
+    relevance: "weapon"
+    isHidden: true
+    isKey: false
+    phaseAvailable: "phase_03"
+    foundInSceneId: "scene_grimpen_mire"
+    sourceSkills:
+      - "grimpen-mire-navigation"
+      - "grimpen-mire-identification-avoidance"

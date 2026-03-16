@@ -1,0 +1,43 @@
+lies:
+  - id: "lie_stapleton_identity"
+    characterId: "stapleton"
+    lieContent: "斯台普顿声称自己只是一个普通的昆虫学家，与巴斯克维尔家族毫无血缘关系"
+    truthContent: "他实际上是罗杰·巴斯克维尔（查尔斯爵士的弟弟）之子，是遗产的合法继承人之一。曾在约克郡以'范德勒'之名经营学校，后改名斯台普顿迁至达特莫尔，就是为了接近目标实施谋杀计划。"
+    contradictingClueIds:
+      - "clue_portrait_resemblance"
+      - "clue_stapleton_identity"
+    isKeyLie: true
+
+  - id: "lie_stapleton_relationship"
+    characterId: "stapleton"
+    lieContent: "斯台普顿声称与他同住的贝里尔是他的妹妹"
+    truthContent: "贝里尔实际上是他的妻子。他将妻子伪装成妹妹，一是为了利用她的美貌接近目标（查尔斯爵士和亨利爵士），二是保持'单身'身份以引诱劳拉·莱昂斯成为不知情的同谋。"
+    contradictingClueIds:
+      - "clue_wife_not_sister"
+    isKeyLie: true
+
+  - id: "lie_barrymore_candle"
+    characterId: "barrymore_husband"
+    lieContent: "白瑞摩否认深夜在窗口持蜡烛发信号，声称只是在检查门窗是否锁好"
+    truthContent: "他在向逃亡到荒原上的妻弟塞尔登（越狱逃犯）传递烛光信号，告知食物投放位置。白瑞摩太太深夜哭泣就是因为担心弟弟的安危。"
+    contradictingClueIds:
+      - "clue_candle_signal"
+      - "clue_selden_escape"
+    isKeyLie: false
+
+  - id: "lie_lyons_letter"
+    characterId: "laura_lyons"
+    lieContent: "劳拉·莱昂斯声称与查尔斯爵士的约会纯粹是为了请求经济援助，并否认是受人指使写信，也否认与斯台普顿有特殊关系"
+    truthContent: "她是在斯台普顿的怂恿下写信约查尔斯爵士到紫杉大道边门会面。斯台普顿以假称单身的身份引诱她，许诺在她离婚后与她结婚。写信的真正目的是为斯台普顿创造谋杀机会——将查尔斯爵士引诱到偏僻地点。"
+    contradictingClueIds:
+      - "clue_lyons_letter"
+      - "clue_wife_not_sister"
+      - "clue_cigar_ash"
+    isKeyLie: true
+
+criticalPath:
+  - step: "发现查尔斯爵士在边门等候（clue_cigar_ash）→ 追问谁约他见面"
+  - step: "质疑劳拉·莱昂斯关于约会信的谎言（lie_lyons_letter）→ 得知是斯台普顿怂恿她写信"
+  - step: "发现肖像画相似（clue_portrait_resemblance）→ 质疑斯台普顿的身份谎言（lie_stapleton_identity）→ 揭露其巴斯克维尔家族后裔身份"
+  - step: "质疑斯台普顿的兄妹关系谎言（lie_stapleton_relationship）→ 确认贝里尔是妻子 → 理解伪装动机"
+  - step: "综合所有线索：身份（继承人）+ 动机（遗产）+ 手段（磷光猎犬）+ 机会（引诱至边门）→ 还原完整谋杀真相"

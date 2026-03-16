@@ -1,0 +1,93 @@
+# ============================================
+# Game3 - 开发过程 Token 用量与花销统计
+# ============================================
+
+# 输入来源统计（发送给模型的内容）
+inputSources:
+  spec3_md:
+    description: "spec3.md 规格文件"
+    estimatedTokens: 2200
+  template3_spec_md:
+    description: "template3_spec.md 模板参考"
+    estimatedTokens: 2800
+  skill_files:
+    description: "12个SKILL文件"
+    files:
+      - ferrier-family-background-analysis: ~600
+      - locked-room-murder-scene-investigation: ~900
+      - hideout-search-surveillance-analysis: ~600
+      - crime-scene-reconstruction-analysis: ~1400
+      - physical-evidence-identity-tracing: ~650
+      - grimpen-mire-identification-avoidance: ~650
+      - inheritance-murder-conspiracy: ~900
+      - sir-charles-baskerville-death-investigation: ~500
+      - ethnic-profile-identification: ~800
+      - alibi-verification-telegrams: ~700
+      - red-headed-league-scam-recruitment: ~1200
+      - crime-concealment-decision-analysis: ~1200
+    totalEstimatedTokens: 10100
+  system_prompt_and_tools:
+    description: "系统提示词和工具定义"
+    estimatedTokens: 8000
+  conversation_context:
+    description: "对话上下文（文件列表、目录结构等）"
+    estimatedTokens: 3000
+
+# 输出统计（模型生成的内容）
+outputFiles:
+  meta_yaml:
+    description: "案件元数据、真相、阶段、设计规范"
+    estimatedTokens: 1800
+  characters_yaml:
+    description: "7个角色完整对话脚本和谎言系统"
+    estimatedTokens: 5500
+  scenes_yaml:
+    description: "场景数据（5个场景+搜查区域）"
+    estimatedTokens: 2800
+  clues_yaml:
+    description: "30+条线索（公开+隐藏+质疑奖励）+推理路径"
+    estimatedTokens: 7500
+  report_card_yaml:
+    description: "结案报告（9道问题+选项+评分）"
+    estimatedTokens: 2500
+  hints_yaml:
+    description: "攻略提示系统（3阶段×2-4组×3层）"
+    estimatedTokens: 3000
+  recommendations_yaml:
+    description: "智能推荐规则（15条条件触发规则）"
+    estimatedTokens: 2500
+  self_check_yaml:
+    description: "自检报告"
+    estimatedTokens: 1200
+  skeleton_yaml:
+    description: "骨架文件（外部生成）"
+    estimatedTokens: 0  # 非本次生成
+
+# 汇总
+summary:
+  totalInputTokens: ~26100
+  totalOutputTokens: ~26800
+  totalTokens: ~52900
+
+  # 基于 Claude Opus 4.6 定价
+  # Input: $15/MTok, Output: $75/MTok
+  pricing:
+    model: "claude-opus-4-6"
+    inputCostPerMTok: 15.00
+    outputCostPerMTok: 75.00
+    estimatedInputCost: "$0.39"     # 26100 / 1000000 * 15
+    estimatedOutputCost: "$2.01"    # 26800 / 1000000 * 75
+    estimatedTotalCost: "$2.40"
+
+  # 对比 spec3.md 生成时的用量
+  specGeneration:
+    note: "spec3.md 由 GLM4.7 生成"
+    promptTokens: 4436
+    completionTokens: 5530
+    totalTokens: 9966
+
+  # 整体项目用量（spec生成 + game开发）
+  projectTotal:
+    specGenerationTokens: 9966
+    gameDevelopmentTokens: ~52900
+    grandTotalTokens: ~62866

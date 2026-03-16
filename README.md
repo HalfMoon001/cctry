@@ -7,6 +7,7 @@
 | 项目 | 来源 | 在线体验 |
 |------|------|---------|
 | [便签整理术](./bianqian-app/) | 《人人都能做到的便签整理术》须藤由美 | [打开](https://halfmoon001.github.io/cctry/bianqian-app/) |
+| [巴斯克维尔猎犬 - 侦探推理游戏](./baskerville-game/) | 《巴斯克维尔的猎犬》柯南·道尔 | [打开](https://halfmoon001.github.io/cctry/baskerville-game/) |
 
 ## 贡献者
 

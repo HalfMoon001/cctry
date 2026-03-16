@@ -1,0 +1,154 @@
+case:
+  type: "murder"
+  title: "巴斯克维尔的猎犬"
+  sourceNovel: "The Hound of the Baskervilles"
+  briefing: "巴斯克维尔家族世代流传着一个恐怖的传说——一头来自地狱的巨型猎犬诅咒着这个家族。查尔斯·巴斯克维尔爵士被发现死在庄园的紫杉大道上，面容极度扭曲，附近有巨型猎犬的爪印。官方结论为心脏病发作，但私人医生莫蒂默认为事情并非如此简单。现在，新的继承人亨利·巴斯克维尔爵士即将来到荒原，你需要调查查尔斯爵士的真正死因，保护亨利爵士，并揭露隐藏在传说背后的真相。"
+  difficulty: "hard"
+  phaseCount: 3
+
+truth:
+  type: "murder"
+  culprit: "stapleton"
+  motive: "遗产继承——斯台普顿是巴斯克维尔家族旁系后裔，隐瞒真实身份，企图杀害合法继承人以夺取巴斯克维尔庄园和遗产"
+  weapon: "经过改造的巨型猎犬——从伦敦富勒姆路罗斯-曼勾斯商行购买，涂满磷光颜料使其口眼喷火，通体漆黑"
+  fatalInjury: "极度恐惧诱发心脏病发作"
+  trick: "利用巴斯克维尔家族猎犬传说制造恐怖氛围，用经过磷光改造的猎犬在夜间攻击患有心脏病的查尔斯爵士，使其因极度恐惧而心脏病发作死亡，伪装成传说中的诅咒应验"
+  causeOfDeath: "心脏病发作（由猎犬追逐引发的极度恐惧导致）"
+  timeOfDeath: "5月4日深夜"
+
+victim:
+  name: "查尔斯·巴斯克维尔爵士"
+  background: "巴斯克维尔庄园的主人，家族最后的男性直系继承人之一。靠南非金矿发财后返回祖宅，修缮庄园并积极参与地方慈善事业。深信家族猎犬传说，患有严重心脏病。"
+  circumstance: "5月4日深夜，查尔斯爵士在紫杉大道散步时被一头经过磷光改造的巨型猎犬追赶，因极度恐惧导致心脏病发作身亡。尸体被发现在紫杉大道尽头，面容极度扭曲，附近有巨型猎犬爪印。"
+
+phases:
+  - id: "phase_01"
+    name: "初始调查"
+    objective: "调查查尔斯爵士的死因，了解巴斯克维尔家族传说，认识庄园周围的主要人物"
+    unlockCondition: "auto"
+    briefing: "莫蒂默医生带来了令人不安的消息：查尔斯爵士的死并非简单的心脏病发作。紫杉大道上的足迹异常、附近的巨型猎犬爪印，以及流传数百年的家族诅咒——这一切都指向一个更加黑暗的真相。新继承人亨利爵士即将抵达荒原，你必须尽快展开调查。"
+    availableSceneIds:
+      - "scene_yew_avenue"
+      - "scene_baskerville_hall"
+      - "scene_coombe_tracey"
+    availableCharacterIds:
+      - "mortimer"
+      - "henry"
+      - "barrymore_husband"
+      - "barrymore_wife"
+      - "stapleton"
+      - "stapleton_sister"
+    newClueIds:
+      - "clue_footprints"
+      - "clue_hound_prints"
+      - "clue_death_scene"
+      - "clue_family_legend"
+      - "clue_cigar_ash"
+      - "clue_gate_status"
+      - "clue_warning_letter"
+
+  - id: "phase_02"
+    name: "荒原调查"
+    objective: "深入调查荒原上的可疑活动，追踪夜间信号和神秘人影，揭开白瑞摩夫妇的秘密"
+    unlockCondition:
+      type: "clues_collected"
+      params:
+        requiredClueIds:
+          - "clue_footprints"
+          - "clue_hound_prints"
+          - "clue_family_legend"
+        minCount: 3
+    briefing: "调查深入后，荒原上的异象越来越多：深夜有人在窗前举蜡烛发送信号，荒原远处传来令人毛骨悚然的嚎叫声，月光下的山脊上出现了一个神秘的身影。白瑞摩夫妇行迹可疑，而斯台普顿对荒原了如指掌。你需要揭开这些谜团。"
+    availableSceneIds:
+      - "scene_yew_avenue"
+      - "scene_baskerville_hall"
+      - "scene_grimpen_mire"
+      - "scene_moor_hideout"
+      - "scene_coombe_tracey"
+    availableCharacterIds:
+      - "mortimer"
+      - "henry"
+      - "barrymore_husband"
+      - "barrymore_wife"
+      - "stapleton"
+      - "stapleton_sister"
+      - "selden"
+      - "laura_lyons"
+    newClueIds:
+      - "clue_candle_signal"
+      - "clue_moor_howling"
+      - "clue_mysterious_figure"
+      - "clue_selden_escape"
+      - "clue_henry_clothes"
+      - "clue_hideout_note"
+      - "clue_telegram_verification"
+
+  - id: "phase_03"
+    name: "真相揭露"
+    objective: "通过肖像比对揭露斯台普顿的真实身份，找到猎犬藏匿地点，揭破所有谎言，还原完整的谋杀真相"
+    unlockCondition:
+      type: "clues_collected"
+      params:
+        requiredClueIds:
+          - "clue_candle_signal"
+          - "clue_hideout_note"
+          - "clue_mysterious_figure"
+        minCount: 3
+    briefing: "线索逐渐汇聚，真相的轮廓开始显现。庄园中的一幅古老肖像画引起了你的注意——画中人的面容与某个你认识的人惊人地相似。格林盆泥潭深处似乎隐藏着什么，而劳拉·莱昂斯手中的信件可能是解开一切的关键。是时候揭开这场精心设计的谋杀阴谋了。"
+    availableSceneIds:
+      - "scene_yew_avenue"
+      - "scene_baskerville_hall"
+      - "scene_grimpen_mire"
+      - "scene_moor_hideout"
+      - "scene_merripit_house"
+      - "scene_coombe_tracey"
+    availableCharacterIds:
+      - "mortimer"
+      - "henry"
+      - "barrymore_husband"
+      - "barrymore_wife"
+      - "stapleton"
+      - "stapleton_sister"
+      - "laura_lyons"
+    newClueIds:
+      - "clue_portrait_resemblance"
+      - "clue_stapleton_identity"
+      - "clue_phosphorus_hound"
+      - "clue_lyons_letter"
+      - "clue_boot_theft"
+      - "clue_wife_not_sister"
+      - "clue_mire_path"
+
+skillAssignment:
+  phase_b_characters:
+    - "inheritance-murder-conspiracy"
+    - "crime-concealment-decision-analysis"
+    - "baskerville-heir-warning-delivery"
+    - "portrait-lineage-analysis"
+    - "hound-mistaken-identity-case-analysis"
+  phase_c_scenes:
+    - "sir-charles-baskerville-death-investigation"
+    - "yew-avenue-crime-scene-mapping"
+    - "grimpen-mire-identification-avoidance"
+    - "hideout-search-surveillance-analysis"
+    - "moor-howling-identification"
+    - "mysterious-figure-observation"
+    - "grimpen-mire-navigation"
+  phase_d_clues:
+    - "alibi-verification-telegrams"
+    - "crime-scene-reconstruction-analysis"
+    - "nighttime-surveillance-procedure"
+    - "candle-signal-process"
+    - "suspect-identification-from-motive-alibi"
+    - "physical-evidence-identity-tracing"
+  skipped:
+    - "high-risk-suspect-arrest-tactics"
+    - "secret-entrapment-elimination-operation"
+    - "criminal-entrapment-operation-deployment"
+    - "tactical-ambush-assault-plan"
+    - "search-capture-operations"
+    - "urban-surveillance-entrapment-tactics"
+    - "water-high-speed-pursuit-tactics"
+    - "baskerville-investigation-protocol"
+    - "holmes-covert-investigation-strategy"
+    - "investigative-bait-tactics"

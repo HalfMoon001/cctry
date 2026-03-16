@@ -1,0 +1,164 @@
+# ============================================
+# Game3 - 智能推荐规则
+# 预编写条件触发，不依赖AI
+# ============================================
+
+# 智能推荐系统：根据玩家持有的线索和对话历史，
+# 推荐2-3个建议话题供选择
+
+recommendationRules:
+
+  # ========== 阶段 1 推荐规则 ==========
+  phase1:
+    - ruleId: "rec-1-start"
+      description: "初始状态推荐"
+      condition:
+        phase: "phase-1"
+        clueCount: 0
+      suggestions:
+        - "与莫蒂默医生谈谈查尔斯爵士的死亡经过"
+        - "听听威尔逊描述红发会的招聘经历"
+        - "查看贝克街221B的书桌和壁炉架"
+
+    - ruleId: "rec-1-mortimer-basic"
+      description: "获得莫蒂默手稿后"
+      condition:
+        phase: "phase-1"
+        hasClues: ["clue-mortimer-manuscript"]
+        notHasClues: ["clue-hound-footprint-testimony"]
+      suggestions:
+        - "追问莫蒂默关于现场是否有其他异常发现"
+        - "了解巴斯克维尔家族传说的细节"
+
+    - ruleId: "rec-1-wilson-basic"
+      description: "获得红发会招聘信息后"
+      condition:
+        phase: "phase-1"
+        hasClues: ["clue-red-league-recruitment"]
+        notHasClues: ["clue-wilson-assistant-description"]
+      suggestions:
+        - "详细了解威尔逊的助手文森特·斯伯丁"
+        - "询问当铺地下室的情况"
+
+    - ruleId: "rec-1-tunnel-suspicion"
+      description: "发现助手可疑后"
+      condition:
+        phase: "phase-1"
+        hasClues: ["clue-wilson-assistant-description", "clue-shop-basement-access"]
+        notHasClues: ["clue-newspaper-clipping-tunnel"]
+      suggestions:
+        - "搜查贝克街壁炉架上的新闻剪报"
+        - "前往红发会办公室搜查地板和抽屉"
+
+    - ruleId: "rec-1-challenge-mortimer"
+      description: "有足够证据质疑莫蒂默"
+      condition:
+        phase: "phase-1"
+        hasClues: ["clue-hound-footprint-testimony"]
+        notChallenged: ["lie-mortimer-footprint"]
+      suggestions:
+        - "用猎犬爪印证据质疑莫蒂默医生的公开证词"
+        - "追问为什么要隐瞒这个发现"
+
+  # ========== 阶段 2 推荐规则 ==========
+  phase2:
+    - ruleId: "rec-2-start"
+      description: "进入阶段2初始推荐"
+      condition:
+        phase: "phase-2"
+        phaseJustStarted: true
+      suggestions:
+        - "探索巴斯克维尔庄园的各个区域"
+        - "与巴里摩尔谈谈查尔斯爵士的日常习惯"
+        - "会见斯泰普尔顿和亨利爵士"
+
+    - ruleId: "rec-2-barrymore-suspicion"
+      description: "发现巴里摩尔可疑行为"
+      condition:
+        phase: "phase-2"
+        hasClues: ["clue-barrymore-candle-signal"]
+        notChallenged: ["lie-barrymore-candle"]
+      suggestions:
+        - "用蜡烛信号证据质疑巴里摩尔"
+        - "调查巴里摩尔太太深夜哭泣的原因"
+
+    - ruleId: "rec-2-after-barrymore-challenge"
+      description: "成功质疑巴里摩尔后"
+      condition:
+        phase: "phase-2"
+        challengeSuccess: ["lie-barrymore-candle"]
+        notHasClues: ["clue-charles-letter-fragment"]
+      suggestions:
+        - "搜查查尔斯爵士书房的壁炉灰烬"
+        - "追查约查尔斯爵士到边门赴约的'女士'"
+
+    - ruleId: "rec-2-portrait-hint"
+      description: "需要发现肖像画线索"
+      condition:
+        phase: "phase-2"
+        hasClues: ["clue-stapleton-butterfly-net"]
+        notHasClues: ["clue-portrait-resemblance"]
+      suggestions:
+        - "仔细观察庄园肖像画廊中的巴斯克维尔家族画像"
+        - "比较画像中的人物与你见过的人"
+
+    - ruleId: "rec-2-stapleton-wife"
+      description: "发现斯泰普尔顿妹妹可疑"
+      condition:
+        phase: "phase-2"
+        hasClues: ["clue-stapleton-wife-not-sister"]
+        notHasClues: ["clue-anonymous-warning-letter"]
+      suggestions:
+        - "询问亨利爵士关于匿名警告信的细节"
+        - "追查警告信与'妹妹'之间的联系"
+
+    - ruleId: "rec-2-challenge-stapleton"
+      description: "有证据质疑斯泰普尔顿"
+      condition:
+        phase: "phase-2"
+        hasClues: ["clue-portrait-resemblance"]
+        notChallenged: ["lie-stapleton-identity"]
+      suggestions:
+        - "用肖像画相似证据质疑斯泰普尔顿的身份"
+        - "追查斯泰普尔顿来达特莫尔之前的经历"
+
+  # ========== 阶段 3 推荐规则 ==========
+  phase3:
+    - ruleId: "rec-3-start"
+      description: "进入阶段3初始推荐"
+      condition:
+        phase: "phase-3"
+        phaseJustStarted: true
+      suggestions:
+        - "探索达特莫尔荒原的石屋遗迹"
+        - "调查泥潭边缘的异常痕迹"
+        - "寻找荒原上嚎叫声的来源"
+
+    - ruleId: "rec-3-mire-access"
+      description: "可以进入泥潭深处"
+      condition:
+        phase: "phase-3"
+        hasClues: ["clue-stapleton-mire-expertise", "clue-phosphorus-traces"]
+        notHasClues: ["clue-hound-kennel"]
+      suggestions:
+        - "沿标记路径进入格林盆泥潭深处"
+        - "搜查泥潭中心小岛上的建筑"
+
+    - ruleId: "rec-3-final-evidence"
+      description: "收集了关键物证后"
+      condition:
+        phase: "phase-3"
+        hasClues: ["clue-hound-kennel", "clue-phosphorus-jar"]
+        notHasClues: ["clue-holmes-phosphorus-analysis"]
+      suggestions:
+        - "将磷光残留物拿给福尔摩斯分析"
+        - "整合所有证据准备提交结案报告"
+
+    - ruleId: "rec-3-ready-report"
+      description: "准备好提交报告"
+      condition:
+        phase: "phase-3"
+        hasClues: ["clue-holmes-phosphorus-analysis", "clue-stapleton-true-identity"]
+      suggestions:
+        - "提交结案报告，回答所有问题"
+        - "最后检查是否还有遗漏的线索"

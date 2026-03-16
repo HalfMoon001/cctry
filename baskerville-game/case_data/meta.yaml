@@ -1,0 +1,102 @@
+# ============================================
+# Game3 - 福尔摩斯探案：迷雾中的真相
+# 案件元数据
+# ============================================
+
+case:
+  id: "game3-sherlock-composite"
+  title: "迷雾中的真相"
+  subtitle: "福尔摩斯探案集"
+  type: composite
+  subTypes:
+    - murder      # 查尔斯爵士之死
+    - conspiracy  # 巴斯克维尔遗产阴谋
+    - scam        # 红发会骗局
+
+  truth:
+    murder:
+      victim: "charles-baskerville"
+      killer: "stapleton"
+      method: "利用涂有磷光剂的巨型猎犬在夜间追赶查尔斯爵士，使其心脏病发作致死"
+      motive: "作为隐藏的巴斯克维尔家族后裔，谋夺巨额遗产"
+    conspiracy:
+      mastermind: "stapleton"
+      scheme: "斯泰普尔顿隐瞒真实身份（巴斯克维尔家族后裔），伪装为自然学家邻居，利用家族猎犬传说和查尔斯爵士的迷信与心脏病弱点实施谋杀，并计划对下一任继承人亨利·巴斯克维尔故技重施"
+      accomplice: "斯泰普尔顿之妻（被胁迫参与）"
+    scam:
+      mastermind: "john-clay"
+      scheme: "以'红发会'虚假招聘为幌子，每日占用当铺老板威尔逊四小时，同伙在当铺地下室挖掘通往银行金库的隧道"
+      victim: "jabez-wilson"
+      frontOrg: "红发会"
+
+  scoring:
+    baseScore: 100
+    hintPenalty:
+      level1: -5   # 模糊方向
+      level2: -10  # 具体建议
+      level3: -20  # 直接揭示
+    bonuses:
+      challengeSuccess: 10   # 成功质疑角色
+      allCluesFound: 15      # 收集全部线索
+      noHintsUsed: 20        # 未使用攻略
+
+phases:
+  - id: "phase-1"
+    name: "案发受理与初步分析"
+    description: "在贝克街221B接收委托，分析初步报告与物证，调查红发会骗局"
+    setting: "伦敦/贝克街"
+    unlockCondition: null  # 初始解锁
+    completionCondition:
+      type: "clues_collected"
+      requiredClues:
+        - "clue-mortimer-manuscript"
+        - "clue-hound-footprint-testimony"
+        - "clue-wilson-assistant-description"
+      minCount: 3
+
+  - id: "phase-2"
+    name: "深入调查与现场搜查"
+    description: "前往巴斯克维尔庄园及周边区域，搜查据点，审讯嫌疑人，搜集关键物证"
+    setting: "庄园/荒原/据点"
+    unlockCondition:
+      type: "phase_complete"
+      requiredPhase: "phase-1"
+    completionCondition:
+      type: "clues_collected"
+      requiredClues:
+        - "clue-barrymore-candle-signal"
+        - "clue-stapleton-butterfly-net"
+        - "clue-yew-alley-footprints"
+      minCount: 5
+
+  - id: "phase-3"
+    name: "最终推理与真相还原"
+    description: "整合所有线索，在荒原上追踪真相，揭露谎言与阴谋，提交结案报告"
+    setting: "达特莫尔荒原/格林盆泥潭"
+    unlockCondition:
+      type: "phase_complete"
+      requiredPhase: "phase-2"
+    completionCondition:
+      type: "report_submitted"
+
+design:
+  style: "温暖手工"
+  palette:
+    primary: "#F5F5DC"       # 米色/羊皮纸
+    secondary: "#2F2F2F"     # 墨水黑
+    accent: "#8B4513"        # 鞍褐
+    success: "#2E8B57"       # 海绿
+    danger: "#B22222"        # 耐火砖红
+    textMuted: "#555555"     # 灰
+  typography:
+    heading: "Georgia, serif"
+    body: "Merriweather, serif"
+  spacing:
+    grid: 8
+    cardPadding: 24
+    moduleGap: 20
+    borderRadius: 2
+  sounds:
+    pageFlip: true
+    penWriting: true
+    stamp: true

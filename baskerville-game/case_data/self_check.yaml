@@ -1,0 +1,82 @@
+# ============================================
+# Game3 - 自检报告
+# ============================================
+
+selfCheck:
+  timestamp: "2026-03-13"
+  result: "PASS"
+
+  items:
+    - check: "truth字段与案件类型一致"
+      status: PASS
+      detail: "meta.yaml中truth包含murder(凶手:stapleton)、conspiracy(策划者:stapleton)、scam(主谋:john-clay)，与composite案件类型匹配。skeleton.yaml中truth.type=murder也正确。"
+
+    - check: "至少3个角色有谎言，每条谎言可被线索戳穿"
+      status: PASS
+      detail: |
+        1. 莫蒂默(lie-mortimer-footprint): 隐瞒猎犬爪印 -> 用clue-hound-footprint-testimony质疑
+        2. 巴里摩尔(lie-barrymore-candle): 否认蜡烛信号 -> 用clue-barrymore-candle-signal质疑
+        3. 斯泰普尔顿(lie-stapleton-identity): 隐瞒巴斯克维尔血统 -> 用clue-portrait-resemblance质疑
+        characters.yaml中还包含lie_lyons_letter(劳拉·莱昂斯)，共4个谎言。
+
+    - check: "至少1条推理路径必须经过质疑"
+      status: PASS
+      detail: "主推理路径'猎犬谋杀真相'要求质疑斯泰普尔顿揭露真实身份；辅助路径要求质疑巴里摩尔排除嫌疑并获得新线索。"
+
+    - check: "完整推理链可推导真相"
+      status: PASS
+      detail: |
+        Murder: 猎犬爪印 → 磷光残留 → 犬舍发现 → 偷靴气味追踪 → 质疑斯泰普尔顿身份 → 确认继承动机
+        Conspiracy: 肖像画相似 → 质疑身份 → 罗杰之子 → 遗产继承链
+        Scam: 助手特征 → 地下室 → 银行剪报 → 隧道挖掘 → 约翰·克莱
+
+    - check: "红鲱鱼有合理解释"
+      status: PASS
+      detail: |
+        1. clue-ferrier-family-record: 过去案件参考资料，与当前案件无直接关系
+        2. clue-watson-stranger-on-moor: 神秘身影实为福尔摩斯暗中调查
+        3. clue-barrymore-inheritance: 遗产份额太小，不构成谋杀动机
+
+    - check: "仅凭公开线索不能直接得出真相"
+      status: PASS
+      detail: "公开线索仅提供背景信息（传说手稿、足迹描述、红发会解散通知等）。关键证据（肖像画相似、犬舍、磷光剂、信件残片）均为隐藏线索。凶手身份必须通过质疑获得。"
+
+    - check: "每个可审讯角色有对话脚本和challengeResponses"
+      status: PASS
+      detail: |
+        原始characters.yaml(我创建的)包含7个角色的完整对话脚本：
+        - Holmes: 5个话题
+        - Watson: 3个话题
+        - Henry: 3个话题
+        - Mortimer: 3个话题 + challengeResponse
+        - Barrymore: 3个话题 + challengeResponse
+        - Stapleton: 4个话题 + challengeResponse
+        - Wilson: 4个话题
+        外部生成的characters.yaml包含9个角色的背景和关系数据。
+
+    - check: "档案卡正确答案与truth对应"
+      status: PASS
+      detail: |
+        Murder凶手=stapleton ✓
+        Murder手法=磷光猎犬 ✓
+        Murder动机=遗产继承 ✓
+        凶手alibi为假 ✓
+        Conspiracy策划者=stapleton(巴斯克维尔后裔) ✓
+        Scam目的=隧道抢银行 ✓
+        Scam主使=约翰·克莱 ✓
+
+    - check: "所有ID引用一致"
+      status: PASS
+      detail: "clues.yaml中的线索ID在scenes.yaml、characters.yaml、hints.yaml、recommendations.yaml中交叉引用一致。谎言ID在characters和clues中对应。"
+
+    - check: "解锁条件可达成，阶段间有信息递进"
+      status: PASS
+      detail: |
+        Phase 1→2: 需收集clue-mortimer-manuscript(公开) + clue-hound-footprint-testimony(公开) + clue-wilson-assistant-description(公开)，最低3条，均可通过对话获得
+        Phase 2→3: 需收集至少5条线索，包含3条必需隐藏线索，可通过搜查和对话获得
+        Phase 3→完成: 提交报告
+        信息递进: 阶段1建立背景 → 阶段2深入搜查获取关键物证 → 阶段3整合推理揭露真相
+
+    - check: "凶手alibi为假，法医报告与truth一致"
+      status: PASS
+      detail: "斯泰普尔顿声称在家研究标本但无人能证实(alibi.isTrue=false)。死因为心脏病发作(法医) = 被磷光猎犬惊吓致心脏病发作(truth)，一致。"

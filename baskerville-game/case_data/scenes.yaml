@@ -1,0 +1,102 @@
+scenes:
+  - id: "scene_yew_avenue"
+    name: "紫杉大道"
+    type: "primary_crime_scene"
+    phaseAvailable: "phase_01"
+    description: "巴斯克维尔庄园后方的紫杉树夹道，查尔斯爵士每晚散步的地方，也是他死亡的地点。"
+    detailedDescription: "两侧是约12英尺高的紫杉树篱，中央路面宽约8英尺，两侧各有约6英尺宽的草地。大道一端通向庄园，另一端有一座凉亭。中间有一扇约4英尺高的边门通往荒原。查尔斯爵士的尸体被发现在大道尽头约50码处，面容极度扭曲，双臂伸开，手指抠入地面。距尸体约20码处的路面上发现了巨型猎犬爪印。边门附近的砾石上有雪茄烟灰掉落两次的痕迹，说明死者曾在此站立5到10分钟。"
+    clueIds:
+      - "clue_footprints"
+      - "clue_hound_prints"
+      - "clue_death_scene"
+      - "clue_cigar_ash"
+      - "clue_gate_status"
+    hiddenClueIds:
+      - "clue_hound_prints"
+      - "clue_cigar_ash"
+    sourceSkills:
+      - "sir-charles-baskerville-death-investigation"
+      - "yew-avenue-crime-scene-mapping"
+
+  - id: "scene_baskerville_hall"
+    name: "巴斯克维尔庄园"
+    type: "residence"
+    phaseAvailable: "phase_01"
+    description: "一座阴森的哥特式庄园，巴斯克维尔家族世代居住于此。大厅挂满了家族历代的肖像画。"
+    detailedDescription: "庄园内部阴暗宏伟，大厅的墙壁上悬挂着巴斯克维尔家族历代成员的肖像画。其中一幅描绘了1647年的雨果·巴斯克维尔——面容凶残，薄嘴唇，眼神透着睚眦必报的寒意。西侧有一间房间的窗户是整座宅邸中唯一能近距离观察荒原的视点，透过两棵树之间的缺口可以直视荒原。管家白瑞摩夫妇就住在仆人住所。深夜可以听到白瑞摩太太隐隐的哭泣声。"
+    clueIds:
+      - "clue_family_legend"
+      - "clue_warning_letter"
+      - "clue_candle_signal"
+      - "clue_portrait_resemblance"
+    hiddenClueIds:
+      - "clue_candle_signal"
+      - "clue_portrait_resemblance"
+    sourceSkills:
+      - "nighttime-surveillance-procedure"
+      - "candle-signal-process"
+      - "portrait-lineage-analysis"
+
+  - id: "scene_grimpen_mire"
+    name: "格林盆大泥潭"
+    type: "wilderness"
+    phaseAvailable: "phase_02"
+    description: "达特莫尔荒原北部最危险的区域，嫩绿色的苔草掩盖着致命的泥潭陷阱。只有极少数人知道穿越泥潭的安全路径。"
+    detailedDescription: "位于达特莫尔荒原北部宽广平地上，点状分布着一小块一小块的嫩绿色苔草区域，看起来比周围环境更肥沃，实际上是致命陷阱的伪装。秋雨过后泥潭吸水膨胀，危险等级升至最高。泥潭中心有一座小岛，地面相对坚实，包含废弃锡矿和矿工小屋——斯台普顿将猎犬藏匿于此。穿越泥潭需要沿着用小木棍标记的特定路径，踩在长着灯芯草的地面上，避开绿色浮渣的泥坑。只有斯台普顿掌握这条路径。"
+    clueIds:
+      - "clue_phosphorus_hound"
+      - "clue_mire_path"
+    hiddenClueIds:
+      - "clue_phosphorus_hound"
+      - "clue_mire_path"
+    sourceSkills:
+      - "grimpen-mire-identification-avoidance"
+      - "grimpen-mire-navigation"
+
+  - id: "scene_moor_hideout"
+    name: "荒原石屋"
+    type: "hideout"
+    phaseAvailable: "phase_02"
+    description: "荒原上一处古老的石屋遗迹，有人近期居住的痕迹。石床上铺着雨衣和毯子，地上散落着空罐头。"
+    detailedDescription: "一处古旧的石屋，内有石床、简陋卧具（雨衣、毯子）、火炉余烬、水桶和餐具。满地的空罐头表明已有人居住了一段时间。角落里有酒杯和酒瓶。桌上有一个包裹，里面装着面包和生活用品。包裹下面藏着一张字条，内容记录的是对某人行踪的监视报告——令人惊讶的是，被监视者并非亨利爵士本人。这里实际上有两个居住者的痕迹：逃犯塞尔登和一位神秘的观察者。"
+    clueIds:
+      - "clue_selden_escape"
+      - "clue_hideout_note"
+      - "clue_mysterious_figure"
+    hiddenClueIds:
+      - "clue_hideout_note"
+    sourceSkills:
+      - "hideout-search-surveillance-analysis"
+      - "mysterious-figure-observation"
+
+  - id: "scene_merripit_house"
+    name: "梅利琵宅邸"
+    type: "residence"
+    phaseAvailable: "phase_03"
+    description: "斯台普顿和所谓的'妹妹'居住的宅邸，位于荒原边缘，靠近格林盆大泥潭。"
+    detailedDescription: "一座位于荒原边缘的宅邸，是通向格林盆大泥潭最近的居住点。斯台普顿在此保存着大量昆虫标本，特别是蝴蝶和飞蛾收藏。宅邸中可以找到贝里尔·斯台普顿被绑缚和虐待的痕迹——这是斯台普顿在最后行动前为防止妻子泄密而采取的极端手段。阁楼中藏有磷光颜料的残留物和旧靴子——从亨利爵士旅馆偷来的，用于让猎犬熟悉目标的气味。"
+    clueIds:
+      - "clue_wife_not_sister"
+      - "clue_boot_theft"
+      - "clue_stapleton_identity"
+    hiddenClueIds:
+      - "clue_boot_theft"
+      - "clue_stapleton_identity"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+      - "baskerville-heir-warning-delivery"
+
+  - id: "scene_coombe_tracey"
+    name: "库姆特雷西镇"
+    type: "related_location"
+    phaseAvailable: "phase_01"
+    description: "达特莫尔附近的小镇，劳拉·莱昂斯在此经营打字业务。镇上的邮电所可以查询电报投递记录。"
+    detailedDescription: "一个宁静的达特莫尔小镇。劳拉·莱昂斯的打字办公室位于镇中心。镇上的邮电所保存着电报收发和投递记录，可以用来核验某些人的不在场证明。通过向邮电所长询问特定电报的投递细节——是否交给了本人、还是转交给了家人——可以判断目标人物当时是否真的在家。"
+    clueIds:
+      - "clue_telegram_verification"
+      - "clue_lyons_letter"
+    hiddenClueIds:
+      - "clue_lyons_letter"
+    sourceSkills:
+      - "alibi-verification-telegrams"
+      - "inheritance-murder-conspiracy"

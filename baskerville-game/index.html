@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>巴斯克维尔猎犬 - 侦探推理游戏</title>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F5DC;--ink:#2F2F2F;--brown:#8B4513;--green:#2E8B57;--red:#B22222;--muted:#555;
+  --card-pad:24px;--gap:20px;--radius:2px;
+  --font-heading:Georgia,'Times New Roman',serif;
+  --font-body:'Merriweather',Georgia,'Times New Roman',serif;
+  --transition:250ms ease-in-out;
+}
+html{font-size:15px;line-height:1.6}
+body{
+  font-family:var(--font-body);color:var(--ink);background:var(--bg);
+  min-height:100vh;overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse at 20% 50%,rgba(139,69,19,.04) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 20%,rgba(139,69,19,.03) 0%,transparent 50%);
+}
+/* paper texture overlay */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1,h2,h3,h4{font-family:var(--font-heading);font-weight:600;color:var(--brown)}
+h1{font-size:2rem}h2{font-size:1.5rem}h3{font-size:1.2rem}h4{font-size:1.05rem}
+.muted{color:var(--muted)}
+a{color:var(--brown);text-decoration:none}
+
+/* ===== LAYOUT ===== */
+.container{max-width:900px;margin:0 auto;padding:16px}
+.view{display:none;animation:slideIn var(--transition) both}
+.view.active{display:block}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes stampIn{0%{transform:scale(2) rotate(-15deg);opacity:0}60%{transform:scale(.95) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@keyframes flipIn{0%{transform:perspective(800px) rotateY(90deg);opacity:0}100%{transform:perspective(800px) rotateY(0);opacity:1}}
+@keyframes inkSpread{0%{box-shadow:0 0 0 0 rgba(139,69,19,.3)}100%{box-shadow:0 0 0 6px rgba(139,69,19,0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes writeLine{from{width:0}to{width:100%}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:inline-block;padding:10px 20px;border:2px solid var(--brown);
+  background:transparent;color:var(--brown);font-family:var(--font-heading);
+  font-size:.95rem;cursor:pointer;border-radius:var(--radius);
+  transition:all var(--transition);position:relative;overflow:hidden;
+}
+.btn:hover{background:var(--brown);color:var(--bg);animation:inkSpread .4s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--brown);color:var(--bg)}
+.btn.primary:hover{background:#6B3410}
+.btn.danger{border-color:var(--red);color:var(--red)}
+.btn.danger:hover{background:var(--red);color:#fff}
+.btn.success{border-color:var(--green);color:var(--green)}
+.btn.success:hover{background:var(--green);color:#fff}
+.btn.small{padding:6px 12px;font-size:.85rem}
+.btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+
+/* ===== CARDS ===== */
+.card{
+  background:#FFFEF7;border:1px solid rgba(139,69,19,.2);
+  border-radius:var(--radius);padding:var(--card-pad);
+  margin-bottom:var(--gap);position:relative;
+  box-shadow:1px 2px 6px rgba(0,0,0,.06);
+  transition:all var(--transition);
+}
+.card:hover{box-shadow:2px 4px 12px rgba(0,0,0,.1)}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--brown),transparent);border-radius:var(--radius) var(--radius) 0 0;
+}
+
+/* ===== BADGE ===== */
+.badge{
+  display:inline-block;padding:2px 8px;font-size:.75rem;border-radius:var(--radius);
+  font-family:var(--font-heading);margin-left:6px;vertical-align:middle;
+}
+.badge.phase1{background:rgba(139,69,19,.15);color:var(--brown)}
+.badge.phase2{background:rgba(46,139,87,.15);color:var(--green)}
+.badge.phase3{background:rgba(178,34,34,.15);color:var(--red)}
+.badge.hidden-badge{background:rgba(85,85,85,.15);color:var(--muted)}
+.badge.key{background:rgba(139,69,19,.25);color:var(--brown);font-weight:600}
+
+/* ===== START SCREEN ===== */
+#startScreen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;
+}
+#startScreen .card{max-width:560px;padding:40px;margin:auto}
+#startScreen h1{font-size:2.4rem;margin-bottom:8px;letter-spacing:2px}
+#startScreen .subtitle{font-size:1rem;color:var(--muted);margin-bottom:24px;font-style:italic}
+#startScreen .briefing{
+  text-align:left;margin:24px 0;padding:16px;
+  border-left:3px solid var(--brown);background:rgba(139,69,19,.04);
+  font-size:.95rem;line-height:1.8;
+}
+#startScreen .stamp{
+  display:inline-block;border:3px solid var(--red);color:var(--red);
+  padding:4px 16px;font-size:.85rem;font-family:var(--font-heading);
+  transform:rotate(-5deg);margin-bottom:16px;opacity:.8;
+}
+
+/* ===== PHASE INDICATOR ===== */
+.phase-bar{
+  display:flex;gap:4px;margin-bottom:var(--gap);padding:12px 16px;
+  background:#FFFEF7;border:1px solid rgba(139,69,19,.15);border-radius:var(--radius);
+  align-items:center;flex-wrap:wrap;
+}
+.phase-bar .phase-item{
+  padding:6px 14px;font-size:.85rem;font-family:var(--font-heading);
+  border-radius:var(--radius);color:var(--muted);border:1px solid transparent;
+  transition:all var(--transition);
+}
+.phase-bar .phase-item.current{
+  background:var(--brown);color:var(--bg);border-color:var(--brown);
+}
+.phase-bar .phase-item.completed{
+  background:rgba(46,139,87,.15);color:var(--green);border-color:var(--green);
+}
+.phase-bar .phase-item.locked{opacity:.4}
+.phase-bar .progress-text{margin-left:auto;font-size:.8rem;color:var(--muted)}
+
+/* ===== MAP ===== */
+.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--gap)}
+.map-card{
+  cursor:pointer;padding:20px;position:relative;overflow:hidden;
+  transition:all var(--transition);
+}
+.map-card:hover{transform:translateY(-2px)}
+.map-card.locked{opacity:.45;cursor:not-allowed;pointer-events:none}
+.map-card .scene-type{
+  font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);
+  margin-bottom:4px;
+}
+.map-card .scene-name{font-family:var(--font-heading);font-size:1.1rem;color:var(--brown);margin-bottom:6px}
+.map-card .scene-desc{font-size:.85rem;color:var(--muted);line-height:1.5}
+.map-card .clue-count{
+  position:absolute;top:12px;right:12px;
+  background:var(--brown);color:var(--bg);font-size:.7rem;
+  padding:2px 8px;border-radius:var(--radius);font-family:var(--font-heading);
+}
+
+/* ===== CHARACTER LIST ===== */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:var(--gap)}
+.char-card{
+  cursor:pointer;padding:16px;text-align:center;transition:all var(--transition);
+}
+.char-card:hover{transform:translateY(-2px)}
+.char-card.locked{opacity:.35;pointer-events:none}
+.char-card .silhouette{
+  width:64px;height:64px;margin:0 auto 8px;border-radius:50%;
+  background:var(--ink);display:flex;align-items:center;justify-content:center;
+  color:var(--bg);font-size:1.4rem;font-family:var(--font-heading);
+  border:2px solid var(--brown);
+}
+.char-card .char-name{font-size:.9rem;font-family:var(--font-heading);color:var(--brown)}
+.char-card .char-role{font-size:.75rem;color:var(--muted)}
+.char-card .lie-indicator{color:var(--red);font-size:.7rem;margin-top:4px}
+
+/* ===== ACTION BAR ===== */
+.action-bar{
+  display:flex;gap:8px;margin:var(--gap) 0;flex-wrap:wrap;justify-content:center;
+}
+
+/* ===== SCENE VIEW ===== */
+.scene-header{
+  padding:24px;background:linear-gradient(135deg,#FFFEF7,#F5F0E0);
+  border:1px solid rgba(139,69,19,.2);border-radius:var(--radius);margin-bottom:var(--gap);
+}
+.scene-header .scene-type-label{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.scene-header h2{margin:4px 0 8px}
+.scene-detail{font-size:.95rem;line-height:1.8;margin-top:12px;padding-top:12px;border-top:1px dashed rgba(139,69,19,.2)}
+.search-areas{margin-top:var(--gap)}
+.search-area{
+  padding:16px 20px;cursor:pointer;border:1px dashed var(--brown);
+  background:rgba(139,69,19,.03);margin-bottom:8px;border-radius:var(--radius);
+  transition:all var(--transition);display:flex;align-items:center;gap:12px;
+}
+.search-area:hover{background:rgba(139,69,19,.08);border-style:solid}
+.search-area.searched{border-color:var(--green);background:rgba(46,139,87,.05);cursor:default}
+.search-area .search-icon{font-size:1.3rem;flex-shrink:0}
+.search-area .search-info h4{margin-bottom:2px}
+.search-area .search-info .hint-text{font-size:.85rem;color:var(--muted)}
+.search-area.phase-locked{opacity:.4;cursor:not-allowed;border-color:var(--muted)}
+.collected-clues{margin-top:var(--gap)}
+.mini-clue{
+  padding:10px 14px;background:rgba(139,69,19,.06);border-left:3px solid var(--brown);
+  margin-bottom:6px;border-radius:0 var(--radius) var(--radius) 0;
+  font-size:.9rem;animation:slideIn .3s both;
+}
+.mini-clue.new{animation:stampIn .5s both;border-left-color:var(--green)}
+
+/* ===== DIALOGUE VIEW ===== */
+.dialogue-container{max-width:700px;margin:0 auto}
+.char-profile{
+  display:flex;gap:20px;align-items:flex-start;padding:20px;
+  background:#FFFEF7;border:1px solid rgba(139,69,19,.15);
+  border-radius:var(--radius);margin-bottom:var(--gap);
+}
+.char-profile .avatar{
+  width:80px;height:80px;border-radius:50%;background:var(--ink);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;color:var(--bg);
+  font-size:2rem;font-family:var(--font-heading);border:3px solid var(--brown);
+}
+.char-profile .char-info h3{margin-bottom:4px}
+.char-profile .char-bg{font-size:.85rem;color:var(--muted);line-height:1.5}
+.dialogue-log{
+  max-height:360px;overflow-y:auto;padding:16px;
+  background:#FFFEF7;border:1px solid rgba(139,69,19,.12);
+  border-radius:var(--radius);margin-bottom:12px;
+}
+.dialogue-log::-webkit-scrollbar{width:6px}
+.dialogue-log::-webkit-scrollbar-thumb{background:rgba(139,69,19,.2);border-radius:3px}
+.msg{padding:10px 14px;margin-bottom:8px;border-radius:var(--radius);animation:flipIn .3s both;max-width:85%}
+.msg.player{background:rgba(139,69,19,.1);margin-left:auto;text-align:right}
+.msg.char{background:rgba(46,139,87,.08);border-left:3px solid var(--green)}
+.msg.system{background:rgba(178,34,34,.08);border-left:3px solid var(--red);font-size:.85rem;font-style:italic}
+.msg .speaker{font-size:.75rem;font-family:var(--font-heading);color:var(--brown);margin-bottom:2px}
+.msg .text{font-size:.9rem;line-height:1.6}
+.topic-buttons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.topic-btn{
+  padding:6px 12px;font-size:.82rem;border:1px solid var(--brown);
+  background:rgba(139,69,19,.05);color:var(--brown);cursor:pointer;
+  border-radius:var(--radius);font-family:var(--font-body);
+  transition:all var(--transition);
+}
+.topic-btn:hover{background:var(--brown);color:var(--bg)}
+.topic-btn.exhausted{opacity:.35;cursor:not-allowed;pointer-events:none;text-decoration:line-through}
+.dialogue-input{
+  display:flex;gap:8px;margin-bottom:12px;
+}
+.dialogue-input input{
+  flex:1;padding:10px 14px;border:1px solid rgba(139,69,19,.3);
+  background:#FFFEF7;font-family:var(--font-body);font-size:.9rem;
+  border-radius:var(--radius);color:var(--ink);
+  transition:border-color var(--transition);
+}
+.dialogue-input input:focus{outline:none;border-color:var(--brown)}
+.challenge-section{
+  margin-top:12px;padding:16px;border:2px dashed var(--red);
+  background:rgba(178,34,34,.03);border-radius:var(--radius);
+}
+.challenge-section h4{color:var(--red);margin-bottom:8px}
+.challenge-clue-list{display:flex;flex-wrap:wrap;gap:6px}
+.challenge-clue-btn{
+  padding:5px 10px;font-size:.8rem;border:1px solid var(--muted);
+  background:#FFFEF7;cursor:pointer;border-radius:var(--radius);
+  transition:all var(--transition);
+}
+.challenge-clue-btn:hover{border-color:var(--red);color:var(--red)}
+.recommendations{
+  margin-top:12px;padding:12px 16px;
+  background:rgba(139,69,19,.04);border:1px solid rgba(139,69,19,.1);
+  border-radius:var(--radius);
+}
+.recommendations h4{font-size:.85rem;margin-bottom:6px;color:var(--brown)}
+.recommendations ul{list-style:none;padding:0}
+.recommendations li{font-size:.82rem;color:var(--muted);padding:2px 0}
+.recommendations li::before{content:">> ";color:var(--brown)}
+
+/* ===== CLUE BOARD ===== */
+.clue-board{
+  background:linear-gradient(135deg,#B8860B22,#8B451322);
+  border:8px solid #6B3410;border-radius:4px;padding:var(--card-pad);
+  min-height:400px;position:relative;
+  box-shadow:inset 0 0 30px rgba(0,0,0,.1),3px 5px 15px rgba(0,0,0,.15);
+}
+.clue-board::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.clue-filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;position:relative;z-index:1}
+.clue-filter-btn{
+  padding:5px 12px;font-size:.8rem;border:1px solid rgba(139,69,19,.4);
+  background:rgba(255,254,247,.7);cursor:pointer;border-radius:var(--radius);
+  font-family:var(--font-heading);transition:all var(--transition);
+}
+.clue-filter-btn.active{background:var(--brown);color:var(--bg)}
+.clue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;position:relative;z-index:1}
+.clue-pin{
+  background:#FFFEF7;padding:14px;border-radius:var(--radius);position:relative;
+  box-shadow:1px 2px 8px rgba(0,0,0,.1);cursor:pointer;
+  transition:all var(--transition);transform:rotate(calc(var(--rot,0) * 1deg));
+  border-top:3px solid var(--brown);
+}
+.clue-pin::before{
+  content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:12px;height:12px;border-radius:50%;
+  background:radial-gradient(circle,#C0392B,#922B21);
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+.clue-pin:hover{transform:rotate(0deg) scale(1.03);z-index:2}
+.clue-pin .clue-name{font-family:var(--font-heading);font-size:.9rem;color:var(--brown);margin-top:4px;margin-bottom:4px}
+.clue-pin .clue-desc{font-size:.8rem;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.clue-pin .clue-phase-tag{position:absolute;top:8px;right:8px}
+
+/* clue detail overlay */
+.clue-detail-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;
+  display:none;align-items:center;justify-content:center;padding:16px;
+}
+.clue-detail-overlay.active{display:flex}
+.clue-detail-card{
+  background:#FFFEF7;max-width:500px;width:100%;padding:32px;
+  border-radius:var(--radius);border-top:4px solid var(--brown);
+  box-shadow:0 8px 32px rgba(0,0,0,.2);animation:flipIn .3s both;
+  position:relative;
+}
+.clue-detail-card .close-btn{
+  position:absolute;top:12px;right:16px;background:none;border:none;
+  font-size:1.5rem;cursor:pointer;color:var(--muted);
+}
+.clue-detail-card h3{margin-bottom:12px}
+.clue-detail-card .detail-desc{font-size:.95rem;line-height:1.8;margin-bottom:12px}
+.clue-detail-card .detail-extra{font-size:.85rem;color:var(--muted);padding-top:12px;border-top:1px dashed rgba(139,69,19,.2);line-height:1.6}
+
+/* ===== REPORT ===== */
+.report-card{max-width:700px;margin:0 auto}
+.question-block{
+  padding:20px;margin-bottom:16px;background:#FFFEF7;
+  border:1px solid rgba(139,69,19,.15);border-radius:var(--radius);
+}
+.question-block .q-num{font-size:.75rem;color:var(--muted);margin-bottom:4px}
+.question-block .q-text{font-family:var(--font-heading);font-size:1rem;margin-bottom:12px;line-height:1.6}
+.question-block label{
+  display:block;padding:8px 12px;margin-bottom:4px;cursor:pointer;
+  border:1px solid transparent;border-radius:var(--radius);
+  font-size:.9rem;transition:all var(--transition);
+}
+.question-block label:hover{background:rgba(139,69,19,.05);border-color:rgba(139,69,19,.1)}
+.question-block label.selected{background:rgba(139,69,19,.1);border-color:var(--brown)}
+.question-block label.correct{background:rgba(46,139,87,.12);border-color:var(--green);color:var(--green)}
+.question-block label.wrong{background:rgba(178,34,34,.1);border-color:var(--red);color:var(--red)}
+.question-block input[type="radio"]{margin-right:8px;accent-color:var(--brown)}
+.report-result{
+  text-align:center;padding:32px;animation:stampIn .6s both;
+}
+.report-result .score{font-size:3rem;font-family:var(--font-heading);color:var(--brown)}
+.report-result .grade{font-size:1.5rem;margin:8px 0;font-family:var(--font-heading)}
+
+/* ===== HINTS PANEL ===== */
+.hints-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;
+  display:none;align-items:flex-start;justify-content:center;padding:40px 16px;
+  overflow-y:auto;
+}
+.hints-overlay.active{display:flex}
+.hints-panel{
+  background:#FFFEF7;max-width:600px;width:100%;padding:32px;
+  border-radius:var(--radius);border-top:4px solid var(--brown);
+  box-shadow:0 8px 32px rgba(0,0,0,.2);animation:slideIn .3s both;
+  position:relative;
+}
+.hints-panel .close-btn{position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted)}
+.hint-phase-group{margin-bottom:20px}
+.hint-phase-group h4{margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid rgba(139,69,19,.15)}
+.hint-tier{
+  padding:10px 14px;margin-bottom:6px;border-left:3px solid var(--muted);
+  background:rgba(139,69,19,.03);border-radius:0 var(--radius) var(--radius) 0;
+}
+.hint-tier .hint-cost{font-size:.75rem;color:var(--red);margin-bottom:4px}
+.hint-tier .hint-text{font-size:.9rem;line-height:1.5;display:none}
+.hint-tier .hint-text.revealed{display:block}
+.hint-tier .reveal-btn{
+  padding:4px 10px;font-size:.8rem;border:1px solid var(--muted);
+  background:transparent;cursor:pointer;border-radius:var(--radius);
+  color:var(--muted);transition:all var(--transition);
+}
+.hint-tier .reveal-btn:hover{border-color:var(--red);color:var(--red)}
+.hint-tier .reveal-btn.used{display:none}
+
+/* ===== PHASE TRANSITION ===== */
+.phase-transition-overlay{
+  position:fixed;inset:0;background:rgba(47,47,47,.85);z-index:200;
+  display:none;align-items:center;justify-content:center;
+}
+.phase-transition-overlay.active{display:flex}
+.phase-transition-content{
+  text-align:center;color:var(--bg);animation:slideIn .5s both;max-width:500px;padding:24px;
+}
+.phase-transition-content h2{color:#F5F5DC;font-size:2rem;margin-bottom:16px;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+.phase-transition-content p{font-size:1rem;line-height:1.8;margin-bottom:24px;opacity:.9}
+.phase-transition-content .stamp-mark{
+  display:inline-block;border:3px solid var(--green);color:var(--green);
+  padding:8px 24px;font-size:1.2rem;font-family:var(--font-heading);
+  animation:stampIn .6s .3s both;transform:rotate(-5deg);
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 16px;
+  border:1px solid rgba(139,69,19,.3);background:rgba(139,69,19,.05);
+  color:var(--brown);cursor:pointer;border-radius:var(--radius);
+  font-family:var(--font-heading);font-size:.85rem;
+  margin-bottom:var(--gap);transition:all var(--transition);
+}
+.back-btn:hover{background:rgba(139,69,19,.12)}
+.back-btn::before{content:"<< "}
+
+/* ===== SCORE DISPLAY ===== */
+.score-display{
+  position:fixed;top:12px;right:12px;z-index:50;
+  padding:8px 16px;background:#FFFEF7;border:1px solid rgba(139,69,19,.2);
+  border-radius:var(--radius);font-family:var(--font-heading);font-size:.85rem;
+  box-shadow:1px 2px 6px rgba(0,0,0,.08);
+}
+.score-display .score-val{color:var(--brown);font-weight:600}
+
+/* ===== EMPTY STATES ===== */
+.empty-state{text-align:center;padding:40px;color:var(--muted);font-style:italic}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  html{font-size:14px}
+  .container{padding:10px}
+  .card{padding:16px}
+  .map-grid{grid-template-columns:1fr}
+  .char-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .clue-grid{grid-template-columns:1fr 1fr}
+  .dialogue-container{padding:0}
+  .char-profile{flex-direction:column;align-items:center;text-align:center}
+  .score-display{top:auto;bottom:8px;right:8px;font-size:.75rem}
+  .phase-bar{flex-direction:column;align-items:stretch}
+  .phase-bar .progress-text{margin-left:0;text-align:center;margin-top:6px}
+}
+</style>
+</head>
+<body>
+
+<!-- Score Display -->
+<div class="score-display" id="scoreDisplay" style="display:none">
+  得分: <span class="score-val" id="scoreVal">100</span>
+</div>
+
+<!-- ===== START SCREEN ===== -->
+<div class="view active" id="startScreen">
+  <div class="container" style="display:flex;align-items:center;justify-content:center;min-height:100vh">
+    <div class="card" style="max-width:560px;padding:40px;text-align:center">
+      <div class="stamp">机密档案 CLASSIFIED</div>
+      <h1>巴斯克维尔猎犬</h1>
+      <p class="subtitle">The Hound of the Baskervilles -- 侦探推理游戏</p>
+      <div class="briefing">
+        <p><strong>案件摘要：</strong></p>
+        <p>查尔斯·巴斯克维尔爵士于达特莫尔庄园紫杉大道离奇死亡。官方结论为心力衰竭，但死者面容极度扭曲，暗示着难以言喻的恐惧。</p>
+        <br>
+        <p>巴斯克维尔家族笼罩在百年诅咒的阴影下——传说中的地狱猎犬是否真的存在？新任继承人亨利爵士的生命也可能受到威胁。</p>
+        <br>
+        <p>请您深入调查此案，搜集线索，质问证人，揭开真相。</p>
+      </div>
+      <button class="btn primary" onclick="startGame()" style="font-size:1.1rem;padding:14px 40px">
+        开始调查
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN DESK ===== -->
+<div class="view" id="mainDesk">
+  <div class="container">
+    <h2 style="text-align:center;margin-bottom:var(--gap)">调查主桌</h2>
+
+    <!-- Phase Bar -->
+    <div class="phase-bar" id="phaseBar"></div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="btn" onclick="showView('clueBoard')">线索板</button>
+      <button class="btn success" onclick="showView('report')" id="reportBtn">提交报告</button>
+      <button class="btn small" onclick="openHints()">提示 (扣分)</button>
+    </div>
+
+    <!-- Map -->
+    <h3 style="margin-bottom:12px">案发地点</h3>
+    <div class="map-grid" id="mapGrid"></div>
+
+    <!-- Characters -->
+    <h3 style="margin:var(--gap) 0 0">相关人物</h3>
+    <div class="char-grid" id="charGrid"></div>
+  </div>
+</div>
+
+<!-- ===== SCENE VIEW ===== -->
+<div class="view" id="sceneView">
+  <div class="container">
+    <button class="back-btn" onclick="showView('mainDesk')">返回主桌</button>
+    <div id="sceneContent"></div>
+  </div>
+</div>
+
+<!-- ===== DIALOGUE VIEW ===== -->
+<div class="view" id="dialogueView">
+  <div class="container">
+    <button class="back-btn" onclick="showView('mainDesk')">返回主桌</button>
+    <div class="dialogue-container" id="dialogueContent"></div>
+  </div>
+</div>
+
+<!-- ===== CLUE BOARD ===== -->
+<div class="view" id="clueBoard">
+  <div class="container">
+    <button class="back-btn" onclick="showView('mainDesk')">返回主桌</button>
+    <h2 style="margin-bottom:var(--gap)">线索板</h2>
+    <div class="clue-board" id="clueBoardContent"></div>
+  </div>
+</div>
+
+<!-- ===== REPORT ===== -->
+<div class="view" id="report">
+  <div class="container">
+    <button class="back-btn" onclick="showView('mainDesk')">返回主桌</button>
+    <h2 style="text-align:center;margin-bottom:var(--gap)">调查报告</h2>
+    <div class="report-card" id="reportContent"></div>
+  </div>
+</div>
+
+<!-- ===== CLUE DETAIL OVERLAY ===== -->
+<div class="clue-detail-overlay" id="clueDetailOverlay" onclick="if(event.target===this)closeClueDetail()">
+  <div class="clue-detail-card" id="clueDetailCard"></div>
+</div>
+
+<!-- ===== HINTS OVERLAY ===== -->
+<div class="hints-overlay" id="hintsOverlay" onclick="if(event.target===this)closeHints()">
+  <div class="hints-panel" id="hintsPanel"></div>
+</div>
+
+<!-- ===== PHASE TRANSITION ===== -->
+<div class="phase-transition-overlay" id="phaseTransition">
+  <div class="phase-transition-content" id="phaseTransitionContent"></div>
+</div>
+
+<script>
+// ========================================
+// GAME DATA
+// ========================================
+
+const PHASES = [
+  {id:"phase_01", name:"初始调查", order:1,
+   scenes:["scene_yew_avenue","scene_baskerville_hall","scene_coombe_tracey"],
+   characters:["mortimer","henry","barrymore_husband","barrymore_wife","stapleton","stapleton_sister"],
+   advanceClues:["clue_footprints","clue_hound_prints","clue_family_legend"],
+   briefing:"第一阶段：初始调查。请前往犯罪现场和关键地点，收集基础线索，与相关证人谈话。重点关注查尔斯爵士的死因和现场痕迹。"},
+  {id:"phase_02", name:"荒原调查", order:2,
+   scenes:["scene_grimpen_mire","scene_moor_hideout"],
+   characters:["selden","laura_lyons"],
+   advanceClues:["clue_candle_signal","clue_hideout_note","clue_mysterious_figure"],
+   briefing:"第二阶段：荒原调查。新的地点已解锁——格林盆大泥潭和荒原石屋。新的人物也浮出水面。深入荒原，追踪神秘活动。"},
+  {id:"phase_03", name:"真相揭露", order:3,
+   scenes:["scene_merripit_house"],
+   characters:[],
+   briefing:"第三阶段：真相揭露。所有线索指向同一个方向。前往梅利琵宅邸，揭开最终真相，提交调查报告。"}
+];
+
+const SCENES = [
+  {id:"scene_yew_avenue",name:"紫杉大道",type:"犯罪现场",phase:"phase_01",
+   desc:"巴斯克维尔庄园后方的紫杉树夹道，查尔斯爵士每晚散步的地方，也是他死亡的地点。",
+   detail:"两侧是约12英尺高的紫杉树篱，中央路面宽约8英尺。中间有一扇约4英尺高的边门通往荒原。查尔斯爵士的尸体被发现在大道尽头，面容极度扭曲。距尸体约20码处发现了巨型猎犬爪印。",
+   publicClues:["clue_footprints","clue_death_scene","clue_gate_status"],
+   hiddenClues:["clue_hound_prints","clue_cigar_ash"],
+   searchAreas:[
+     {name:"泥泞路面",hint:"仔细检查大道上的脚印痕迹",clue:"clue_hound_prints"},
+     {name:"边门附近地面",hint:"观察边门旁的地面残留物",clue:"clue_cigar_ash"}
+   ]},
+  {id:"scene_baskerville_hall",name:"巴斯克维尔庄园",type:"住所",phase:"phase_01",
+   desc:"一座阴森的哥特式庄园，大厅挂满了家族历代的肖像画。",
+   detail:"庄园内部阴暗宏伟。其中一幅描绘了1647年的雨果·巴斯克维尔。西侧窗户能直视荒原。管家白瑞摩夫妇就住在仆人住所。",
+   publicClues:["clue_family_legend","clue_warning_letter"],
+   hiddenClues:["clue_candle_signal","clue_portrait_resemblance"],
+   searchAreas:[
+     {name:"西侧窗户",hint:"深夜观察这扇窗户",clue:"clue_candle_signal",requirePhase:"phase_02"},
+     {name:"肖像画廊",hint:"仔细比较画中人物与现实中的某人",clue:"clue_portrait_resemblance",requirePhase:"phase_03"}
+   ]},
+  {id:"scene_coombe_tracey",name:"库姆特雷西镇",type:"小镇",phase:"phase_01",
+   desc:"达特莫尔附近的小镇，劳拉·莱昂斯在此经营打字业务。",
+   detail:"镇上的邮电所保存着电报收发和投递记录，可以用来核验不在场证明。",
+   publicClues:["clue_telegram_verification"],
+   hiddenClues:["clue_lyons_letter"],
+   searchAreas:[
+     {name:"劳拉的办公桌抽屉",hint:"搜查打字员的文件",clue:"clue_lyons_letter",requirePhase:"phase_03"}
+   ]},
+  {id:"scene_grimpen_mire",name:"格林盆大泥潭",type:"荒野",phase:"phase_02",
+   desc:"达特莫尔荒原北部最危险的区域，嫩绿色的苔草掩盖着致命的泥潭陷阱。",
+   detail:"泥潭中心有一座小岛，包含废弃锡矿小屋——斯台普顿将猎犬藏匿于此。只有斯台普顿掌握穿越路径。",
+   publicClues:[],
+   hiddenClues:["clue_phosphorus_hound","clue_mire_path"],
+   searchAreas:[
+     {name:"泥潭中心小岛",hint:"沿标记路径深入泥潭",clue:"clue_phosphorus_hound",requirePhase:"phase_03"},
+     {name:"木棍标记的路径",hint:"寻找地面上的引导标记",clue:"clue_mire_path",requirePhase:"phase_03"}
+   ]},
+  {id:"scene_moor_hideout",name:"荒原石屋",type:"据点",phase:"phase_02",
+   desc:"荒原上一处古老的石屋遗迹，有人近期居住的痕迹。",
+   detail:"石床上铺着雨衣和毯子，地上散落着空罐头。桌上包裹下面藏着一张字条。",
+   publicClues:["clue_selden_escape","clue_mysterious_figure","clue_moor_howling"],
+   hiddenClues:["clue_hideout_note"],
+   searchAreas:[
+     {name:"包裹下面",hint:"翻开桌上包裹查看下方",clue:"clue_hideout_note"}
+   ]},
+  {id:"scene_merripit_house",name:"梅利琵宅邸",type:"住所",phase:"phase_03",
+   desc:"斯台普顿和所谓的'妹妹'居住的宅邸，位于荒原边缘。",
+   detail:"宅邸中可以找到贝里尔被绑缚的痕迹。阁楼中藏有磷光颜料残留物和旧靴子。",
+   publicClues:["clue_wife_not_sister"],
+   hiddenClues:["clue_boot_theft","clue_stapleton_identity"],
+   searchAreas:[
+     {name:"阁楼",hint:"检查阁楼中的隐藏物品",clue:"clue_boot_theft"},
+     {name:"斯台普顿的书桌",hint:"搜查私人文件",clue:"clue_stapleton_identity"}
+   ]}
+];
+
+const CHARACTERS = [
+  {id:"mortimer",name:"詹姆斯·莫蒂默医生",role:"证人",phases:["phase_01","phase_02"],
+   silhouette:"瘦高,夹持手杖,戴眼镜",bg:"查尔斯爵士的私人医生和好友。第一个发现尸体。",initial:"莫",
+   lie:{id:"lie_mortimer",about:"隐瞒猎犬爪印",
+     challengeClue:"clue_hound_prints",
+     successText:"你说得对……我在距尸体约二十码处看到了巨型猎犬的爪印。我太害怕了，害怕别人说我迷信……但这是事实。",
+     failText:"我不明白你在说什么。我已经把一切都告诉了陪审团。",
+     rewardClue:null},
+   topics:[
+     {id:"t_mortimer_death",keywords:["查尔斯","死亡","尸体","发现"],
+      response:"我在紫杉大道尽头发现了查尔斯爵士的遗体。面容极度扭曲，双臂伸开，手指深深抠入地面。官方结论是心脏衰竭。",
+      maxUse:3,used:0},
+     {id:"t_mortimer_legend",keywords:["传说","猎犬","诅咒","家族"],
+      response:"巴斯克维尔家族自雨果·巴斯克维尔时代起就笼罩在猎犬传说的阴影下。雨果酒后追逐少女跑上荒原，被一只'地狱猎犬'撕碎。此后族人多有不得善终。",
+      maxUse:3,used:0},
+     {id:"t_mortimer_footprints",keywords:["足迹","脚印","现场","痕迹"],
+      response:"紫杉大道上只有查尔斯爵士自己的脚印。从边门开始，他的步伐从正常变成了踮脚奔跑——极度恐惧中逃命。",
+      maxUse:3,used:0}
+   ]},
+  {id:"henry",name:"亨利·巴斯克维尔爵士",role:"委托人",phases:["phase_01","phase_02","phase_03"],
+   silhouette:"年轻健壮,旅行装束",bg:"查尔斯爵士的侄子，从加拿大归来继承庄园。",initial:"亨",
+   lie:null,
+   topics:[
+     {id:"t_henry_warning",keywords:["警告信","威胁","信件","伦敦"],
+      response:"我在伦敦旅馆收到一封匿名信——'如果你珍惜自己的性命和理智，就远离荒原。'字是从报纸上剪下来拼贴的，但'荒原'二字是手写的。",
+      maxUse:3,used:0},
+     {id:"t_henry_boot",keywords:["靴子","失窃","旅馆","丢失"],
+      response:"奇怪的事！我先丢了一只新靴子，后来找回来了，但接着一只旧靴子又不见了。谁会偷一只旧靴子呢？",
+      maxUse:3,used:0},
+     {id:"t_henry_clothes",keywords:["衣服","旧衣","转赠","白瑞摩"],
+      response:"白瑞摩把我不要的旧衣服送给了荒原上的什么人。我倒不介意，但这些衣服怎么会到荒原上去？",
+      maxUse:3,used:0}
+   ]},
+  {id:"barrymore_husband",name:"约翰·白瑞摩",role:"嫌疑人",phases:["phase_01","phase_02"],
+   silhouette:"高大,络腮胡,管家制服",bg:"巴斯克维尔庄园的管家，深夜有可疑行为。",initial:"白",
+   lie:{id:"lie_barrymore",about:"否认蜡烛信号",
+     challengeClue:"clue_candle_signal",
+     successText:"好吧，先生，我承认了。那是我妻子的弟弟——塞尔登，从达特莫尔监狱逃出来的。我们用蜡烛信号告诉他食物放在哪里。这与查尔斯爵士的死毫无关系，我发誓！不过……查尔斯爵士死的那天晚上，他似乎在边门处等什么人——我听说他收到了一位女士的来信。",
+     failText:"先生，我不知道您在说什么。我只是在检查窗户。",
+     rewardClue:null},
+   topics:[
+     {id:"t_barry_habits",keywords:["查尔斯","习惯","散步","日常"],
+      response:"查尔斯爵士每晚都会在紫杉大道散步，吸上一支雪茄。那天晚上他比平时晚了一些，似乎在边门处等什么人。",
+      maxUse:3,used:0},
+     {id:"t_barry_telegram",keywords:["电报","通知","亨利","消息"],
+      response:"电报是我太太转交给我的，我当时并不在家。",
+      maxUse:3,used:0}
+   ]},
+  {id:"stapleton",name:"杰克·斯台普顿",role:"嫌疑人",phases:["phase_01","phase_02","phase_03"],
+   silhouette:"中等偏矮,手持捕蝶网",bg:"自称达特莫尔的自然学家，热衷蝴蝶采集。",initial:"斯",
+   lie:{id:"lie_stapleton",about:"隐瞒巴斯克维尔血统",
+     challengeClue:"clue_portrait_resemblance",
+     successText:"你……你怎么知道的？！是的，我是罗杰·巴斯克维尔的儿子。我的父亲是家族的耻辱，逃到了南美洲。我本该是遗产的继承人，但查尔斯爵士甚至不知道我的存在！",
+     failText:"这简直是无稽之谈。我是一个科学家。",
+     rewardClue:null},
+   topics:[
+     {id:"t_stap_butterfly",keywords:["蝴蝶","昆虫","采集","自然"],
+      response:"达特莫尔是稀有蝴蝶的天堂！独眼蝶只在格林盆泥潭附近的小岛上才能找到。我经常穿越泥潭去那里采集。",
+      maxUse:3,used:0},
+     {id:"t_stap_mire",keywords:["泥潭","路径","穿越","格林盆"],
+      response:"格林盆大泥潭确实凶险无比，但只要记住地标和小路的位置，就能安全穿越。普通人千万不要尝试。",
+      maxUse:3,used:0},
+     {id:"t_stap_sister",keywords:["妹妹","贝里尔","女士","家人"],
+      response:"贝里尔是我的妹妹，她陪我住在梅利琵庄。她不太喜欢荒原，但作为我唯一的亲人，她留了下来。",
+      maxUse:3,used:0}
+   ]},
+  {id:"stapleton_sister",name:"贝里尔·斯台普顿",role:"证人",phases:["phase_01","phase_02","phase_03"],
+   silhouette:"美貌女子,忧虑神态",bg:"被介绍为斯台普顿的妹妹，实际上是他的妻子。",initial:"贝",
+   lie:null,
+   topics:[
+     {id:"t_beryl_warning",keywords:["警告","危险","离开","荒原"],
+      response:"（低声,环顾四周）请您……请您务必小心。如果能回伦敦就回伦敦吧。这个地方对任何巴斯克维尔来说都不安全。我不能再说更多了。",
+      maxUse:3,used:0},
+     {id:"t_beryl_brother",keywords:["哥哥","斯台普顿","关系","他"],
+      response:"（目光躲闪）他……对我很好。我们是一家人。（停顿）但有时候我觉得他变了，变得让我害怕。",
+      maxUse:3,used:0}
+   ]},
+  {id:"laura_lyons",name:"劳拉·莱昂斯",role:"证人",phases:["phase_02","phase_03"],
+   silhouette:"年轻女子,简朴衣着",bg:"库姆特雷西镇的打字员，被斯台普顿利用。",initial:"劳",
+   lie:{id:"lie_lyons",about:"否认受指使写信",
+     challengeClue:"clue_lyons_letter",
+     successText:"好吧……是斯台普顿让我写信约查尔斯爵士到边门见面的。他说那是为了帮我获得经济援助。但后来他又阻止我赴约——我到了才知道查尔斯爵士那天晚上死了！斯台普顿对我说过他是单身的，但我现在知道那个女人是他的妻子，不是妹妹。",
+     failText:"我与查尔斯爵士的约会纯粹是个人事务。",
+     rewardClue:null},
+   topics:[
+     {id:"t_lyons_charles",keywords:["查尔斯","约会","信件","见面"],
+      response:"查尔斯爵士是个善良的绅士，他帮助过我。我曾写信给他请求帮忙……但那天晚上的事，我不想多说。",
+      maxUse:3,used:0},
+     {id:"t_lyons_stapleton",keywords:["斯台普顿","关系","认识","他"],
+      response:"斯台普顿先生？他是我的……朋友。一个很体贴的人。他说他是单身的。（脸上闪过一丝困惑）",
+      maxUse:3,used:0}
+   ]},
+  {id:"barrymore_wife",name:"伊丽莎·白瑞摩",role:"证人",phases:["phase_01","phase_02"],
+   silhouette:"中年女子,哀伤面容",bg:"庄园女管家，经常在深夜哭泣。",initial:"伊",
+   lie:null,
+   topics:[
+     {id:"t_wife_crying",keywords:["哭泣","深夜","难过","伤心"],
+      response:"（眼眶泛红）先生，我只是……有时候会想一些伤心的事。请别追问了。我是个可怜的女人。",
+      maxUse:3,used:0}
+   ]}
+];
+
+const CLUES = [
+  {id:"clue_footprints",name:"查尔斯爵士的异常足迹",phase:"phase_01",hidden:false,key:false,
+   desc:"紫杉大道上的足迹从边门处开始由正常步行变为踮脚奔跑，说明他在极度恐惧中逃命。",
+   detail:"从庄园到边门为正常步行；边门处短暂停留；穿过边门后变为踮脚奔跑，直至倒地。"},
+  {id:"clue_death_scene",name:"查尔斯爵士的死状",phase:"phase_01",hidden:false,key:false,
+   desc:"面容极度扭曲，双臂伸开，手指抠入地面。无暴力伤害痕迹，符合极度恐惧导致心力衰竭。",detail:""},
+  {id:"clue_gate_status",name:"边门状态",phase:"phase_01",hidden:false,key:false,
+   desc:"边门高约4英尺，关闭上锁但任何人可翻越。附近砾石上只有死者脚印。",detail:""},
+  {id:"clue_family_legend",name:"巴斯克维尔猎犬传说",phase:"phase_01",hidden:false,key:true,
+   desc:"自1647年雨果·巴斯克维尔被'地狱猎犬'撕碎以来，家族成员多有不得善终。查尔斯爵士深信此传说。",detail:""},
+  {id:"clue_warning_letter",name:"匿名警告信",phase:"phase_01",hidden:false,key:false,
+   desc:"亨利在伦敦旅馆收到：'如果你珍惜自己的性命和理智，就远离荒原。'报纸剪字拼贴，'荒原'二字手写。",detail:""},
+  {id:"clue_telegram_verification",name:"电报核验结果",phase:"phase_01",hidden:false,key:false,
+   desc:"发给白瑞摩的电报由妻子转交而非本人签收，无法确认他当时在家。",detail:""},
+  {id:"clue_hound_prints",name:"巨型猎犬爪印",phase:"phase_01",hidden:true,key:true,
+   desc:"莫蒂默医生私下透露：距尸体约20码处有巨型猎犬爪印，因害怕被视为迷信而未向陪审团披露。",detail:""},
+  {id:"clue_cigar_ash",name:"边门处的雪茄烟灰",phase:"phase_01",hidden:true,key:true,
+   desc:"边门旁发现雪茄灰掉落两次，推断查尔斯爵士在此等候约5到10分钟。他在等谁？",detail:""},
+  {id:"clue_moor_howling",name:"荒原上的恐怖嚎叫",phase:"phase_02",hidden:false,key:false,
+   desc:"从格林盆泥潭方向传来的恐怖嚎叫声。斯台普顿称是'怪鸟'，但实为藏在泥潭中的猎犬。",detail:""},
+  {id:"clue_mysterious_figure",name:"月光下的神秘人影",phase:"phase_02",hidden:false,key:false,
+   desc:"荒原山脊上出现又高又瘦的人影，在月光下凝视荒野。排除了逃犯塞尔登——这是第三个存在。",detail:""},
+  {id:"clue_selden_escape",name:"逃犯塞尔登",phase:"phase_02",hidden:false,key:false,
+   desc:"达特莫尔监狱越狱逃犯塞尔登藏在荒原上，是白瑞摩太太的弟弟。白瑞摩夫妇秘密供养他。",detail:""},
+  {id:"clue_henry_clothes",name:"亨利爵士的旧衣服转赠",phase:"phase_02",hidden:false,key:true,
+   desc:"白瑞摩将亨利的旧衣服转赠给塞尔登。猎犬通过衣服气味将塞尔登误认为亨利。",detail:""},
+  {id:"clue_candle_signal",name:"白瑞摩的深夜烛光信号",phase:"phase_02",hidden:true,key:true,
+   desc:"深夜约凌晨2点，白瑞摩在西侧窗口向荒原发信号。荒原上有光点回应。固定通信程序。",detail:""},
+  {id:"clue_hideout_note",name:"石屋中的监视字条",phase:"phase_02",hidden:true,key:true,
+   desc:"石屋包裹下的字条是对某人行踪的监视报告。被监视者并非亨利爵士。笔迹表明写信者受过良好教育。",detail:""},
+  {id:"clue_wife_not_sister",name:"妹妹实为妻子",phase:"phase_03",hidden:false,key:true,
+   desc:"贝里尔·斯台普顿并非妹妹而是妻子。斯台普顿伪装兄妹关系以利用她接近目标并保持'单身'身份。",detail:""},
+  {id:"clue_portrait_resemblance",name:"肖像画的惊人相似",phase:"phase_03",hidden:true,key:true,
+   desc:"遮去帽子假发后，雨果·巴斯克维尔的肖像与斯台普顿面部轮廓惊人相似——遗传学上的返祖现象。",detail:""},
+  {id:"clue_stapleton_identity",name:"斯台普顿的真实身份",phase:"phase_03",hidden:true,key:true,
+   desc:"斯台普顿实为罗杰·巴斯克维尔之子。巴斯克维尔→范德勒→斯台普顿。他是遗产的合法继承人。",detail:""},
+  {id:"clue_phosphorus_hound",name:"磷光猎犬",phase:"phase_03",hidden:true,key:true,
+   desc:"泥潭小岛上发现犬舍和磷光颜料罐。猎犬涂成漆黑，口眼涂磷光剂呈现'地狱猎犬'效果。",detail:""},
+  {id:"clue_lyons_letter",name:"劳拉的约会信",phase:"phase_03",hidden:true,key:true,
+   desc:"劳拉受斯台普顿怂恿写信约查尔斯爵士到边门见面。斯台普顿随后阻止她赴约，自己放出猎犬。",detail:""},
+  {id:"clue_boot_theft",name:"旅馆靴子失窃",phase:"phase_03",hidden:true,key:true,
+   desc:"亨利先丢新靴子后丢旧靴子。偷旧靴子是为了获取气味训练猎犬。新靴子没气味所以归还。",detail:""},
+  {id:"clue_mire_path",name:"泥潭秘密路径",phase:"phase_03",hidden:true,key:false,
+   desc:"木棍标记的秘密路径通向泥潭中心小岛。只有斯台普顿知道。",detail:""}
+];
+
+const REPORT_QUESTIONS = [
+  {id:"q1",text:"查尔斯·巴斯克维尔爵士的直接死因是什么？",
+   options:["被猎犬咬死","被人毒杀","极度恐惧导致心脏衰竭","自然衰老"],correct:2},
+  {id:"q2",text:"谁是幕后凶手？",
+   options:["莫蒂默医生","约翰·白瑞摩","杰克·斯台普顿","逃犯塞尔登"],correct:2},
+  {id:"q3",text:"斯台普顿的真实身份是什么？",
+   options:["前军官","罗杰·巴斯克维尔之子","失踪的远亲","流浪的科学家"],correct:1},
+  {id:"q4",text:"猎犬是如何呈现'地狱猎犬'效果的？",
+   options:["只是传说，没有真正的猎犬","用火焰装置","涂抹磷光颜料","用发光的项圈"],correct:2},
+  {id:"q5",text:"为什么偷亨利爵士的旧靴子？",
+   options:["作为嫁祸的证据","获取气味训练猎犬","纯粹的恶作剧","卖钱"],correct:1},
+  {id:"q6",text:"查尔斯爵士死的那晚在边门等谁？",
+   options:["莫蒂默医生","贝里尔·斯台普顿","劳拉·莱昂斯","逃犯塞尔登"],correct:2},
+  {id:"q7",text:"白瑞摩深夜的蜡烛信号是给谁的？",
+   options:["逃犯塞尔登","斯台普顿","荒原上的神秘人","劳拉·莱昂斯"],correct:0},
+  {id:"q8",text:"贝里尔·斯台普顿与杰克·斯台普顿的真实关系是？",
+   options:["兄妹","无血缘关系的合伙人","夫妻","表亲"],correct:2},
+  {id:"q9",text:"斯台普顿的犯罪动机是什么？",
+   options:["个人仇恨","继承巴斯克维尔遗产","科学实验","为父报仇"],correct:1}
+];
+
+const HINTS = [
+  {phase:"phase_01",tiers:[
+    {cost:5,text:"注意紫杉大道的泥泞路面——不仅仅有人的脚印。边门附近也值得仔细搜索。"},
+    {cost:10,text:"莫蒂默医生似乎有所隐瞒。如果你找到了猎犬爪印的证据，试着质问他。巴斯克维尔庄园中的家族传说是推进调查的关键。"},
+    {cost:20,text:"收集三条关键线索即可推进：查尔斯爵士的异常足迹（进入紫杉大道自动获得）、巨型猎犬爪印（搜索紫杉大道泥泞路面）、巴斯克维尔猎犬传说（进入庄园自动获得）。"}
+  ]},
+  {phase:"phase_02",tiers:[
+    {cost:5,text:"荒原石屋有人居住的痕迹——仔细搜查桌上的包裹。巴斯克维尔庄园的西侧窗户在深夜会有异常。"},
+    {cost:10,text:"白瑞摩的蜡烛信号可以在庄园西侧窗户发现（需搜索）。石屋中的字条藏在包裹下面。荒原石屋会自动提供神秘人影的线索。"},
+    {cost:20,text:"推进到第三阶段需要：白瑞摩的深夜烛光信号（搜索庄园西侧窗户）、石屋中的监视字条（搜索石屋包裹下面）、月光下的神秘人影（进入荒原石屋自动获得）。"}
+  ]},
+  {phase:"phase_03",tiers:[
+    {cost:5,text:"梅利琵宅邸的阁楼和斯台普顿的书桌隐藏着重要证据。肖像画廊中的发现可能是揭露斯台普顿的关键。"},
+    {cost:10,text:"质问斯台普顿需要肖像画相似的证据（搜索庄园肖像画廊）。质问劳拉需要约会信的证据（搜索库姆特雷西镇的办公桌）。格林盆泥潭中心有猎犬的藏身处。"},
+    {cost:20,text:"凶手是斯台普顿，他是巴斯克维尔家族后裔。他训练猎犬涂上磷光颜料，利用劳拉约查尔斯到边门，然后放出猎犬将其吓死。动机是继承遗产。"}
+  ]}
+];
+
+// ========================================
+// GAME STATE
+// ========================================
+
+let state = {
+  currentPhase: "phase_01",
+  collectedClues: [],
+  visitedScenes: [],
+  searchedAreas: [],
+  challengesDone: [],
+  challengeSuccesses: 0,
+  hintsRevealed: [], // "phase_01_0", "phase_01_1", etc.
+  topicUsage: {}, // "charId_topicId" -> count
+  score: 100,
+  reportSubmitted: false,
+  reportScore: 0,
+  currentScene: null,
+  currentChar: null,
+  dialogueLog: [],
+};
+
+// ========================================
+// AUDIO ENGINE (Web Audio API)
+// ========================================
+
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playPageFlip() {
+  try {
+    const ctx = getAudioCtx();
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.15, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.04)) * 0.3;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const filt = ctx.createBiquadFilter();
+    filt.type = 'highpass'; filt.frequency.value = 2000;
+    src.connect(filt); filt.connect(ctx.destination);
+    src.start();
+  } catch(e) {}
+}
+
+function playPenWrite() {
+  try {
+    const ctx = getAudioCtx();
+    const dur = 0.08;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const t = i / ctx.sampleRate;
+      data[i] = (Math.random() * 2 - 1) * 0.1 * Math.sin(t * 3000) * Math.exp(-t * 30);
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start();
+  } catch(e) {}
+}
+
+function playStamp() {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(150, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 0.15);
+    // noise thud
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.02)) * 0.3;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start();
+  } catch(e) {}
+}
+
+function playSuccess() {
+  try {
+    const ctx = getAudioCtx();
+    [440, 554, 659].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.12);
+      gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + i * 0.12 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.3);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + i * 0.12);
+      osc.stop(ctx.currentTime + i * 0.12 + 0.3);
+    });
+  } catch(e) {}
+}
+
+// ========================================
+// VIEW MANAGEMENT
+// ========================================
+
+function showView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const view = document.getElementById(viewId);
+  if (view) {
+    view.classList.add('active');
+    view.style.animation = 'none';
+    view.offsetHeight; // reflow
+    view.style.animation = '';
+  }
+  playPageFlip();
+  if (viewId === 'mainDesk') renderMainDesk();
+  if (viewId === 'clueBoard') renderClueBoard();
+  if (viewId === 'report') renderReport();
+  document.getElementById('scoreDisplay').style.display = viewId === 'startScreen' ? 'none' : 'block';
+  updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+  document.getElementById('scoreVal').textContent = state.score;
+}
+
+// ========================================
+// PHASE LOGIC
+// ========================================
+
+function getCurrentPhaseObj() {
+  return PHASES.find(p => p.id === state.currentPhase);
+}
+
+function getPhaseOrder(phaseId) {
+  const p = PHASES.find(pp => pp.id === phaseId);
+  return p ? p.order : 99;
+}
+
+function isPhaseUnlocked(phaseId) {
+  return getPhaseOrder(phaseId) <= getPhaseOrder(state.currentPhase);
+}
+
+function getAvailableSceneIds() {
+  let ids = [];
+  PHASES.forEach(p => {
+    if (isPhaseUnlocked(p.id)) ids = ids.concat(p.scenes);
+  });
+  return ids;
+}
+
+function getAvailableCharIds() {
+  let ids = new Set();
+  PHASES.forEach(p => {
+    if (isPhaseUnlocked(p.id)) p.characters.forEach(c => ids.add(c));
+  });
+  // Also include chars whose phases include the current phase
+  CHARACTERS.forEach(c => {
+    if (c.phases.includes(state.currentPhase) || c.phases.some(pp => isPhaseUnlocked(pp))) {
+      ids.add(c.id);
+    }
+  });
+  return [...ids];
+}
+
+function checkPhaseAdvance() {
+  const phase = getCurrentPhaseObj();
+  if (!phase || !phase.advanceClues) return;
+  const allCollected = phase.advanceClues.every(c => state.collectedClues.includes(c));
+  if (allCollected) {
+    const nextIdx = PHASES.indexOf(phase) + 1;
+    if (nextIdx < PHASES.length) {
+      const nextPhase = PHASES[nextIdx];
+      state.currentPhase = nextPhase.id;
+      showPhaseTransition(nextPhase);
+    }
+  }
+}
+
+function showPhaseTransition(phase) {
+  const overlay = document.getElementById('phaseTransition');
+  const content = document.getElementById('phaseTransitionContent');
+  content.innerHTML = `
+    <h2>阶段推进</h2>
+    <div class="stamp-mark">第${phase.order}阶段</div>
+    <h2 style="margin-top:16px">${phase.name}</h2>
+    <p>${phase.briefing}</p>
+    <button class="btn primary" onclick="closePhaseTransition()" style="color:#F5F5DC;border-color:#F5F5DC">继续调查</button>
+  `;
+  overlay.classList.add('active');
+  playSuccess();
+}
+
+function closePhaseTransition() {
+  document.getElementById('phaseTransition').classList.remove('active');
+  renderMainDesk();
+}
+
+// ========================================
+// CLUE COLLECTION
+// ========================================
+
+function collectClue(clueId, silent) {
+  if (state.collectedClues.includes(clueId)) return false;
+  state.collectedClues.push(clueId);
+  if (!silent) {
+    playPenWrite();
+    const clue = CLUES.find(c => c.id === clueId);
+    if (clue) showToast(`发现线索: ${clue.name}`);
+  }
+  checkPhaseAdvance();
+  return true;
+}
+
+function hasClue(clueId) {
+  return state.collectedClues.includes(clueId);
+}
+
+// ========================================
+// TOAST NOTIFICATIONS
+// ========================================
+
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:300;
+    padding:12px 24px;background:#FFFEF7;border:2px solid var(--brown);
+    border-radius:2px;font-family:var(--font-heading);font-size:.9rem;color:var(--brown);
+    box-shadow:2px 4px 12px rgba(0,0,0,.15);animation:slideIn .3s both;
+    max-width:90vw;text-align:center;
+  `;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'opacity .3s';
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  }, 2500);
+}
+
+// ========================================
+// MAIN DESK RENDERING
+// ========================================
+
+function renderMainDesk() {
+  renderPhaseBar();
+  renderMap();
+  renderCharGrid();
+  // Report button availability
+  const reportBtn = document.getElementById('reportBtn');
+  if (state.currentPhase === 'phase_03') {
+    reportBtn.disabled = false;
+  } else {
+    reportBtn.disabled = true;
+  }
+}
+
+function renderPhaseBar() {
+  const bar = document.getElementById('phaseBar');
+  const totalClues = CLUES.length;
+  const collected = state.collectedClues.length;
+  bar.innerHTML = PHASES.map(p => {
+    let cls = 'phase-item';
+    if (p.id === state.currentPhase) cls += ' current';
+    else if (getPhaseOrder(p.id) < getPhaseOrder(state.currentPhase)) cls += ' completed';
+    else cls += ' locked';
+    return `<div class="${cls}">第${p.order}阶段: ${p.name}</div>`;
+  }).join('') + `<div class="progress-text">已收集 ${collected}/${totalClues} 条线索</div>`;
+}
+
+function renderMap() {
+  const grid = document.getElementById('mapGrid');
+  const available = getAvailableSceneIds();
+  grid.innerHTML = SCENES.map(s => {
+    const unlocked = available.includes(s.id);
+    const visited = state.visitedScenes.includes(s.id);
+    const totalClues = s.publicClues.length + s.hiddenClues.length;
+    const foundHere = [...s.publicClues, ...s.hiddenClues].filter(c => hasClue(c)).length;
+    return `
+      <div class="card map-card ${unlocked ? '' : 'locked'}" onclick="${unlocked ? `openScene('${s.id}')` : ''}">
+        <div class="scene-type">${s.type}</div>
+        <div class="scene-name">${s.name} ${visited ? '<span style="color:var(--green);font-size:.8rem">已访问</span>' : ''}</div>
+        <div class="scene-desc">${s.desc}</div>
+        ${unlocked ? `<div class="clue-count">${foundHere}/${totalClues} 线索</div>` : '<div class="clue-count" style="background:var(--muted)">锁定</div>'}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCharGrid() {
+  const grid = document.getElementById('charGrid');
+  const available = getAvailableCharIds();
+  grid.innerHTML = CHARACTERS.map(c => {
+    const unlocked = available.includes(c.id);
+    const hasLie = c.lie && !state.challengesDone.includes(c.lie.id);
+    const lied = c.lie && state.challengesDone.includes(c.lie.id);
+    return `
+      <div class="card char-card ${unlocked ? '' : 'locked'}" onclick="${unlocked ? `openDialogue('${c.id}')` : ''}">
+        <div class="silhouette">${c.initial}</div>
+        <div class="char-name">${c.name}</div>
+        <div class="char-role">${c.role}</div>
+        ${hasLie ? '<div class="lie-indicator">可能有所隐瞒</div>' : ''}
+        ${lied ? '<div style="color:var(--green);font-size:.7rem;margin-top:4px">已揭露谎言</div>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+// ========================================
+// SCENE VIEW
+// ========================================
+
+function openScene(sceneId) {
+  const scene = SCENES.find(s => s.id === sceneId);
+  if (!scene) return;
+  state.currentScene = sceneId;
+
+  // Auto-collect public clues on entry
+  const newClues = [];
+  scene.publicClues.forEach(cid => {
+    if (collectClue(cid, true)) newClues.push(cid);
+  });
+  if (!state.visitedScenes.includes(sceneId)) state.visitedScenes.push(sceneId);
+
+  renderSceneView(scene, newClues);
+  showView('sceneView');
+  if (newClues.length > 0) {
+    setTimeout(() => showToast(`自动收集了 ${newClues.length} 条线索`), 400);
+  }
+}
+
+function renderSceneView(scene, newClues) {
+  const content = document.getElementById('sceneContent');
+  const allClues = [...scene.publicClues, ...scene.hiddenClues].filter(c => hasClue(c));
+
+  content.innerHTML = `
+    <div class="scene-header">
+      <div class="scene-type-label">${scene.type}</div>
+      <h2>${scene.name}</h2>
+      <p>${scene.desc}</p>
+      <div class="scene-detail">${scene.detail}</div>
+    </div>
+
+    <div class="search-areas">
+      <h3>可搜索区域</h3>
+      ${scene.searchAreas.map(area => {
+        const searched = state.searchedAreas.includes(sceneId + '_' + area.clue);
+        const phaseLocked = area.requirePhase && !isPhaseUnlocked(area.requirePhase);
+        let cls = 'search-area';
+        if (searched) cls += ' searched';
+        if (phaseLocked) cls += ' phase-locked';
+
+        return `
+          <div class="${cls}" onclick="${!searched && !phaseLocked ? `searchArea('${scene.id}','${area.clue}')` : ''}">
+            <div class="search-icon">${searched ? '&#10003;' : phaseLocked ? '&#128274;' : '&#128269;'}</div>
+            <div class="search-info">
+              <h4>${area.name}</h4>
+              <div class="hint-text">${phaseLocked ? '需要更深入的调查才能检查此处' : area.hint}</div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+
+    <div class="collected-clues">
+      <h3 style="margin-bottom:8px">已发现的线索</h3>
+      ${allClues.length === 0 ? '<p class="muted" style="font-size:.9rem">暂无线索</p>' :
+        allClues.map(cid => {
+          const clue = CLUES.find(c => c.id === cid);
+          const isNew = newClues && newClues.includes(cid);
+          return `<div class="mini-clue ${isNew ? 'new' : ''}">${clue ? clue.name + ' - ' + clue.desc : cid}</div>`;
+        }).join('')}
+    </div>
+  `;
+}
+
+function searchArea(sceneId, clueId) {
+  const key = sceneId + '_' + clueId;
+  if (state.searchedAreas.includes(key)) return;
+  state.searchedAreas.push(key);
+  collectClue(clueId, false);
+  playStamp();
+
+  const scene = SCENES.find(s => s.id === sceneId);
+  if (scene) renderSceneView(scene, [clueId]);
+}
+
+// ========================================
+// DIALOGUE VIEW
+// ========================================
+
+let currentDialogueChar = null;
+
+function openDialogue(charId) {
+  const char = CHARACTERS.find(c => c.id === charId);
+  if (!char) return;
+  currentDialogueChar = char;
+  state.currentChar = charId;
+  state.dialogueLog = [];
+  renderDialogueView(char);
+  showView('dialogueView');
+}
+
+function renderDialogueView(char) {
+  const content = document.getElementById('dialogueContent');
+  const hasLie = char.lie && !state.challengesDone.includes(char.lie.id);
+  const lied = char.lie && state.challengesDone.includes(char.lie.id);
+
+  content.innerHTML = `
+    <div class="char-profile">
+      <div class="avatar">${char.initial}</div>
+      <div class="char-info">
+        <h3>${char.name}</h3>
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:4px">${char.role} ${hasLie ? '<span style="color:var(--red)"> | 可能有所隐瞒</span>' : ''}${lied ? '<span style="color:var(--green)"> | 已揭露谎言</span>' : ''}</div>
+        <div class="char-bg">${char.bg}</div>
+      </div>
+    </div>
+
+    <div class="dialogue-log" id="dialogueLog">
+      <div class="msg system"><div class="text">你开始与${char.name}交谈。选择话题关键词或输入文字来询问。</div></div>
+    </div>
+
+    <div class="topic-buttons" id="topicButtons">
+      ${char.topics.map(t => {
+        const usageKey = char.id + '_' + t.id;
+        const used = state.topicUsage[usageKey] || 0;
+        const exhausted = used >= t.maxUse;
+        return t.keywords.map(kw =>
+          `<button class="topic-btn ${exhausted ? 'exhausted' : ''}" onclick="askTopic('${char.id}','${t.id}','${kw}')" ${exhausted ? 'disabled' : ''}>${kw}</button>`
+        ).join('');
+      }).join('')}
+    </div>
+
+    <div class="dialogue-input">
+      <input type="text" id="dialogueInput" placeholder="输入关键词询问..." onkeydown="if(event.key==='Enter')submitDialogue()">
+      <button class="btn small" onclick="submitDialogue()">询问</button>
+    </div>
+
+    ${hasLie ? `
+    <div class="challenge-section">
+      <h4>质问 - 使用线索揭露谎言</h4>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:8px">${char.lie.about}</p>
+      <div class="challenge-clue-list" id="challengeClues">
+        ${state.collectedClues.map(cid => {
+          const clue = CLUES.find(c => c.id === cid);
+          return clue ? `<button class="challenge-clue-btn" onclick="challengeWith('${char.id}','${cid}')">${clue.name}</button>` : '';
+        }).join('')}
+        ${state.collectedClues.length === 0 ? '<p class="muted" style="font-size:.85rem">尚未收集到任何线索</p>' : ''}
+      </div>
+    </div>
+    ` : ''}
+
+    <div class="recommendations" id="recommendations" style="display:none">
+      <h4>调查建议</h4>
+      <ul id="recList"></ul>
+    </div>
+  `;
+}
+
+function askTopic(charId, topicId, keyword) {
+  const char = CHARACTERS.find(c => c.id === charId);
+  if (!char) return;
+  const topic = char.topics.find(t => t.id === topicId);
+  if (!topic) return;
+
+  const usageKey = charId + '_' + topicId;
+  const used = state.topicUsage[usageKey] || 0;
+
+  if (used >= topic.maxUse) {
+    addDialogueMsg('char', char.name, '关于这件事，我已经说过了。没有更多可以补充的。');
+    return;
+  }
+
+  state.topicUsage[usageKey] = used + 1;
+  addDialogueMsg('player', '侦探', `关于"${keyword}"...`);
+  setTimeout(() => {
+    addDialogueMsg('char', char.name, topic.response);
+    playPenWrite();
+    showRecommendations(char);
+    renderTopicButtons(char);
+  }, 300);
+}
+
+function submitDialogue() {
+  const input = document.getElementById('dialogueInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  const char = currentDialogueChar;
+  if (!char) return;
+
+  // Match keywords
+  let matched = null;
+  for (const topic of char.topics) {
+    const usageKey = char.id + '_' + topic.id;
+    const used = state.topicUsage[usageKey] || 0;
+    if (used >= topic.maxUse) continue;
+    for (const kw of topic.keywords) {
+      if (text.includes(kw)) {
+        matched = { topic, keyword: kw };
+        break;
+      }
+    }
+    if (matched) break;
+  }
+
+  addDialogueMsg('player', '侦探', text);
+
+  if (matched) {
+    const usageKey = char.id + '_' + matched.topic.id;
+    state.topicUsage[usageKey] = (state.topicUsage[usageKey] || 0) + 1;
+    setTimeout(() => {
+      addDialogueMsg('char', char.name, matched.topic.response);
+      playPenWrite();
+      showRecommendations(char);
+      renderTopicButtons(char);
+    }, 300);
+  } else {
+    setTimeout(() => {
+      addDialogueMsg('char', char.name, '（沉默片刻）我不确定该怎么回答这个问题。也许您可以换个方式问？');
+    }, 300);
+  }
+}
+
+function renderTopicButtons(char) {
+  const container = document.getElementById('topicButtons');
+  if (!container) return;
+  container.innerHTML = char.topics.map(t => {
+    const usageKey = char.id + '_' + t.id;
+    const used = state.topicUsage[usageKey] || 0;
+    const exhausted = used >= t.maxUse;
+    return t.keywords.map(kw =>
+      `<button class="topic-btn ${exhausted ? 'exhausted' : ''}" onclick="askTopic('${char.id}','${t.id}','${kw}')" ${exhausted ? 'disabled' : ''}>${kw}</button>`
+    ).join('');
+  }).join('');
+}
+
+function addDialogueMsg(type, speaker, text) {
+  const log = document.getElementById('dialogueLog');
+  if (!log) return;
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+  div.innerHTML = `<div class="speaker">${speaker}</div><div class="text">${text}</div>`;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+  state.dialogueLog.push({ type, speaker, text });
+}
+
+function challengeWith(charId, clueId) {
+  const char = CHARACTERS.find(c => c.id === charId);
+  if (!char || !char.lie) return;
+
+  if (state.challengesDone.includes(char.lie.id)) return;
+
+  addDialogueMsg('player', '侦探', `我要用证据质问你——${CLUES.find(c=>c.id===clueId)?.name || clueId}`);
+
+  if (clueId === char.lie.challengeClue) {
+    // Success
+    state.challengesDone.push(char.lie.id);
+    state.challengeSuccesses++;
+    state.score += 10;
+    setTimeout(() => {
+      addDialogueMsg('char', char.name, char.lie.successText);
+      if (char.lie.rewardClue) collectClue(char.lie.rewardClue, false);
+      playSuccess();
+      showToast('质问成功！+10分');
+      updateScoreDisplay();
+      renderDialogueView(char);
+      // Rebuild the log
+      state.dialogueLog.forEach(entry => {
+        const log = document.getElementById('dialogueLog');
+        const div = document.createElement('div');
+        div.className = `msg ${entry.type}`;
+        div.innerHTML = `<div class="speaker">${entry.speaker}</div><div class="text">${entry.text}</div>`;
+        log.appendChild(div);
+      });
+    }, 500);
+  } else {
+    // Fail
+    setTimeout(() => {
+      addDialogueMsg('char', char.name, char.lie.failText);
+      addDialogueMsg('system', '系统', '质问失败。证据不充分。你可以继续寻找正确的证据再试。');
+    }, 500);
+  }
+}
+
+function showRecommendations(char) {
+  const recDiv = document.getElementById('recommendations');
+  const recList = document.getElementById('recList');
+  if (!recDiv || !recList) return;
+
+  const recs = [];
+
+  // Based on collected clues, suggest next steps
+  if (hasClue('clue_footprints') && !hasClue('clue_hound_prints')) {
+    recs.push('紫杉大道的泥泞路面可能隐藏着更多脚印痕迹');
+  }
+  if (hasClue('clue_cigar_ash') && !hasClue('clue_lyons_letter')) {
+    recs.push('查尔斯爵士在等谁？调查是否有人约他到边门');
+  }
+  if (char.lie && !state.challengesDone.includes(char.lie.id)) {
+    if (hasClue(char.lie.challengeClue)) {
+      recs.push(`你手中的证据可以用来质问${char.name}的谎言`);
+    } else {
+      recs.push(`${char.name}似乎有所隐瞒，但你还需要找到合适的证据`);
+    }
+  }
+  if (hasClue('clue_candle_signal') && !state.challengesDone.includes('lie_barrymore')) {
+    recs.push('可以用烛光信号的证据质问白瑞摩');
+  }
+  if (hasClue('clue_selden_escape') && !hasClue('clue_henry_clothes')) {
+    recs.push('了解塞尔登穿的衣服来源可能很重要');
+  }
+  if (hasClue('clue_mysterious_figure') && !hasClue('clue_hideout_note')) {
+    recs.push('荒原石屋中可能藏有关于神秘人影的线索');
+  }
+  if (hasClue('clue_wife_not_sister') && !hasClue('clue_portrait_resemblance')) {
+    recs.push('仔细研究巴斯克维尔庄园的肖像画可能会有惊人发现');
+  }
+
+  // Add generic tips
+  if (recs.length === 0) {
+    const phase = getCurrentPhaseObj();
+    if (phase && phase.advanceClues) {
+      const missing = phase.advanceClues.filter(c => !hasClue(c));
+      if (missing.length > 0) {
+        recs.push(`还需要收集 ${missing.length} 条关键线索才能推进调查`);
+      }
+    }
+    recs.push('继续搜索各个地点并与相关人物交谈');
+  }
+
+  recList.innerHTML = recs.map(r => `<li>${r}</li>`).join('');
+  recDiv.style.display = 'block';
+}
+
+// ========================================
+// CLUE BOARD
+// ========================================
+
+function renderClueBoard() {
+  const board = document.getElementById('clueBoardContent');
+  const collected = state.collectedClues;
+
+  if (collected.length === 0) {
+    board.innerHTML = '<div class="empty-state">尚未收集到任何线索。<br>前往各个地点开始调查吧。</div>';
+    return;
+  }
+
+  let filterHtml = `
+    <div class="clue-filters">
+      <button class="clue-filter-btn active" onclick="filterClues('all',this)">全部</button>
+      <button class="clue-filter-btn" onclick="filterClues('phase_01',this)">第一阶段</button>
+      <button class="clue-filter-btn" onclick="filterClues('phase_02',this)">第二阶段</button>
+      <button class="clue-filter-btn" onclick="filterClues('phase_03',this)">第三阶段</button>
+    </div>
+  `;
+
+  const clueCards = collected.map((cid, idx) => {
+    const clue = CLUES.find(c => c.id === cid);
+    if (!clue) return '';
+    const rot = ((idx * 7 + 3) % 7) - 3;
+    const phaseNum = clue.phase.replace('phase_0','');
+    const badgeCls = 'phase' + phaseNum;
+    return `
+      <div class="clue-pin" style="--rot:${rot}" data-phase="${clue.phase}" onclick="showClueDetail('${cid}')">
+        <span class="clue-phase-tag"><span class="badge ${badgeCls}">P${phaseNum}</span></span>
+        <div class="clue-name">${clue.name}</div>
+        <div class="clue-desc">${clue.desc}</div>
+        ${clue.key ? '<span class="badge key" style="margin-top:6px">关键</span>' : ''}
+        ${clue.hidden ? '<span class="badge hidden-badge" style="margin-top:6px">隐藏</span>' : ''}
+      </div>
+    `;
+  }).join('');
+
+  board.innerHTML = filterHtml + `<div class="clue-grid" id="clueGrid">${clueCards}</div>`;
+}
+
+function filterClues(phase, btn) {
+  document.querySelectorAll('.clue-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.clue-pin').forEach(pin => {
+    if (phase === 'all' || pin.dataset.phase === phase) {
+      pin.style.display = '';
+    } else {
+      pin.style.display = 'none';
+    }
+  });
+}
+
+function showClueDetail(clueId) {
+  const clue = CLUES.find(c => c.id === clueId);
+  if (!clue) return;
+  const overlay = document.getElementById('clueDetailOverlay');
+  const card = document.getElementById('clueDetailCard');
+  const phaseNum = clue.phase.replace('phase_0','');
+  card.innerHTML = `
+    <button class="close-btn" onclick="closeClueDetail()">&times;</button>
+    <span class="badge phase${phaseNum}">第${phaseNum}阶段</span>
+    ${clue.key ? '<span class="badge key">关键线索</span>' : ''}
+    ${clue.hidden ? '<span class="badge hidden-badge">隐藏线索</span>' : ''}
+    <h3 style="margin-top:12px">${clue.name}</h3>
+    <div class="detail-desc">${clue.desc}</div>
+    ${clue.detail ? `<div class="detail-extra">${clue.detail}</div>` : ''}
+  `;
+  overlay.classList.add('active');
+  playPageFlip();
+}
+
+function closeClueDetail() {
+  document.getElementById('clueDetailOverlay').classList.remove('active');
+}
+
+// ========================================
+// REPORT
+// ========================================
+
+function renderReport() {
+  const content = document.getElementById('reportContent');
+
+  if (state.reportSubmitted) {
+    renderReportResult(content);
+    return;
+  }
+
+  if (state.currentPhase !== 'phase_03') {
+    content.innerHTML = '<div class="empty-state">需要达到第三阶段才能提交报告。</div>';
+    return;
+  }
+
+  content.innerHTML = REPORT_QUESTIONS.map((q, idx) => `
+    <div class="question-block" id="qblock_${q.id}">
+      <div class="q-num">问题 ${idx + 1}/${REPORT_QUESTIONS.length}</div>
+      <div class="q-text">${q.text}</div>
+      ${q.options.map((opt, oi) => `
+        <label onclick="selectAnswer('${q.id}',${oi},this)">
+          <input type="radio" name="${q.id}" value="${oi}"> ${opt}
+        </label>
+      `).join('')}
+    </div>
+  `).join('') + `
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn primary" onclick="submitReport()" style="font-size:1.1rem;padding:14px 40px">提交报告</button>
+    </div>
+  `;
+}
+
+function selectAnswer(qId, optIdx, label) {
+  const block = document.getElementById('qblock_' + qId);
+  block.querySelectorAll('label').forEach(l => l.classList.remove('selected'));
+  label.classList.add('selected');
+  playPenWrite();
+}
+
+function submitReport() {
+  let correct = 0;
+  const answers = {};
+
+  REPORT_QUESTIONS.forEach(q => {
+    const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+    if (selected) {
+      answers[q.id] = parseInt(selected.value);
+      const block = document.getElementById('qblock_' + q.id);
+      block.querySelectorAll('label').forEach((l, idx) => {
+        if (idx === q.correct) l.classList.add('correct');
+        else if (idx === parseInt(selected.value)) l.classList.add('wrong');
+        l.style.pointerEvents = 'none';
+      });
+      if (parseInt(selected.value) === q.correct) correct++;
+    }
+  });
+
+  // Calculate final score
+  // Challenge bonuses already applied
+  const allCluesCollected = state.collectedClues.length === CLUES.length;
+  const noHints = state.hintsRevealed.length === 0;
+
+  if (allCluesCollected) { state.score += 15; showToast('全部线索收集奖励 +15'); }
+  if (noHints) { state.score += 20; showToast('无提示奖励 +20'); }
+
+  state.reportSubmitted = true;
+  state.reportScore = correct;
+
+  playStamp();
+  updateScoreDisplay();
+
+  setTimeout(() => {
+    const content = document.getElementById('reportContent');
+    renderReportResult(content, correct, answers, allCluesCollected, noHints);
+  }, 1000);
+}
+
+function renderReportResult(content, correct, answers, allCluesCollected, noHints) {
+  if (correct === undefined) {
+    correct = state.reportScore;
+    allCluesCollected = state.collectedClues.length === CLUES.length;
+    noHints = state.hintsRevealed.length === 0;
+  }
+
+  const total = REPORT_QUESTIONS.length;
+  const pct = Math.round(correct / total * 100);
+  let grade = '初级侦探';
+  if (pct >= 90) grade = '大侦探';
+  else if (pct >= 70) grade = '高级侦探';
+  else if (pct >= 50) grade = '中级侦探';
+
+  content.innerHTML = `
+    <div class="report-result">
+      <div class="score">${state.score}</div>
+      <div style="font-size:1rem;color:var(--muted);margin-bottom:8px">最终得分</div>
+      <div class="grade" style="color:${pct >= 70 ? 'var(--green)' : 'var(--red)'}">${grade}</div>
+      <div style="margin:16px 0;font-size:.95rem">
+        <p>答对 ${correct}/${total} 题</p>
+        <p>质问成功 ${state.challengeSuccesses} 次 (+${state.challengeSuccesses * 10}分)</p>
+        <p>收集线索 ${state.collectedClues.length}/${CLUES.length} 条</p>
+        ${allCluesCollected ? '<p style="color:var(--green)">全部线索收集奖励 +15</p>' : ''}
+        ${noHints ? '<p style="color:var(--green)">无提示奖励 +20</p>' : ''}
+        ${state.hintsRevealed.length > 0 ? `<p style="color:var(--red)">使用提示 ${state.hintsRevealed.length} 次</p>` : ''}
+      </div>
+      <div style="margin-top:24px;padding:20px;border-top:2px solid var(--brown)">
+        <h3 style="margin-bottom:12px">案件真相</h3>
+        <p style="font-size:.95rem;line-height:1.8;text-align:left">
+          杰克·斯台普顿实为罗杰·巴斯克维尔之子，是巴斯克维尔遗产的合法继承人。他利用家族猎犬传说，训练一只巨型猎犬并涂上磷光颜料，制造出"地狱猎犬"的恐怖效果。他利用劳拉·莱昂斯写信将查尔斯爵士引诱到紫杉大道边门等候，然后放出猎犬。查尔斯爵士因极度恐惧导致心脏衰竭而死。斯台普顿的下一个目标是亨利·巴斯克维尔爵士——他偷走亨利的旧靴子来训练猎犬追踪其气味。所谓的"妹妹"贝里尔实际上是他的妻子，被迫配合他的阴谋。
+        </p>
+      </div>
+      <button class="btn" onclick="location.reload()" style="margin-top:20px">重新开始</button>
+    </div>
+  `;
+}
+
+// ========================================
+// HINTS
+// ========================================
+
+function openHints() {
+  const panel = document.getElementById('hintsPanel');
+
+  panel.innerHTML = `
+    <button class="close-btn" onclick="closeHints()">&times;</button>
+    <h2 style="margin-bottom:4px">调查提示</h2>
+    <p class="muted" style="font-size:.85rem;margin-bottom:20px">使用提示将永久扣除分数，且不可撤销。</p>
+    ${HINTS.map((hGroup, gi) => {
+      const phaseNum = hGroup.phase.replace('phase_0','');
+      const phaseObj = PHASES.find(p => p.id === hGroup.phase);
+      return `
+        <div class="hint-phase-group">
+          <h4>第${phaseNum}阶段: ${phaseObj ? phaseObj.name : ''}</h4>
+          ${hGroup.tiers.map((tier, ti) => {
+            const key = hGroup.phase + '_' + ti;
+            const revealed = state.hintsRevealed.includes(key);
+            // Can only reveal if previous tier is revealed (or it's tier 0)
+            const canReveal = ti === 0 || state.hintsRevealed.includes(hGroup.phase + '_' + (ti - 1));
+            return `
+              <div class="hint-tier">
+                <div class="hint-cost">提示 ${ti + 1} | 消耗 ${tier.cost} 分</div>
+                ${revealed ?
+                  `<div class="hint-text revealed">${tier.text}</div>` :
+                  `<button class="reveal-btn ${!canReveal ? 'disabled' : ''}" ${!canReveal ? 'disabled' : ''} onclick="revealHint('${hGroup.phase}',${ti},${tier.cost})">
+                    ${canReveal ? '查看提示 (-' + tier.cost + '分)' : '先查看前一级提示'}
+                  </button>`
+                }
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }).join('')}
+  `;
+
+  document.getElementById('hintsOverlay').classList.add('active');
+}
+
+function revealHint(phase, tierIdx, cost) {
+  const key = phase + '_' + tierIdx;
+  if (state.hintsRevealed.includes(key)) return;
+
+  state.hintsRevealed.push(key);
+  state.score -= cost;
+  if (state.score < 0) state.score = 0;
+  updateScoreDisplay();
+  playPageFlip();
+  showToast(`使用提示 -${cost}分`);
+  openHints(); // re-render
+}
+
+function closeHints() {
+  document.getElementById('hintsOverlay').classList.remove('active');
+}
+
+// ========================================
+// START GAME
+// ========================================
+
+function startGame() {
+  playStamp();
+  showView('mainDesk');
+
+  // Show phase 1 briefing
+  setTimeout(() => {
+    showPhaseTransition(PHASES[0]);
+  }, 400);
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  showView('startScreen');
+});
+</script>
+</body>
+</html>

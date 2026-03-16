@@ -1,0 +1,164 @@
+characters:
+  - id: "stapleton"
+    name: "杰克·斯台普顿"
+    role: "suspect"
+    background: "自称昆虫学家，居住在荒原上的梅利琵宅邸。热衷于研究飞蛾和蝴蝶，尤其擅长穿越格林盆大泥潭。实际上是巴斯克维尔家族旁系后裔罗杰·巴斯克维尔之子，曾用姓氏范德勒在约克郡办学，后改名斯台普顿迁至达特莫尔荒原。他将妻子伪装成妹妹，以便利用她接近目标。从伦敦富勒姆路罗斯-曼勾斯商行购买最强壮最凶猛的猎犬，涂满磷光颜料制造恐怖效果。"
+    relationToCore: "凶手——查尔斯爵士的谋杀者，巴斯克维尔家族旁系后裔，企图杀害所有合法继承人以夺取遗产"
+    isGuilty: true
+    phaseAvailable: "phase_01"
+    alibi:
+      description: "斯台普顿声称查尔斯爵士去世当晚他在梅利琵宅邸研究昆虫标本，但电报核验显示无人能确认他本人在家"
+      isTrue: false
+    lies: ["lie_stapleton_identity", "lie_stapleton_relationship"]
+    relationships:
+      - targetId: "henry"
+        description: "表面上是友善的邻居，实际上企图谋杀亨利爵士以夺取遗产"
+      - targetId: "stapleton_sister"
+        description: "实际上是夫妻关系，对外谎称是兄妹"
+      - targetId: "laura_lyons"
+        description: "以假称单身的身份引诱劳拉·莱昂斯，利用她写信引诱查尔斯爵士"
+      - targetId: "mortimer"
+        description: "从莫蒂默医生处套取查尔斯爵士心脏病和迷信的情报"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
+      - "portrait-lineage-analysis"
+
+  - id: "henry"
+    name: "亨利·巴斯克维尔爵士"
+    role: "witness"
+    background: "查尔斯爵士的侄子，巴斯克维尔庄园的新继承人。此前一直在加拿大务农，对家族传说知之甚少。性格勇敢直率，但对荒原环境和家族诅咒心存畏惧。抵达伦敦后收到匿名警告信，并发现旅馆中靴子离奇失窃。"
+    relationToCore: "受害者的继承人，也是凶手的下一个目标"
+    isGuilty: false
+    phaseAvailable: "phase_01"
+    alibi:
+      description: "亨利爵士作为被保护对象，无需提供不在场证明"
+      isTrue: true
+    lies: []
+    relationships:
+      - targetId: "stapleton"
+        description: "被斯台普顿的友善外表所迷惑，视其为友邻"
+      - targetId: "stapleton_sister"
+        description: "对斯台普顿小姐（实为斯台普顿之妻）产生好感"
+      - targetId: "barrymore_husband"
+        description: "庄园管家，对其忠诚度存疑"
+      - targetId: "mortimer"
+        description: "私人医生和朋友，信任其判断"
+    sourceSkills:
+      - "baskerville-heir-warning-delivery"
+      - "hound-mistaken-identity-case-analysis"
+
+  - id: "barrymore_husband"
+    name: "约翰·白瑞摩"
+    role: "suspect"
+    background: "巴斯克维尔庄园的管家，与妻子一同在庄园服务多年。身材高大，留着漂亮的黑胡须。查尔斯爵士去世当晚发现遗体并报警。深夜有举蜡烛在窗前发送信号的可疑行为，实际上是在向荒原上的逃犯塞尔登传递食物位置信息。"
+    relationToCore: "庄园管家，发现查尔斯爵士遗体的人，夜间活动可疑"
+    isGuilty: false
+    phaseAvailable: "phase_01"
+    alibi:
+      description: "白瑞摩声称深夜在检查门窗是否锁好，实际上是在窗前举蜡烛向荒原上的逃犯塞尔登发送信号"
+      isTrue: false
+    lies: ["lie_barrymore_candle"]
+    relationships:
+      - targetId: "barrymore_wife"
+        description: "夫妻关系，共同掩护塞尔登"
+      - targetId: "selden"
+        description: "妻弟，越狱逃犯，白瑞摩夫妇一直在秘密为其提供食物和庇护"
+      - targetId: "henry"
+        description: "新主人，尽职服侍但心存秘密"
+    sourceSkills:
+      - "candle-signal-process"
+      - "nighttime-surveillance-procedure"
+
+  - id: "barrymore_wife"
+    name: "伊丽莎·白瑞摩"
+    role: "witness"
+    background: "庄园女管家，白瑞摩的妻子。逃犯塞尔登是她的弟弟。经常在深夜偷偷哭泣，担心弟弟在荒原上的安危。忠于职守但受制于亲情，协助丈夫向塞尔登传递食物。"
+    relationToCore: "女管家，逃犯塞尔登的姐姐，参与掩护逃犯"
+    isGuilty: false
+    phaseAvailable: "phase_01"
+    alibi:
+      description: "深夜哭泣是因为担心弟弟塞尔登的安全"
+      isTrue: true
+    lies: []
+    relationships:
+      - targetId: "barrymore_husband"
+        description: "夫妻关系，共同守护塞尔登的秘密"
+      - targetId: "selden"
+        description: "弟弟，越狱逃犯，她一直在暗中帮助他"
+    sourceSkills:
+      - "candle-signal-process"
+
+  - id: "mortimer"
+    name: "詹姆斯·莫蒂默医生"
+    role: "witness"
+    background: "达特莫尔的乡村医生，查尔斯爵士的私人医生和好友。对颅骨学有浓厚兴趣。第一个到达死亡现场的人，发现尸体附近有巨型猎犬爪印，但因担心被视为迷信而未向验尸陪审团披露这一关键发现。"
+    relationToCore: "查尔斯爵士的私人医生，掌握未公开的关键证据（猎犬爪印），案件的求助者"
+    isGuilty: false
+    phaseAvailable: "phase_01"
+    alibi:
+      description: "查尔斯爵士去世当晚莫蒂默在自己诊所，有病人可以证明"
+      isTrue: true
+    lies: []
+    relationships:
+      - targetId: "henry"
+        description: "作为查尔斯爵士的遗嘱执行人之一，负责照顾新继承人"
+      - targetId: "stapleton"
+        description: "邻居关系，不知不觉中向斯台普顿泄露了查尔斯爵士的健康状况和迷信"
+    sourceSkills:
+      - "sir-charles-baskerville-death-investigation"
+
+  - id: "stapleton_sister"
+    name: "贝里尔·斯台普顿"
+    role: "witness"
+    background: "被介绍为斯台普顿的妹妹，实际上是他的妻子。出生于哥斯达黎加，美貌聪慧。内心反对丈夫的谋杀计划，曾试图匿名警告亨利爵士离开荒原，并在荒原上直接劝说路人（误认华生为亨利）立即回伦敦。"
+    relationToCore: "凶手的妻子（伪装为妹妹），曾试图警告亨利爵士"
+    isGuilty: false
+    phaseAvailable: "phase_01"
+    alibi:
+      description: "斯台普顿小姐大部分时间待在梅利琵宅邸"
+      isTrue: true
+    lies: []
+    relationships:
+      - targetId: "stapleton"
+        description: "实际上是夫妻关系，被迫对外伪装为兄妹"
+      - targetId: "henry"
+        description: "对亨利爵士有好感，试图暗中保护他"
+    sourceSkills:
+      - "baskerville-heir-warning-delivery"
+
+  - id: "selden"
+    name: "塞尔登"
+    role: "other"
+    background: "诺丁丘杀人犯，白瑞摩太太的弟弟。从达特莫尔监狱越狱后藏匿在荒原的石屋中，靠白瑞摩夫妇通过烛光信号和秘密送餐维持生存。后来穿着亨利爵士的旧衣服被猎犬追赶，坠崖身亡——因猎犬通过衣服上的气味将他误认为亨利爵士。"
+    relationToCore: "越狱逃犯，白瑞摩太太的弟弟，因穿着亨利爵士的旧衣服被猎犬误杀"
+    isGuilty: false
+    phaseAvailable: "phase_02"
+    alibi:
+      description: "藏匿在荒原石屋中，靠白瑞摩夫妇供养"
+      isTrue: true
+    lies: []
+    relationships:
+      - targetId: "barrymore_wife"
+        description: "姐弟关系，依赖姐姐的秘密援助生存"
+      - targetId: "barrymore_husband"
+        description: "姐夫，协助传送食物和信号"
+    sourceSkills:
+      - "candle-signal-process"
+      - "hound-mistaken-identity-case-analysis"
+
+  - id: "laura_lyons"
+    name: "劳拉·莱昂斯"
+    role: "witness"
+    background: "库姆特雷西镇的打字员，弗兰克兰老先生的女儿。与丈夫分居，经济拮据。被斯台普顿以假称单身的身份引诱，答应为他写信请查尔斯爵士在紫杉大道边门会面，为斯台普顿创造了谋杀机会。查尔斯爵士死亡当晚她被斯台普顿阻止赴约。"
+    relationToCore: "被斯台普顿利用写信引诱查尔斯爵士至谋杀地点的关键人物"
+    isGuilty: false
+    phaseAvailable: "phase_02"
+    alibi:
+      description: "劳拉声称与查尔斯爵士的约会纯粹是为了请求经济援助，并否认与斯台普顿有特殊关系"
+      isTrue: false
+    lies: ["lie_lyons_letter"]
+    relationships:
+      - targetId: "stapleton"
+        description: "被斯台普顿以虚假的单身身份引诱，以为他会在离婚后与她结婚"
+    sourceSkills:
+      - "inheritance-murder-conspiracy"
