@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配图2 - 东野圭吾变成了我的私人密室</title>
+<style>
+  :root {
+    --cream: #f5eee3;
+    --peach: #efe5d7;
+    --lavender: #e6e0ee;
+    --coral: #b45c48;
+    --rose: #8b4538;
+    --purple: #76699e;
+    --gold: #c89a5f;
+    --ink: #2e2530;
+    --ink-soft: #615565;
+    --mint: #53685f;
+    --paper: #fcf8f1;
+    --shadow: 0 18px 50px rgba(47, 32, 40, 0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(200,154,95,0.18), transparent 24%),
+      radial-gradient(circle at top right, rgba(118,105,158,0.16), transparent 22%),
+      linear-gradient(180deg, #fbf7f1 0%, #f3ecdf 100%);
+    color: var(--ink);
+    padding: 78px 20px 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: rgba(255, 253, 248, 0.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(107, 69, 112, 0.08);
+  }
+
+  .toolbar button {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #b36a50, #7f4b3c);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(127, 75, 60, 0.22);
+  }
+
+  .toolbar button.secondary {
+    background: white;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px rgba(107, 69, 112, 0.12);
+  }
+
+  .slide-label {
+    margin: 28px 0 12px;
+    font-size: 13px;
+    color: rgba(61, 32, 64, 0.55);
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+
+  .slide {
+    width: 800px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    background: var(--paper);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(107, 69, 112, 0.08);
+    outline: 4px solid transparent;
+    transition: outline-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .slide.selected {
+    outline-color: rgba(180, 92, 72, 0.28);
+    transform: translateY(-2px);
+  }
+
+  .slide::before,
+  .slide::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .slide::before {
+    width: 220px;
+    height: 220px;
+    top: -80px;
+    right: -70px;
+    background: radial-gradient(circle, rgba(118,105,158,0.18), transparent 68%);
+  }
+
+  .slide::after {
+    width: 190px;
+    height: 190px;
+    left: -60px;
+    bottom: -70px;
+    background: radial-gradient(circle, rgba(200,154,95,0.18), transparent 68%);
+  }
+
+  .theme-candy {
+    background:
+      radial-gradient(circle at 12% 18%, rgba(200, 154, 95, 0.16), transparent 18%),
+      radial-gradient(circle at 84% 14%, rgba(118, 105, 158, 0.12), transparent 19%),
+      linear-gradient(180deg, #faf5ee, #f3eadf);
+  }
+
+  .theme-peach {
+    background:
+      radial-gradient(circle at 85% 82%, rgba(180, 92, 72, 0.10), transparent 20%),
+      linear-gradient(180deg, #f4ede4, #ebe0d0);
+  }
+
+  .theme-lavender {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 18%),
+      linear-gradient(135deg, #2f2940 0%, #1c1725 100%);
+    color: #fff;
+  }
+
+  .theme-board {
+    background:
+      linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(135deg, #34243f, #25142f 60%, #1d1126);
+    background-size: 28px 28px, 28px 28px, auto;
+    color: #fff;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 32px 34px 28px;
+  }
+
+  .brand {
+    position: absolute;
+    top: 18px;
+    left: 22px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 3;
+  }
+
+  .brand-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    background: rgba(252,248,241,0.9);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 8px 18px rgba(61,32,64,0.08);
+    font-size: 18px;
+  }
+
+  .brand-text {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: rgba(61, 32, 64, 0.55);
+  }
+
+  .theme-lavender .brand-badge,
+  .theme-board .brand-badge {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+
+  .theme-lavender .brand-text,
+  .theme-board .brand-text {
+    color: rgba(255,255,255,0.6);
+  }
+
+  .page-num {
+    position: absolute;
+    right: 22px;
+    bottom: 18px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: rgba(61, 32, 64, 0.32);
+    z-index: 3;
+  }
+
+  .theme-lavender .page-num,
+  .theme-board .page-num {
+    color: rgba(255,255,255,0.28);
+  }
+
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,0.74);
+    box-shadow: inset 0 0 0 1px rgba(107, 69, 112, 0.08);
+  }
+
+  .theme-lavender .section-tag,
+  .theme-board .section-tag {
+    color: rgba(255,255,255,0.78);
+    background: rgba(255,255,255,0.08);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  }
+
+  .title {
+    margin-top: 18px;
+    font-size: 32px;
+    line-height: 1.14;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .desc {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(61,32,64,0.68);
+  }
+
+  .theme-lavender .desc,
+  .theme-board .desc {
+    color: rgba(255,255,255,0.64);
+  }
+
+  .scribble {
+    position: absolute;
+    font-size: 22px;
+    color: rgba(180, 92, 72, 0.4);
+    font-weight: 900;
+    transform: rotate(-12deg);
+  }
+
+  .frame-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .polaroid {
+    flex: 1;
+    background: #fcf8f1;
+    border-radius: 24px;
+    padding: 12px 12px 14px;
+    box-shadow: 0 18px 35px rgba(61, 32, 64, 0.12);
+    position: relative;
+  }
+
+  .polaroid:nth-child(1) { transform: rotate(-4deg); }
+  .polaroid:nth-child(2) { transform: rotate(2deg); }
+  .polaroid:nth-child(3) { transform: rotate(-2deg); }
+
+  .tape {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    width: 72px;
+    height: 18px;
+    border-radius: 6px;
+    background: rgba(200, 154, 95, 0.26);
+  }
+
+  .shot {
+    width: 100%;
+    height: 158px;
+    border-radius: 18px;
+    object-fit: cover;
+    display: block;
+    box-shadow: inset 0 0 0 1px rgba(61,32,64,0.06);
+  }
+
+  .polaroid h3 {
+    margin-top: 12px;
+    font-size: 18px;
+    color: var(--ink);
+    font-weight: 900;
+  }
+
+  .mini {
+    margin-top: 6px;
+    font-size: 10px;
+    line-height: 1.55;
+    color: rgba(61,32,64,0.58);
+  }
+
+  .pill {
+    display: inline-flex;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-right: 8px;
+  }
+
+  .pill.coral { background: rgba(180,92,72,0.12); color: var(--rose); }
+  .pill.gold { background: rgba(200,154,95,0.18); color: #8f6530; }
+  .pill.purple { background: rgba(118,105,158,0.18); color: #5b5184; }
+  .pill.white { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .step {
+    flex: 1;
+    background: rgba(252,248,241,0.78);
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow: inset 0 0 0 1px rgba(107,69,112,0.08);
+    position: relative;
+  }
+
+  .step-number {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #b36a50, #7f4b3c);
+    color: white;
+    font-size: 18px;
+    font-weight: 900;
+    box-shadow: 0 10px 18px rgba(127,75,60,0.18);
+  }
+
+  .step h3 {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .step p {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(61,32,64,0.62);
+  }
+
+  .step .thumb {
+    margin-top: 10px;
+    width: 100%;
+    height: 102px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid rgba(107,69,112,0.08);
+  }
+
+  .arrow {
+    align-self: center;
+    font-size: 34px;
+    color: rgba(127,75,60,0.38);
+    font-weight: 900;
+  }
+
+  .scene-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 18px;
+    margin-top: 22px;
+  }
+
+  .scene-shot {
+    position: relative;
+    background: rgba(255,255,255,0.08);
+    border-radius: 26px;
+    padding: 12px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  }
+
+  .scene-shot img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 18px;
+    display: block;
+  }
+
+  .sticker {
+    position: absolute;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+  }
+
+  .sticker.coral { background: #f6ebe7; color: var(--rose); }
+  .sticker.gold { background: #f6ecd9; color: #8f6530; }
+  .sticker.purple { background: #ece8f4; color: #5b5184; }
+
+  .bubble-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bubble {
+    padding: 16px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  }
+
+  .bubble.light {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.82);
+  }
+
+  .bubble.player {
+    background: linear-gradient(135deg, rgba(180,92,72,0.28), rgba(127,75,60,0.2));
+    color: white;
+  }
+
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .mood-card {
+    border-radius: 24px;
+    padding: 16px;
+    background: rgba(255,255,255,0.74);
+    box-shadow: inset 0 0 0 1px rgba(107,69,112,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mood-card h3 {
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .mood-card ul {
+    list-style: none;
+    margin-top: 10px;
+  }
+
+  .mood-card li {
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(61,32,64,0.62);
+  }
+
+  .chain {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-top: 20px;
+    align-items: center;
+  }
+
+  .chip {
+    padding: 9px 12px;
+    border-radius: 16px;
+    background: #fcf8f1;
+    box-shadow: 0 12px 24px rgba(61,32,64,0.10);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  .chip.hot {
+    background: linear-gradient(135deg, #f6ebe7, #f4ead8);
+    color: var(--rose);
+  }
+
+  .chip-arrow {
+    color: rgba(255,255,255,0.4);
+    font-weight: 900;
+  }
+
+  .lock-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .lock-card {
+    padding: 16px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.78);
+    box-shadow: 0 14px 28px rgba(61,32,64,0.10);
+    min-height: 118px;
+  }
+
+  .lock-card h3 {
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .lock-card p {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(61,32,64,0.62);
+  }
+
+  .lock-card.accent {
+    background: linear-gradient(135deg, #f7eee7, #f4ebdc);
+  }
+
+  .board-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .board-photo {
+    position: relative;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.06);
+    padding: 10px;
+    transform: rotate(-2deg);
+  }
+
+  .board-photo img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+  }
+
+  .pin {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #b36a50, #7f4b3c);
+    box-shadow: 0 6px 12px rgba(127,75,60,0.28);
+  }
+
+  .red-thread {
+    position: absolute;
+    height: 2px;
+    background: rgba(180,92,72,0.5);
+    transform-origin: left center;
+  }
+
+  .clue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .clue {
+    padding: 10px 12px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.08);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  }
+
+  .clue h4 {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .clue p {
+    margin-top: 4px;
+    font-size: 11px;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.64);
+  }
+
+  .paths {
+    display: grid;
+    grid-template-columns: 1fr 72px 1fr;
+    gap: 14px;
+    margin-top: 18px;
+    align-items: stretch;
+  }
+
+  .path-box {
+    border-radius: 26px;
+    padding: 18px;
+    box-shadow: 0 16px 30px rgba(61,32,64,0.10);
+  }
+
+  .path-box.left { background: linear-gradient(180deg, #f5ece4, #f8f1e6); }
+  .path-box.right { background: linear-gradient(180deg, #ebe5f1, #f7f1e8); }
+
+  .path-box h3 {
+    font-size: 18px;
+    font-weight: 900;
+  }
+
+  .path-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .path-step {
+    background: rgba(255,255,255,0.76);
+    border-radius: 18px;
+    padding: 10px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .vs {
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    color: rgba(61,32,64,0.35);
+    font-weight: 900;
+  }
+
+  .footer-note {
+    margin-top: 16px;
+    padding: 10px 14px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.68);
+    display: inline-block;
+    font-size: 12px;
+    color: rgba(61,32,64,0.72);
+    box-shadow: inset 0 0 0 1px rgba(107,69,112,0.08);
+  }
+
+  .info {
+    margin-top: 18px;
+    font-size: 13px;
+    color: rgba(61,32,64,0.52);
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="downloadAll()">全部下载 ZIP</button>
+  <button class="secondary" onclick="downloadOne(selectedIndex)">下载当前选中</button>
+</div>
+
+<div class="slide-label">配图 1 · 放在「三个游戏并排截图」位置</div>
+<div class="slide theme-candy selected" id="slide-1" style="height: 540px;">
+  <div class="brand"><div class="brand-badge">✦</div><div class="brand-text">01FISH SCRAPBOOK</div></div>
+  <div class="page-num">1/10</div>
+  <div class="content">
+    <div class="section-tag">PLAYABLE MYSTERIES</div>
+    <div class="title" style="font-size: 30px;">一套模版，长出三种完全不同的案发现场</div>
+    <div class="desc">不只是“能生成”，而是每本书都长成了自己那张脸。温暖、人情、阴冷、腐朽华丽，全都被 UI 和机制一起翻译了出来。</div>
+    <div class="scribble" style="top: 34px; right: 42px;">✦ ✧</div>
+    <div class="frame-row">
+      <div class="polaroid">
+        <div class="tape"></div>
+        <img class="shot" src="./归档(1)/图1.png" alt="新参者截图">
+        <h3>新参者</h3>
+        <div style="margin-top:8px;">
+          <span class="pill gold">米黄街巷</span>
+          <span class="pill coral">人情推理</span>
+        </div>
+        <div class="mini">像旧信纸、像人形町橱窗。界面一出来，案子就没那么冷了。</div>
+      </div>
+      <div class="polaroid">
+        <div class="tape" style="background: rgba(118,105,158,0.24); transform: translateX(-50%) rotate(3deg);"></div>
+        <img class="shot" src="./归档(1)/图2.png" alt="迷雾别墅截图">
+        <h3>迷雾别墅</h3>
+        <div style="margin-top:8px;">
+          <span class="pill purple">紫黑密室</span>
+          <span class="pill coral">高压调查</span>
+        </div>
+        <div class="mini">像你正摸黑搜证，屏幕每一块紫光都在提醒你：这屋里有人没说实话。</div>
+      </div>
+      <div class="polaroid">
+        <div class="tape" style="background: rgba(180,92,72,0.22); transform: translateX(-50%) rotate(-2deg);"></div>
+        <img class="shot" src="./归档(1)/图7.png" alt="庄园截图">
+        <h3>布莱克希思</h3>
+        <div style="margin-top:8px;">
+          <span class="pill gold">庄园铜金</span>
+          <span class="pill purple">时间循环</span>
+        </div>
+        <div class="mini">不是“复古皮肤”，是连疑云的质地都一起换掉了。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-label">配图 2 · 放在「怎么用」小节的步骤表格之后</div>
+<div class="slide theme-peach" id="slide-2" style="height: 560px;">
+  <div class="brand"><div class="brand-badge">✿</div><div class="brand-text">BUILD FLOW</div></div>
+  <div class="page-num">2/10</div>
+  <div class="content">
+    <div class="section-tag">THREE STEPS</div>
+    <div class="title" style="font-size: 30px;">三步，不写代码也能把小说做成游戏</div>
+    <div class="flow">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>上传一本书</h3>
+        <p>把东野圭吾、阿加莎、横沟正史丢进去。只要这本书里有“线索推向事实”的闭环，AI 就有活可干。</p>
+        <img class="thumb" src="./归档(1)/图9.png" alt="上传页面">
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>选中模版</h3>
+        <p>选“身临其境-推理小说模版”，剩下的不是让你继续补需求，而是让 AI 开始搭案子、搭界面、搭规则。</p>
+        <img class="thumb" src="./归档(1)/图12.png" alt="二维码页面">
+      </div>
+      <div class="arrow">→</div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>拿成品开玩</h3>
+        <p>浏览器直接打开。场景、对话、线索、质疑、档案卡，全套交付，不是一个“故事摘要页”。</p>
+        <img class="thumb" src="./归档(1)/图6.png" alt="结案页面">
+      </div>
+    </div>
+    <div class="footer-note">上传 PDF → 选模版 → Build App → 打开就能玩</div>
+  </div>
+</div>
+
+<div class="slide-label">配图 3 · 放在「先玩一把再说」的游戏对话界面截图位置</div>
+<div class="slide theme-lavender" id="slide-3" style="height: 470px;">
+  <div class="brand"><div class="brand-badge">✧</div><div class="brand-text">LIVE DEMO</div></div>
+  <div class="page-num">3/10</div>
+  <div class="content">
+    <div class="section-tag">QUESTION HER</div>
+    <div class="title">不是看剧情，是把证据摔到角色脸上</div>
+    <div class="scene-grid">
+      <div class="scene-shot">
+        <img src="./归档(1)/图1.png" alt="新参者地图界面">
+        <div class="sticker coral" style="top: 18px; right: 18px;">线索簿 +14</div>
+        <div class="sticker gold" style="bottom: 20px; left: 18px;">仙贝店有鬼</div>
+      </div>
+      <div class="bubble-list">
+        <div class="bubble light">“峰子姐啊……上上个星期来过一次吧。”<br><span style="color:#d4ac73;">问题</span>：可购物小票写的是三天前。</div>
+        <div class="bubble player">出示证据：购物小票。<br>按下“质疑”，不是为了听新台词，是为了撬开一层新的事实。</div>
+        <div class="bubble light">角色表情、说法、可追问方向都会一起变化。<br><span style="color:#9388b8;">这才像侦探在场。</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-label">配图 4 · 放在「一套模版，三种完全不同的游戏」之后</div>
+<div class="slide theme-candy" id="slide-4" style="height: 470px;">
+  <div class="brand"><div class="brand-badge">♡</div><div class="brand-text">STYLE CAPTURE</div></div>
+  <div class="page-num">4/10</div>
+  <div class="content">
+    <div class="section-tag">BOOK MOOD</div>
+    <div class="title" style="font-size: 31px;">AI 抓到的不是情节，是每本书的气质</div>
+    <div class="mood-grid">
+      <div class="mood-card" style="background: linear-gradient(180deg, #fff8ee, #fffef8);">
+        <h3 style="color:#8a5c19;">温暖</h3>
+        <div style="margin-top:8px;"><span class="pill gold">稿纸感</span><span class="pill coral">人情味</span></div>
+        <ul>
+          <li>米黄底色，像旧书页</li>
+          <li>按钮是仙贝棕，不是科技蓝</li>
+          <li>看着不像案发系统，像街坊口供簿</li>
+        </ul>
+      </div>
+      <div class="mood-card" style="background: linear-gradient(180deg, #faf6ff, #fffafb);">
+        <h3 style="color:#5d4e9b;">阴冷</h3>
+        <div style="margin-top:8px;"><span class="pill purple">紫雾感</span><span class="pill coral">封闭感</span></div>
+        <ul>
+          <li>深色面板压着你呼吸</li>
+          <li>搜证结果像在黑暗里闪一下</li>
+          <li>每块卡片都写着“这里不对劲”</li>
+        </ul>
+      </div>
+      <div class="mood-card" style="background: linear-gradient(180deg, #fff8ef, #faf6ff);">
+        <h3 style="color:#9a6517;">腐朽华丽</h3>
+        <div style="margin-top:8px;"><span class="pill gold">铜金色</span><span class="pill purple">庄园感</span></div>
+        <ul>
+          <li>贵族旧宅的体面和霉味一起在</li>
+          <li>复杂线索需要推理板承接</li>
+          <li>越漂亮，越可疑</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-label">配图 5 · 放在「模版到底做了什么」之后</div>
+<div class="slide theme-board" id="slide-5" style="height: 500px;">
+  <div class="brand"><div class="brand-badge">✦</div><div class="brand-text">SPEC CHAIN</div></div>
+  <div class="page-num">5/10</div>
+  <div class="content">
+    <div class="section-tag">14 DECISIONS</div>
+    <div class="title" style="font-size: 30px;">这不是提示词，是一条把小说拧成游戏的决策链</div>
+    <div class="desc">每一章都在缩小“AI 随便发挥”的空间，直到它输出的不是漂亮废话，而是能运行的体验。</div>
+    <div class="chain">
+      <div class="chip hot">① 做什么游戏</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">② 给谁玩</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">③ 为什么做</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip hot">④ 视觉风格</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑤ 功能清单</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑥ 用户动线</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑦ 信息结构</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑧ 数据设计</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑨ 交互设计</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip hot">⑩ 核心机制</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑪ 角色场景</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑫ 技术约束</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip">⑬ 开发指引</div>
+      <div class="chip-arrow">→</div>
+      <div class="chip hot">⑭ 验收标准</div>
+    </div>
+    <div style="display:flex; gap:12px; margin-top:24px;">
+      <span class="pill white">约束代替指令</span>
+      <span class="pill white">枚举代替开放</span>
+      <span class="pill white">视觉强制量化</span>
+    </div>
+  </div>
+</div>
+
+<div class="slide-label">配图 6 · 放在「五把锁保证游戏不无聊」之后</div>
+<div class="slide theme-peach" id="slide-6" style="height: 540px;">
+  <div class="brand"><div class="brand-badge">✿</div><div class="brand-text">FIVE LOCKS</div></div>
+  <div class="page-num">6/10</div>
+  <div class="content">
+    <div class="section-tag">ANTI-BORING</div>
+    <div class="title" style="font-size: 31px;">五把锁，保证它不是“能玩一下”的试玩页</div>
+    <div class="lock-list">
+      <div class="lock-card accent">
+        <h3>谎言-质疑机制</h3>
+        <p>至少 3 人说谎。证据不是装饰，是推进剧情的撬棍。</p>
+      </div>
+      <div class="lock-card">
+        <h3>线索分层</h3>
+        <p>公开线索保推进，隐藏线索给探索快感，避免一眼看穿。</p>
+      </div>
+      <div class="lock-card">
+        <h3>智能推荐</h3>
+        <p>对话后自动抛出下一步问题，保底也能往前走，不把玩家卡死。</p>
+      </div>
+      <div class="lock-card accent">
+        <h3>攻略系统</h3>
+        <p>三层提示、逐层扣分。有安全网，但不能白嫖。</p>
+      </div>
+      <div class="lock-card accent" style="grid-column: 1 / -1;">
+        <h3>阶段解锁保底</h3>
+        <p>漏掉一次质疑也能继续调查。它奖励聪明，不惩罚偶然走神。</p>
+      </div>
+    </div>
+    <div class="footer-note">机制负责下限，内容负责上限。</div>
+  </div>
+</div>
+
+<div class="slide-label">配图 7 · 放在「迷雾别墅游戏界面截图」位置</div>
+<div class="slide theme-board" id="slide-7" style="height: 560px;">
+  <div class="brand"><div class="brand-badge">✧</div><div class="brand-text">CONSPIRACY BOARD</div></div>
+  <div class="page-num">7/10</div>
+  <div class="content">
+    <div class="section-tag">DOUBLE TRUTH</div>
+    <div class="title" style="font-size: 26px;">《迷雾别墅》最有劲的，不是死人，是四个地方越想越不对</div>
+    <div class="board-grid">
+      <div class="board-photo">
+        <div class="pin" style="top: 8px; left: 18px;"></div>
+        <div class="pin" style="top: 14px; right: 26px;"></div>
+        <img src="./归档(1)/图2.png" alt="迷雾别墅场景">
+        <div class="red-thread" style="width: 120px; top: 90px; left: 84%; transform: rotate(140deg);"></div>
+        <div class="red-thread" style="width: 110px; top: 180px; left: 78%; transform: rotate(186deg);"></div>
+      </div>
+      <div class="clue-list">
+        <div class="clue">
+          <h4>凶器数量对不上</h4>
+          <p>买了 10 把，只找到 8 把。少掉的两把，不会自己蒸发。</p>
+        </div>
+        <div class="clue">
+          <h4>监控被两种手法破坏</h4>
+          <p>一个剪线，一个偷卡。像两个人做的，不像一个人手滑。</p>
+        </div>
+        <div class="clue">
+          <h4>匿名信知道警方没公开的事</h4>
+          <p>这封信的作者不是观众，是场内人。</p>
+        </div>
+        <div class="clue" style="background: rgba(180,92,72,0.14);">
+          <h4 style="color:#f1d7c7;">结论</h4>
+          <p style="color:rgba(255,255,255,0.82);">“随机杀人”只是表面故事。真正的戏，在共犯。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-label">配图 8 · 放在「新参者游戏对话界面截图」之后</div>
+<div class="slide theme-peach" id="slide-8" style="height: 520px;">
+  <div class="brand"><div class="brand-badge">✿</div><div class="brand-text">NINGYOCHO MAP</div></div>
+  <div class="page-num">8/10</div>
+  <div class="content">
+    <div class="section-tag">SHINZANMONO</div>
+    <div class="title" style="font-size: 28px;">《新参者》好玩的地方，是案子在街巷里一点点暖着展开</div>
+    <div class="scene-grid" style="grid-template-columns: 1.05fr 0.95fr; margin-top: 18px;">
+      <div class="scene-shot" style="background: rgba(180,92,72,0.08); box-shadow: inset 0 0 0 1px rgba(180,92,72,0.12);">
+        <img src="./归档(1)/图1.png" alt="新参者地图界面" style="height: 300px;">
+        <div class="sticker gold" style="top: 18px; left: 18px;">人形町调查地图</div>
+        <div class="sticker coral" style="right: 18px; bottom: 18px;">线索簿 14 条</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="lock-card accent" style="min-height:auto;">
+          <h3>不是冷冰冰的案件页</h3>
+          <p>仙贝店、钟表店、童梦屋这些地点本身就在讲人情关系，像一条可以走进去的街。</p>
+        </div>
+        <div class="lock-card" style="min-height:auto;">
+          <h3>每个地点都像口供入口</h3>
+          <p>玩家不是顺着按钮翻页，而是像加贺一样，一家家敲门、一句句问出来。</p>
+        </div>
+        <div class="lock-card accent" style="min-height:auto;">
+          <h3>温暖风格反而更有反差</h3>
+          <p>米黄、棕金、纸感边框，让“谎言”和“证据”出现时更有刺点。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-label">配图 9 · 放在「布莱克希思庄园游戏界面截图」位置</div>
+<div class="slide theme-board" id="slide-9" style="height: 540px;">
+  <div class="brand"><div class="brand-badge">✧</div><div class="brand-text">BLACKHEATH LOOP</div></div>
+  <div class="page-num">9/10</div>
+  <div class="content">
+    <div class="section-tag">THE SEVEN DEATHS</div>
+    <div class="title" style="font-size: 27px;">《伊芙琳的七次死亡》适合做成庄园推理板，因为它本来就层层套着时间循环</div>
+    <div class="board-grid" style="margin-top: 16px;">
+      <div class="board-photo" style="transform: rotate(-1deg);">
+        <div class="pin" style="top: 10px; left: 22px;"></div>
+        <div class="pin" style="top: 18px; right: 24px; background: linear-gradient(135deg, #c89a5f, #8f6530);"></div>
+        <img src="./归档(1)/图7.png" alt="布莱克希思庄园界面" style="height: 250px;">
+      </div>
+      <div class="clue-list">
+        <div class="clue" style="background: rgba(200,154,95,0.12);">
+          <h4 style="color:#f4ddb8;">阶段推进像剥洋葱</h4>
+          <p style="color:rgba(255,255,255,0.78);">迷雾初现、往事回响、循环真相，天然就是三幕结构。</p>
+        </div>
+        <div class="clue">
+          <h4>适合推理板承接复杂信息</h4>
+          <p>角色多、线索多、时间点交错。没有整理面板，玩家很容易在庄园里迷路。</p>
+        </div>
+        <div class="clue">
+          <h4>铜金庄园风格正好压住诡异感</h4>
+          <p>不是廉价恐怖，而是旧贵族体面外壳下，慢慢渗出来的腐朽和不对劲。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide-label">配图 10 · 放在「不止推理小说」之后</div>
+<div class="slide theme-candy" id="slide-10" style="height: 490px;">
+  <div class="brand"><div class="brand-badge">♡</div><div class="brand-text">UNIVERSAL PIPELINE</div></div>
+  <div class="page-num">10/10</div>
+  <div class="content">
+    <div class="section-tag">TWO PATHS</div>
+    <div class="title" style="font-size: 28px;">它不是只会做东野圭吾，而是在做“把叙事变成交互”</div>
+    <div class="paths">
+      <div class="path-box left">
+        <h3>从知识出发</h3>
+        <div class="path-flow">
+          <div class="path-step">经典诡计 / 知识库 / 设计模式</div>
+          <div class="path-step">拆成结构化规则</div>
+          <div class="path-step">AI 无限组合新案件</div>
+        </div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="path-box right">
+        <h3>从故事出发</h3>
+        <div class="path-flow">
+          <div class="path-step">你最爱的那本推理小说</div>
+          <div class="path-step">套进“身临其境”模版</div>
+          <div class="path-step">AI 还原成可玩的案发现场</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-note">把人能理解的叙事，变成 AI 能运行的体验。</div>
+  </div>
+</div>
+
+<p class="info">共 10 张配图 · 文件名风格为“配图2-序号-描述.png” · 点击某张卡片可切换当前下载目标</p>
+
+<script src="./vendor/html2canvas.min.js"></script>
+<script src="./vendor/jszip.min.js"></script>
+<script>
+  const SCALE = 2;
+  const slideNames = [
+    "配图2-1-三种案发现场",
+    "配图2-2-三步做成游戏",
+    "配图2-3-质疑现场",
+    "配图2-4-AI捕捉气质",
+    "配图2-5-决策链",
+    "配图2-6-五把锁",
+    "配图2-7-迷雾别墅线索板",
+    "配图2-8-新参者调查地图",
+    "配图2-9-伊芙琳庄园循环",
+    "配图2-10-通用管线"
+  ];
+
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  let selectedIndex = 0;
+
+  slides.forEach((slide, index) => {
+    slide.addEventListener("click", () => {
+      slides.forEach(node => node.classList.remove("selected"));
+      slide.classList.add("selected");
+      selectedIndex = index;
+    });
+  });
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function renderSlide(el) {
+    const previousOutline = el.style.outline;
+    const previousTransform = el.style.transform;
+    el.style.outline = "none";
+    el.style.transform = "none";
+
+    try {
+      return await html2canvas(el, {
+        scale: SCALE,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        width: 800,
+        imageTimeout: 0,
+        logging: false
+      });
+    } finally {
+      el.style.outline = previousOutline;
+      el.style.transform = previousTransform;
+    }
+  }
+
+  async function downloadOne(index) {
+    const el = document.getElementById(`slide-${index + 1}`);
+    if (!el) return;
+    try {
+      const canvas = await renderSlide(el);
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+      if (!blob) throw new Error("PNG 导出失败");
+      downloadBlob(blob, `${slideNames[index]}.png`);
+    } catch (error) {
+      console.error(error);
+      alert("下载失败。请用同目录下的“启动配图2导出.command”打开页面后再试。");
+    }
+  }
+
+  async function downloadAll() {
+    if (typeof JSZip === "undefined") {
+      alert("本地 ZIP 库未加载成功。请用同目录下的“启动配图2导出.command”打开页面后再试。");
+      return;
+    }
+
+    try {
+      const zip = new JSZip();
+      for (let i = 0; i < slides.length; i++) {
+        const canvas = await renderSlide(slides[i]);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+        if (!blob) throw new Error(`第 ${i + 1} 张 PNG 导出失败`);
+        zip.file(`${slideNames[i]}.png`, blob);
+      }
+      const content = await zip.generateAsync({ type: "blob" });
+      downloadBlob(content, "东野圭吾变成了我的私人密室-配图2.zip");
+    } catch (error) {
+      console.error(error);
+      alert("批量下载失败。请用同目录下的“启动配图2导出.command”打开页面后再试。");
+    }
+  }
+</script>
+</body>
+</html>

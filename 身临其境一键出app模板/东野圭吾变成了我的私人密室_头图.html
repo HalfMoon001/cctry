@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>头图候选 - 东野圭吾变成了我的私人密室</title>
+<style>
+  :root {
+    --bg: #101115;
+    --panel: #17191f;
+    --panel-line: rgba(255,255,255,0.08);
+    --paper: #efe4cf;
+    --paper-2: #dcc7a2;
+    --ink: #2a241d;
+    --text: #f8f1e3;
+    --muted: rgba(248,241,227,0.62);
+    --red: #b64842;
+    --gold: #d2aa52;
+    --teal: #78a7a1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(210,170,82,0.08), transparent 26%),
+      linear-gradient(180deg, #0d0e12, #16181d 55%, #0f1013);
+    color: var(--text);
+    padding: 72px 22px 90px;
+  }
+
+  .toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgba(8, 8, 11, 0.88);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+  }
+
+  .toolbar button {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+    color: var(--text);
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .page {
+    max-width: 1020px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.56);
+    margin-bottom: 30px;
+  }
+
+  .option {
+    margin-bottom: 34px;
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  }
+
+  .option-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 14px;
+  }
+
+  .option-name {
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .option-note {
+    font-size: 13px;
+    color: rgba(255,255,255,0.56);
+    margin-top: 4px;
+  }
+
+  .option-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .option-actions button {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .cover {
+    width: 900px;
+    height: 383px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.34);
+  }
+
+  .brand {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.48);
+    font-size: 12px;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+  }
+
+  .brand svg { width: 28px; height: 28px; }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    font-family: "STSong", "Songti SC", "Noto Serif CJK SC", serif;
+    font-size: 52px;
+    line-height: 1.04;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+  }
+
+  .hero-title .accent { color: var(--red); }
+
+  .hero-sub {
+    margin-top: 14px;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .chip-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+
+  .chip {
+    padding: 8px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .cover-a {
+    background:
+      radial-gradient(circle at 15% 18%, rgba(210,170,82,0.12), transparent 25%),
+      linear-gradient(135deg, #101115, #1b1b22 45%, #101115);
+  }
+
+  .cover-a .grid,
+  .cover-b .grid,
+  .cover-c .grain,
+  .cover-d .grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .cover-a .grid,
+  .cover-b .grid {
+    background:
+      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 36px 36px;
+    opacity: 0.22;
+  }
+
+  .cover-a .paper {
+    position: absolute;
+    left: 236px;
+    top: 34px;
+    width: 420px;
+    height: 308px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(239,228,207,0.98), rgba(221,199,162,0.96));
+    box-shadow: 0 26px 54px rgba(0,0,0,0.32);
+    color: var(--ink);
+    padding: 28px 32px;
+    z-index: 3;
+  }
+
+  .cover-a .paper::before {
+    content: "";
+    position: absolute;
+    inset: 16px;
+    border: 1px solid rgba(42,36,29,0.08);
+    border-radius: 18px;
+  }
+
+  .cover-a .stamp {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    color: var(--red);
+    border: 2px solid rgba(182,72,66,0.42);
+    padding: 4px 10px;
+    border-radius: 999px;
+    transform: rotate(-7deg);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .cover-a .paper .hero-sub { color: rgba(42,36,29,0.72); }
+
+  .cover-a .chip {
+    background: rgba(42,36,29,0.06);
+    border: 1px solid rgba(42,36,29,0.08);
+    color: rgba(42,36,29,0.72);
+  }
+
+  .cover-a .book-stack,
+  .cover-a .sticky,
+  .cover-a .feature-card,
+  .cover-a .arrow-flow {
+    position: absolute;
+    z-index: 2;
+    box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+  }
+
+  .cover-a .book-stack {
+    left: 64px;
+    top: 58px;
+    width: 134px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: none;
+  }
+
+  .cover-a .book {
+    position: relative;
+    border-radius: 14px;
+    padding: 12px 14px 12px 16px;
+    color: #fff5df;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
+
+  .cover-a .book::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 7px;
+    background: rgba(255,255,255,0.18);
+  }
+
+  .cover-a .book small {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.56);
+    margin-bottom: 6px;
+  }
+
+  .cover-a .book b {
+    display: block;
+    font-size: 16px;
+    line-height: 1.15;
+    margin-bottom: 4px;
+  }
+
+  .cover-a .book span {
+    display: block;
+    font-size: 11px;
+    color: rgba(255,255,255,0.72);
+  }
+
+  .cover-a .book.warm { background: linear-gradient(135deg, #7d5c3b, #3d3027); }
+  .cover-a .book.dark { background: linear-gradient(135deg, #493f6d, #262233); }
+  .cover-a .book.gold { background: linear-gradient(135deg, #756041, #31281f); }
+
+  .cover-a .sticky {
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  .cover-a .sticky small {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    margin-top: 5px;
+    opacity: 0.72;
+  }
+
+  .cover-a .sticky.yellow {
+    left: 82px;
+    bottom: 60px;
+    background: #f1dd7f;
+    color: #2e2418;
+    transform: rotate(-3deg);
+  }
+
+  .cover-a .sticky.blue {
+    right: 58px;
+    top: 54px;
+    background: #97d5d0;
+    color: #20312f;
+    transform: rotate(3deg);
+  }
+
+  .cover-a .arrow-flow {
+    left: 76px;
+    bottom: 18px;
+    width: 164px;
+    padding: 11px 14px;
+    border-radius: 14px;
+    background: rgba(7,8,10,0.42);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.74);
+    font-size: 12px;
+    line-height: 1.45;
+    box-shadow: none;
+  }
+
+  .cover-a .arrow-flow b {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.46);
+    margin-bottom: 6px;
+  }
+
+  .cover-a .string {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(182,72,66,0.8), rgba(182,72,66,0.06));
+    box-shadow: 0 0 12px rgba(182,72,66,0.16);
+  }
+
+  .cover-a .s1 { left: 196px; top: 108px; width: 122px; transform: rotate(8deg); }
+  .cover-a .s2 { left: 654px; top: 116px; width: 70px; transform: rotate(-10deg); }
+
+  .cover-a .feature-card {
+    right: 28px;
+    bottom: 24px;
+    width: 178px;
+    min-height: 126px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.09);
+    background: rgba(7,8,10,0.42);
+    padding: 12px 14px 14px;
+  }
+
+  .cover-a .feature-label,
+  .cover-b .board-note,
+  .cover-c .case-top,
+  .cover-d .desk-top {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.52);
+    text-transform: uppercase;
+  }
+
+  .cover-a .feature-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .cover-a .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.78);
+  }
+
+  .cover-a .feature-item::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .cover-b {
+    background:
+      radial-gradient(circle at 82% 20%, rgba(120,167,161,0.16), transparent 22%),
+      linear-gradient(135deg, #111217, #191b22 55%, #111217);
+  }
+
+  .cover-b .board {
+    position: absolute;
+    inset: 26px;
+    border-radius: 26px;
+    background:
+      linear-gradient(180deg, rgba(33,26,19,0.92), rgba(24,20,16,0.96));
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+  }
+
+  .cover-b .board::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 18%, rgba(210,170,82,0.10), transparent 22%),
+      linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
+  }
+
+  .cover-b .card {
+    position: absolute;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.24);
+  }
+
+  .cover-b .title-card {
+    left: 54px;
+    top: 54px;
+    width: 470px;
+    height: 232px;
+    background: linear-gradient(180deg, rgba(242,232,210,0.98), rgba(224,207,180,0.96));
+    color: var(--ink);
+    padding: 28px 30px;
+  }
+
+  .cover-b .title-card .hero-sub { color: rgba(42,36,29,0.72); }
+
+  .cover-b .title-card .chip {
+    background: rgba(42,36,29,0.06);
+    color: rgba(42,36,29,0.7);
+    border: 1px solid rgba(42,36,29,0.08);
+  }
+
+  .cover-b .evidence-card {
+    right: 64px;
+    top: 56px;
+    width: 262px;
+    height: 124px;
+    background: rgba(10,11,15,0.54);
+    padding: 16px 18px;
+  }
+
+  .cover-b .evidence-card .board-note { margin-bottom: 12px; }
+
+  .cover-b .line-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.74);
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .cover-b .line-item::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+
+  .cover-b .mini-map {
+    right: 64px;
+    bottom: 52px;
+    width: 262px;
+    height: 124px;
+    background: rgba(10,11,15,0.54);
+    padding: 14px 16px;
+  }
+
+  .cover-b .mini-map svg { width: 100%; height: 78px; margin-top: 8px; }
+
+  .cover-b .polaroid {
+    left: 118px;
+    bottom: 38px;
+    width: 148px;
+    height: 104px;
+    background: linear-gradient(180deg, #f7efdf, #e1d0b4);
+    padding: 8px;
+    transform: rotate(-6deg);
+  }
+
+  .cover-b .polaroid::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 72px;
+    border-radius: 8px;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.2)),
+      linear-gradient(135deg, #5c4a40, #26211f);
+  }
+
+  .cover-b .polaroid::after {
+    content: "你不是读者，你是侦探";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 9px;
+    color: rgba(42,36,29,0.72);
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .cover-b .red-thread {
+    position: absolute;
+    left: 254px;
+    bottom: 106px;
+    width: 124px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(182,72,66,0.85), rgba(182,72,66,0.08));
+    transform: rotate(16deg);
+  }
+
+  .cover-c {
+    background:
+      radial-gradient(circle at 18% 50%, rgba(182,72,66,0.22), transparent 20%),
+      linear-gradient(90deg, #0f1013 0%, #14151a 34%, #0d0e12 34%, #0d0e12 100%);
+  }
+
+  .cover-c .grain,
+  .cover-d .grain {
+    background-image:
+      radial-gradient(rgba(255,255,255,0.22) 0.7px, transparent 0.7px),
+      radial-gradient(rgba(255,255,255,0.12) 0.7px, transparent 0.7px);
+    background-position: 0 0, 10px 8px;
+    background-size: 20px 20px;
+    opacity: 0.12;
+  }
+
+  .cover-c .spotlight {
+    position: absolute;
+    left: -80px;
+    top: -40px;
+    width: 420px;
+    height: 460px;
+    background: radial-gradient(circle at 55% 50%, rgba(182,72,66,0.24), transparent 48%);
+    filter: blur(10px);
+  }
+
+  .cover-c .left-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    padding: 42px 40px;
+    z-index: 2;
+  }
+
+  .cover-c .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 999px;
+    padding: 8px 12px;
+    color: rgba(255,255,255,0.68);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .cover-c .badge::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .cover-c .title-stack {
+    margin-top: 22px;
+    font-family: "STSong", "Songti SC", "Noto Serif CJK SC", serif;
+    font-size: 56px;
+    line-height: 0.98;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  .cover-c .title-stack span { color: #fff0d1; }
+  .cover-c .title-stack .accent { color: var(--red); }
+
+  .cover-c .case-top {
+    margin-top: 18px;
+    margin-bottom: 10px;
+  }
+
+  .cover-c .small-copy {
+    color: rgba(255,255,255,0.74);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 220px;
+  }
+
+  .cover-c .ticket {
+    position: absolute;
+    left: 272px;
+    top: 38px;
+    width: 360px;
+    height: 304px;
+    border-radius: 30px;
+    background: linear-gradient(180deg, rgba(238,227,203,0.98), rgba(218,198,167,0.96));
+    color: var(--ink);
+    padding: 28px 28px 26px;
+    box-shadow: 0 26px 54px rgba(0,0,0,0.34);
+    z-index: 3;
+  }
+
+  .cover-c .ticket::before,
+  .cover-c .ticket::after {
+    content: "";
+    position: absolute;
+    top: 128px;
+    width: 24px;
+    height: 48px;
+    border-radius: 999px;
+    background: #0d0e12;
+  }
+
+  .cover-c .ticket::before { left: -12px; }
+  .cover-c .ticket::after { right: -12px; }
+
+  .cover-c .ticket-top {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(42,36,29,0.56);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .cover-c .ticket .hero-sub {
+    color: rgba(42,36,29,0.7);
+    font-size: 17px;
+  }
+
+  .cover-c .rule {
+    margin-top: 18px;
+    border-top: 1px dashed rgba(42,36,29,0.18);
+    padding-top: 14px;
+  }
+
+  .cover-c .rule-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(42,36,29,0.66);
+    margin-bottom: 8px;
+  }
+
+  .cover-c .mini-badge {
+    position: absolute;
+    right: 54px;
+    top: 44px;
+    width: 190px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    z-index: 3;
+  }
+
+  .cover-c .mini-badge .board-note { margin-bottom: 10px; }
+
+  .cover-c .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cover-c .tag-list span {
+    font-size: 12px;
+    color: rgba(255,255,255,0.74);
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .cover-c .magnifier {
+    position: absolute;
+    right: 36px;
+    bottom: 20px;
+    opacity: 0.16;
+    z-index: 1;
+  }
+
+  .cover-d {
+    background:
+      radial-gradient(circle at 78% 16%, rgba(120,167,161,0.18), transparent 22%),
+      linear-gradient(135deg, #2a1f17, #1a1614 48%, #0f1013 100%);
+  }
+
+  .cover-d .desk {
+    position: absolute;
+    inset: 22px;
+    border-radius: 28px;
+    background:
+      linear-gradient(135deg, rgba(67,45,32,0.72), rgba(28,22,19,0.86)),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 2px, transparent 2px, transparent 18px);
+    overflow: hidden;
+  }
+
+  .cover-d .desk::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(210,170,82,0.10), transparent 18%),
+      radial-gradient(circle at 82% 78%, rgba(182,72,66,0.14), transparent 18%);
+  }
+
+  .cover-d .paper-main {
+    position: absolute;
+    left: 222px;
+    top: 48px;
+    width: 432px;
+    height: 286px;
+    background: linear-gradient(180deg, rgba(241,231,211,0.98), rgba(223,206,180,0.96));
+    border-radius: 18px;
+    transform: rotate(-2deg);
+    box-shadow: 0 28px 56px rgba(0,0,0,0.28);
+    color: var(--ink);
+    padding: 28px 30px;
+    z-index: 3;
+  }
+
+  .cover-d .paper-main::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(42,36,29,0.10);
+    border-radius: 10px;
+  }
+
+  .cover-d .desk-top { color: rgba(42,36,29,0.56); }
+
+  .cover-d .paper-main .hero-sub {
+    color: rgba(42,36,29,0.72);
+    font-size: 17px;
+  }
+
+  .cover-d .chip {
+    background: rgba(42,36,29,0.06);
+    color: rgba(42,36,29,0.72);
+    border: 1px solid rgba(42,36,29,0.08);
+  }
+
+  .cover-d .small-paper,
+  .cover-d .clip,
+  .cover-d .lens,
+  .cover-d .card {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .cover-d .small-paper {
+    left: 72px;
+    top: 72px;
+    width: 126px;
+    height: 162px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f5ebd8, #dfcba8);
+    box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    transform: rotate(-8deg);
+    padding: 14px 14px 12px;
+    color: rgba(42,36,29,0.74);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .cover-d .small-paper b {
+    display: block;
+    font-size: 14px;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+
+  .cover-d .card {
+    right: 74px;
+    top: 70px;
+    width: 156px;
+    height: 180px;
+    border-radius: 18px;
+    background: rgba(7,8,10,0.44);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    padding: 14px 16px;
+  }
+
+  .cover-d .card svg { width: 100%; height: 92px; margin-top: 12px; }
+
+  .cover-d .clip {
+    left: 616px;
+    top: 32px;
+    width: 54px;
+    height: 28px;
+    border: 4px solid rgba(160,160,160,0.42);
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    transform: rotate(8deg);
+  }
+
+  .cover-d .lens {
+    right: 112px;
+    bottom: 46px;
+    opacity: 0.24;
+  }
+
+  .footer-note {
+    margin-top: 14px;
+    text-align: center;
+    color: rgba(255,255,255,0.46);
+    font-size: 12px;
+  }
+
+  @media (max-width: 980px) {
+    body { padding-left: 12px; padding-right: 12px; }
+    .option { padding: 14px; }
+    .option-head { flex-direction: column; align-items: flex-start; }
+    .cover { transform-origin: top center; transform: scale(0.9); margin: -18px auto -6px; }
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <button onclick="downloadAllMain()">下载全部横版</button>
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})">回到顶部</button>
+  </div>
+
+  <div class="page">
+    <div class="page-title">东野圭吾头图候选</div>
+    <div class="page-subtitle">同一方向下做了 4 个更整洁的版本。每个版本都可以单独下载横版头图和次图。</div>
+
+    <section class="option">
+      <div class="option-head">
+        <div>
+          <div class="option-name">A. 档案卡</div>
+          <div class="option-note">最稳，保留案件板趣味，但信息最收敛。</div>
+        </div>
+        <div class="option-actions">
+          <button onclick="downloadCover('cover-a', 'A-档案卡', 'main')">下载横版</button>
+          <button onclick="downloadCover('cover-a', 'A-档案卡', 'secondary')">下载次图</button>
+        </div>
+      </div>
+      <div class="cover cover-a" id="cover-a">
+        <div class="grid"></div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" fill="none">
+            <circle cx="13" cy="16" r="10" stroke="rgba(255,255,255,0.5)" stroke-width="2.2"/>
+            <ellipse cx="13" cy="8.5" rx="7" ry="1.5" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+            <ellipse cx="14" cy="17" rx="3.5" ry="2" fill="#b64842"/>
+            <polygon points="10,17 7.5,14.5 7.5,19.5" fill="#b64842"/>
+            <circle cx="16" cy="16.3" r="0.7" fill="#efe4cf"/>
+            <line x1="26" y1="4" x2="26" y2="16" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M26 16 Q26 22 22 22" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="26" cy="4" r="2" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          </svg>
+          <span>01fish detective lab</span>
+        </div>
+        <div class="book-stack">
+          <div class="book warm">
+            <small>sample 01</small>
+            <b>新参者</b>
+            <span>温暖街巷案</span>
+          </div>
+          <div class="book dark">
+            <small>sample 02</small>
+            <b>你杀了谁</b>
+            <span>迷雾别墅案</span>
+          </div>
+          <div class="book gold">
+            <small>sample 03</small>
+            <b>伊芙琳</b>
+            <span>庄园循环案</span>
+          </div>
+        </div>
+        <div class="sticky yellow">嫌疑人会说谎<small>QUESTION THEM</small></div>
+        <div class="sticky blue">小说会变成游戏<small>BOOK TO APP</small></div>
+        <div class="arrow-flow"><b>build flow</b>上传 PDF → 选模版 → 一键构建</div>
+        <div class="string s1"></div>
+        <div class="string s2"></div>
+        <div class="paper">
+          <div class="eyebrow">case file · mystery template</div>
+          <div class="stamp">AI BUILD</div>
+          <div class="hero-title">把<span class="accent">东野圭吾</span><br>变成我的私人密室</div>
+          <div class="hero-sub">一套模版，把任何推理小说<br>做成身临其境的游戏</div>
+          <div class="chip-row">
+            <div class="chip">3 本小说试跑</div>
+            <div class="chip">一键构建</div>
+            <div class="chip">场景探索</div>
+            <div class="chip">证据质疑</div>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-label">game features</div>
+          <div class="feature-list">
+            <div class="feature-item">场景探索</div>
+            <div class="feature-item">角色对话</div>
+            <div class="feature-item">证据质疑</div>
+            <div class="feature-item">攻略提示</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-note">横版 900×383 · 中心裁切次图 200×200</div>
+    </section>
+
+    <section class="option">
+      <div class="option-head">
+        <div>
+          <div class="option-name">B. 证据墙</div>
+          <div class="option-note">更像侦探办公室，布局分区清楚，气质偏成熟。</div>
+        </div>
+        <div class="option-actions">
+          <button onclick="downloadCover('cover-b', 'B-证据墙', 'main')">下载横版</button>
+          <button onclick="downloadCover('cover-b', 'B-证据墙', 'secondary')">下载次图</button>
+        </div>
+      </div>
+      <div class="cover cover-b" id="cover-b">
+        <div class="grid"></div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" fill="none">
+            <circle cx="13" cy="16" r="10" stroke="rgba(255,255,255,0.5)" stroke-width="2.2"/>
+            <ellipse cx="13" cy="8.5" rx="7" ry="1.5" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+            <ellipse cx="14" cy="17" rx="3.5" ry="2" fill="#b64842"/>
+            <polygon points="10,17 7.5,14.5 7.5,19.5" fill="#b64842"/>
+            <circle cx="16" cy="16.3" r="0.7" fill="#efe4cf"/>
+            <line x1="26" y1="4" x2="26" y2="16" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M26 16 Q26 22 22 22" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="26" cy="4" r="2" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          </svg>
+          <span>01fish case room</span>
+        </div>
+        <div class="board">
+          <div class="title-card card">
+            <div class="eyebrow">mystery board · game template</div>
+            <div class="hero-title">把<span class="accent">东野圭吾</span><br>变成我的私人密室</div>
+            <div class="hero-sub">一套模版，把任何推理小说做成<br>身临其境的推理游戏</div>
+            <div class="chip-row">
+              <div class="chip">新参者</div>
+              <div class="chip">迷雾别墅</div>
+              <div class="chip">伊芙琳</div>
+            </div>
+          </div>
+          <div class="evidence-card card">
+            <div class="board-note">evidence set</div>
+            <div class="line-item">上传 PDF，自动拆出人物与案件</div>
+            <div class="line-item">场景探索、对话、质疑全部生成</div>
+            <div class="line-item">连 UI 气质也跟着原著变</div>
+          </div>
+          <div class="mini-map card">
+            <div class="board-note">room map</div>
+            <svg viewBox="0 0 220 78" fill="none">
+              <path d="M10 18H86V42H122V12H208V64H136V50H88V68H10V18Z" stroke="rgba(255,243,214,0.64)" stroke-width="2.4" stroke-linejoin="round"/>
+              <circle cx="48" cy="31" r="4" fill="#d2aa52"/>
+              <circle cx="166" cy="28" r="4" fill="#78a7a1"/>
+              <circle cx="164" cy="54" r="4" fill="#b64842"/>
+              <path d="M48 31L164 54" stroke="rgba(182,72,66,0.8)" stroke-width="1.8" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <div class="polaroid card"></div>
+          <div class="red-thread"></div>
+        </div>
+      </div>
+      <div class="footer-note">更像公众号正式头图，耐看、稳定。</div>
+    </section>
+
+    <section class="option">
+      <div class="option-head">
+        <div>
+          <div class="option-name">C. 舞台海报</div>
+          <div class="option-note">戏剧感最强，左侧像开场灯光，右侧像入场票根。</div>
+        </div>
+        <div class="option-actions">
+          <button onclick="downloadCover('cover-c', 'C-舞台海报', 'main')">下载横版</button>
+          <button onclick="downloadCover('cover-c', 'C-舞台海报', 'secondary')">下载次图</button>
+        </div>
+      </div>
+      <div class="cover cover-c" id="cover-c">
+        <div class="grain"></div>
+        <div class="spotlight"></div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" fill="none">
+            <circle cx="13" cy="16" r="10" stroke="rgba(255,255,255,0.5)" stroke-width="2.2"/>
+            <ellipse cx="13" cy="8.5" rx="7" ry="1.5" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+            <ellipse cx="14" cy="17" rx="3.5" ry="2" fill="#b64842"/>
+            <polygon points="10,17 7.5,14.5 7.5,19.5" fill="#b64842"/>
+            <circle cx="16" cy="16.3" r="0.7" fill="#efe4cf"/>
+            <line x1="26" y1="4" x2="26" y2="16" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M26 16 Q26 22 22 22" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="26" cy="4" r="2" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          </svg>
+          <span>01fish mystery show</span>
+        </div>
+        <div class="left-panel">
+          <div class="badge">closed room special</div>
+          <div class="title-stack">把<br><span class="accent">东野圭吾</span><br>变成<br><span>私人密室</span></div>
+          <div class="case-top">you walk into the story</div>
+          <div class="small-copy">不是看完一本推理小说，而是直接走进案发现场。</div>
+        </div>
+        <div class="ticket">
+          <div class="ticket-top">
+            <span>entry pass</span>
+            <span>ai build</span>
+          </div>
+          <div class="hero-title" style="font-size:48px;margin-top:18px;">任何推理小说<br>都能变成游戏</div>
+          <div class="hero-sub">上传 PDF，选模版，构建。<br>场景、角色、证据、质疑，一次长出来。</div>
+          <div class="rule">
+            <div class="rule-row"><span>试玩样本</span><span>3 本</span></div>
+            <div class="rule-row"><span>核心机制</span><span>探索 / 质疑 / 攻略</span></div>
+            <div class="rule-row"><span>阅读身份</span><span>读者 → 侦探</span></div>
+          </div>
+        </div>
+        <div class="mini-badge">
+          <div class="board-note">original moods</div>
+          <div class="tag-list">
+            <span>新参者</span>
+            <span>迷雾别墅</span>
+            <span>伊芙琳</span>
+            <span>密室</span>
+          </div>
+        </div>
+        <div class="magnifier">
+          <svg width="168" height="168" viewBox="0 0 168 168" fill="none">
+            <circle cx="70" cy="70" r="48" stroke="#fff3d7" stroke-width="7"/>
+            <line x1="104" y1="104" x2="154" y2="154" stroke="#fff3d7" stroke-width="10" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="footer-note">最有封面感，适合想做“推理发布会”气氛时选。</div>
+    </section>
+
+    <section class="option">
+      <div class="option-head">
+        <div>
+          <div class="option-name">D. 俯视桌面</div>
+          <div class="option-note">更像作家工作台，趣味来自桌面道具，整体安静一些。</div>
+        </div>
+        <div class="option-actions">
+          <button onclick="downloadCover('cover-d', 'D-俯视桌面', 'main')">下载横版</button>
+          <button onclick="downloadCover('cover-d', 'D-俯视桌面', 'secondary')">下载次图</button>
+        </div>
+      </div>
+      <div class="cover cover-d" id="cover-d">
+        <div class="grain"></div>
+        <div class="brand">
+          <svg viewBox="0 0 32 32" fill="none">
+            <circle cx="13" cy="16" r="10" stroke="rgba(255,255,255,0.5)" stroke-width="2.2"/>
+            <ellipse cx="13" cy="8.5" rx="7" ry="1.5" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+            <ellipse cx="14" cy="17" rx="3.5" ry="2" fill="#b64842"/>
+            <polygon points="10,17 7.5,14.5 7.5,19.5" fill="#b64842"/>
+            <circle cx="16" cy="16.3" r="0.7" fill="#efe4cf"/>
+            <line x1="26" y1="4" x2="26" y2="16" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M26 16 Q26 22 22 22" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="26" cy="4" r="2" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          </svg>
+          <span>01fish writing desk</span>
+        </div>
+        <div class="desk">
+          <div class="small-paper">
+            <b>线索卡</b>
+            上传小说<br>
+            选模版<br>
+            生成游戏<br>
+            开始审问
+          </div>
+          <div class="paper-main">
+            <div class="desk-top">writer's desk · mystery app template</div>
+            <div class="hero-title">把<span class="accent">东野圭吾</span><br>变成我的私人密室</div>
+            <div class="hero-sub">一套模版，把任何推理小说做成<br>身临其境的游戏</div>
+            <div class="chip-row">
+              <div class="chip">像剧本杀一样审讯</div>
+              <div class="chip">像侦探小说一样推理</div>
+              <div class="chip">但案件来自你最爱的那本书</div>
+            </div>
+          </div>
+          <div class="clip"></div>
+          <div class="card">
+            <div class="desk-top">room map</div>
+            <svg viewBox="0 0 132 92" fill="none">
+              <path d="M8 18H54V40H82V10H124V72H88V56H56V78H8V18Z" stroke="rgba(255,243,214,0.64)" stroke-width="2.4" stroke-linejoin="round"/>
+              <circle cx="32" cy="31" r="4" fill="#d2aa52"/>
+              <circle cx="94" cy="26" r="4" fill="#78a7a1"/>
+              <circle cx="96" cy="59" r="4" fill="#b64842"/>
+            </svg>
+          </div>
+          <div class="lens">
+            <svg width="168" height="168" viewBox="0 0 168 168" fill="none">
+              <circle cx="70" cy="70" r="48" stroke="#fff3d7" stroke-width="7"/>
+              <line x1="104" y1="104" x2="154" y2="154" stroke="#fff3d7" stroke-width="10" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="footer-note">更文艺，也更像“东野圭吾被摊开在桌面上”。</div>
+    </section>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<script>
+async function renderCanvas(el) {
+  return html2canvas(el, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: null,
+    width: 900,
+    height: 383
+  });
+}
+
+async function downloadCover(id, label, type) {
+  const el = document.getElementById(id);
+  const canvas = await renderCanvas(el);
+
+  if (type === "main") {
+    canvas.toBlob(blob => saveAs(blob, "头图-" + label + "-900x383.png"));
+    return;
+  }
+
+  const crop = document.createElement("canvas");
+  crop.width = 400;
+  crop.height = 400;
+  const ctx = crop.getContext("2d");
+  const sx = (canvas.width - 400) / 2;
+  const sy = (canvas.height - 400) / 2;
+  ctx.drawImage(canvas, sx, sy, 400, 400, 0, 0, 400, 400);
+  crop.toBlob(blob => saveAs(blob, "次图-" + label + "-200x200.png"));
+}
+
+async function downloadAllMain() {
+  const ids = [
+    ["cover-a", "A-档案卡"],
+    ["cover-b", "B-证据墙"],
+    ["cover-c", "C-舞台海报"],
+    ["cover-d", "D-俯视桌面"]
+  ];
+
+  for (const [id, label] of ids) {
+    await downloadCover(id, label, "main");
+  }
+}
+</script>
+</body>
+</html>
